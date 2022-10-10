@@ -1,10 +1,12 @@
 public abstract class Robot{
     private Case position;
     private int capacite;
+    private int reservoir;
     
     public Robot(Case position, int capacite) {
     	this.position = position;
     	this.capacite = capacite;
+        this.reservoir = capacite;
     }
     
     public Case getPosition() {
@@ -16,14 +18,19 @@ public abstract class Robot{
     }
     
     public double getVitesse(NatureTerrain nature) {
-    	// TODO
+        // C'est une vitesse par défaut, mais pas vraie pour les robots terrestres. Il FAUT override
+    	return (double) 100;
     }
     
     public void deverserEau(int quantite) {
-    	//TODO
+    	if (quantite > reservoir){
+            throw new IllegalArgumentException("On ne peut pas deverser plus d'eau que eau dans le réservoir !");
+        } else {
+            this.reservoir = this.reservoir - quantite;
+        }
     }
     
     public void remplirReservoir() {
-    	// TODO
+    	this.reservoir = this.capacite
     }
 }
