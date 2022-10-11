@@ -6,7 +6,7 @@ public abstract class Robot {
     public Robot(Case position, int capacite) {
         this.position = position;
         this.capacite = capacite;
-        this.reservoir = capacite;
+        this.reservoir = capacite; //TODO: Demander au prof si on commence à 0 ou plein
     }
 
     public Case getPosition() {
