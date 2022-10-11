@@ -17,10 +17,7 @@ public abstract class Robot{
     	this.position;
     }
     
-    public double getVitesse(NatureTerrain nature) {
-        // C'est une vitesse par défaut, mais pas vraie pour les robots terrestres. Il FAUT override
-    	return (double) 100;
-    }
+    public abstract double getVitesse(NatureTerrain nature);
     
     public void deverserEau(int quantite) {
     	if (quantite > reservoir){
