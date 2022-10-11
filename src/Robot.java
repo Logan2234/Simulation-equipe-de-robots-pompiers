@@ -14,7 +14,7 @@ public abstract class Robot{
     }
     
     public void setPositon(Case position) {
-    	this.position;
+    	this.position = position;
     }
     
     public abstract double getVitesse(NatureTerrain nature);
