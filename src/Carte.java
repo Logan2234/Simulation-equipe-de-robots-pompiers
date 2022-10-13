@@ -4,22 +4,31 @@ public class Carte {
     private int nbColonnes;
     private Case[][] tab_cases;
 
+    
     public Carte(int nbLignes, int nbColonnes) {
         this.nbLignes = nbLignes;
         this.nbColonnes = nbColonnes;
         tab_cases = new Case[nbLignes][nbColonnes];
     }
-
+    
     public int getTailleCases() {
         return tailleCases;
     }
-
+    
+    public void setTailleCases(int tailleCases){
+        this.tailleCases = tailleCases;
+    }
+    
     public int getNbLignes() {
         return nbLignes;
     }
-
+    
     public int getNbColonnes() {
         return nbColonnes;
+    }
+    
+    public void setTab_cases(Case[][] tab_cases) {
+        this.tab_cases = tab_cases;
     }
 
     public boolean voisinExiste(Case src, Direction dir) {
