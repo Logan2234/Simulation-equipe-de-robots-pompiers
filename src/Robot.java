@@ -2,15 +2,21 @@ public abstract class Robot {
     private Case position;
     private int capacite;
     private int reservoir;
+    private double vitesse_defaut;
 
-    public Robot(Case position, int capacite) {
+    public Robot(Case position, int capacite, double vitesse) {
         this.position = position;
         this.capacite = capacite;
         this.reservoir = capacite; //TODO: Demander au prof si on commence à 0 ou plein
+        this.vitesse_defaut = vitesse;
     }
 
     public Case getPosition() {
         return this.position;
+    }
+
+    public double getVitesseDefaut() {
+        return this.vitesse_defaut;
     }
 
     public void setPositon(Case position) {

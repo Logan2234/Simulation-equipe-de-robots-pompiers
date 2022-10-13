@@ -39,7 +39,7 @@ public class LecteurDonnees {
         Robot[] robots = new Robot[nbRobots];
 
         for (int i = 0; i < nbRobots; i++) {
-            robots[i] = lireRobot(i);
+            robots[i] = lireRobot(i, carte);
         }
 
         return new DonneesSimulation(carte, incendies, robots);
@@ -146,7 +146,7 @@ public class LecteurDonnees {
      * 
      * @param i
      */
-    private Robot lireRobot(int i) throws DataFormatException {
+    private Robot lireRobot(int i, Carte carte) throws DataFormatException {
         ignorerCommentaires();
 
         try {
@@ -157,7 +157,7 @@ public class LecteurDonnees {
             // lecture eventuelle d'une vitesse du robot (entier)
             String s = scanner.findInLine("(\\d+)"); // 1 or more digit(s) ?
             // pour lire un flottant: ("(\\d+(\\.\\d+)?)");
-            
+
             int vitesse = 0;
             if (s != null) {
                 vitesse = Integer.parseInt(s);
@@ -167,22 +167,22 @@ public class LecteurDonnees {
 
             switch (type) {
                 case "DRONES":
-                    if (vitesse != 0):
-                        return new RobotDrone(lig, col, vitesse);
-                    return new RobotDrone(lig, col);
-                    break;
+                    if (vitesse != 0)
+                        return new RobotDrone(carte.getCase(lig, col), vitesse);
+                    return new RobotDrone(carte.getCase(lig, col));
                 case "ROUES":
-                    return new RobotRoues(lig, col);
-                    break;
+                    if (vitesse != 0)
+                        return new RobotRoues(carte.getCase(lig, col), vitesse);
+                    return new RobotRoues(carte.getCase(lig, col));
                 case "PATTES":
-                    return new RobotPattes(lig, col);
-                    break;
+                    return new RobotPattes(carte.getCase(lig, col));
                 case "CHENILLES":
-                    return new RobotChenilles(lig, col);
-                    break;
+                    if (vitesse != 0)
+                        return new RobotChenilles(carte.getCase(lig, col), vitesse);
+                    return new RobotChenilles(carte.getCase(lig, col));
                 default:
-                    throw new DataFormatException("Un robot ne peut avoir qu'un des types suivant: DRONE, ROUES, PATTES, CHENILLES");
-                    break;
+                    throw new DataFormatException(
+                            "Un robot ne peut avoir qu'un des types suivant: DRONE, ROUES, PATTES, CHENILLES");
             }
 
         } catch (NoSuchElementException e) {

@@ -1,15 +1,19 @@
-public class RobotChenilles extends Robots{
-    private double vitesse_default = 60;
+public class RobotChenilles extends Robot {
+    public RobotChenilles(Case position) {
+        super(position, 2000, 60);
+    }
 
-    public RobotChenilles(Case position){
-        super(position, 2000);
+    public RobotChenilles(Case position, double vitesse) {
+        super(position, 2000, vitesse);
     }
 
     @Override
     public double getVitesse(NatureTerrain nature) {
-        //if (nature == foret)
-            return vitesse_default/2;
-        // else if (nature!=eau && nature!=rocher) { return vitesse_default;}
-        // else {return 0;}
+        if (nature == NatureTerrain.FORET)
+            return super.getVitesseDefaut() / 2;
+        else if (nature != NatureTerrain.EAU && nature != NatureTerrain.ROCHE)
+            return super.getVitesseDefaut();
+        else 
+            return 0;
     }
 }

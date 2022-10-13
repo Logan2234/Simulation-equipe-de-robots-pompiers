@@ -31,6 +31,10 @@ public class Carte {
         this.tab_cases = tab_cases;
     }
 
+    public Case getCase(int lig, int col){
+        return tab_cases[lig][col];
+    }
+
     public boolean voisinExiste(Case src, Direction dir) {
         switch (dir) {
             case NORD:

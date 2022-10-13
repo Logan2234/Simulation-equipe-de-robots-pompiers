@@ -1,15 +1,15 @@
-public class RobotPattes extends Robot{
-    private double vitesse_default = 30;
-
-    public RobotPattes(Case position){
-        super(position, 1/0);
+public class RobotPattes extends Robot {
+    public RobotPattes(Case position) {
+        super(position, -1, 30);
     }
-    
+
     @Override
     public double getVitesse(NatureTerrain nature) {
-        //if (nature == rocher)
+        if (nature == NatureTerrain.ROCHE)
             return 10;
-        //else if (nature != eau) {return vitesse_default;}
-        //else {return 0}
+        else if (nature != NatureTerrain.EAU) 
+            return super.getVitesseDefaut();
+        else 
+            return 0;
     }
 }
