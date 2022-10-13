@@ -9,11 +9,16 @@ public class RobotDrone extends Robot {
 
     @Override
     public void remplirReservoir() {
-        // TODO
-    }
-
-    @Override
-    public double getVitesse(NatureTerrain nature) {
-        return super.getVitesseDefaut();
+        boolean aboveWater = false;
+        for (Direction dir : Direction.values()){
+            if (Case.getCarte().getVoisin(super.getPosition(), dir).getNature() == NatureTerrain.EAU){
+                aboveWater = true;
+                break;
+            }
+        }
+        if (aboveWater)
+            super.fillReservoir();
+        else
+            throw new IllegalArgumentException("Il n'est pas possible de remplir le réservoir du drône sans être au-dessus d'une source d'eau");
     }
 }

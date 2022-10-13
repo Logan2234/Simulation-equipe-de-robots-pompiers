@@ -1,13 +1,22 @@
 public class Case {
-
     private NatureTerrain nature;
     private int ligne;
     private int colonne;
-
+    // Pour trouver les voisins d'une case il faut qu'il y ait un lien entre les cases et la carte
+    private static Carte carte;
+    
     public Case(NatureTerrain nature, int ligne, int colonne) {
         this.nature = nature;
         this.ligne = ligne;
         this.colonne = colonne;
+    }
+    
+    public static void setCarte(Carte carte){
+        Case.carte = carte;
+    }
+    
+    public static Carte getCarte() {
+        return carte;
     }
 
     public NatureTerrain getNature() {
@@ -26,5 +35,4 @@ public class Case {
     public String toString() {
         return "Case [nature=" + nature + ", ligne=" + ligne + ", colonne=" + colonne + "]";
     }
-
 }

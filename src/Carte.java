@@ -1,37 +1,39 @@
+import java.util.Arrays;
+
 public class Carte {
+
     private int tailleCases;
     private int nbLignes;
     private int nbColonnes;
     private Case[][] tab_cases;
 
-    
     public Carte(int nbLignes, int nbColonnes) {
         this.nbLignes = nbLignes;
         this.nbColonnes = nbColonnes;
         tab_cases = new Case[nbLignes][nbColonnes];
     }
-    
+
     public int getTailleCases() {
         return tailleCases;
     }
-    
-    public void setTailleCases(int tailleCases){
+
+    public void setTailleCases(int tailleCases) {
         this.tailleCases = tailleCases;
     }
-    
+
     public int getNbLignes() {
         return nbLignes;
     }
-    
+
     public int getNbColonnes() {
         return nbColonnes;
     }
-    
+
     public void setTab_cases(Case[][] tab_cases) {
         this.tab_cases = tab_cases;
     }
 
-    public Case getCase(int lig, int col){
+    public Case getCase(int lig, int col) {
         return tab_cases[lig][col];
     }
 
@@ -73,5 +75,11 @@ public class Carte {
             }
         }
         return src;
+    }
+
+    @Override
+    public String toString() {
+        return "Carte [tailleCases=" + tailleCases + ", nbLignes=" + nbLignes + ", nbColonnes=" + nbColonnes
+                + ", tab_cases=" + Arrays.toString(tab_cases) + "]";
     }
 }
