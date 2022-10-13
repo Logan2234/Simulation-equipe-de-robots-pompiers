@@ -168,7 +168,7 @@ public class LecteurDonnees {
             verifieLigneTerminee();
 
             switch (type) {
-                case "DRONES":
+                case "DRONE":
                     if (vitesse != 0)
                         return new RobotDrone(Case.getCarte().getCase(lig, col), vitesse);
                     return new RobotDrone(Case.getCarte().getCase(lig, col));

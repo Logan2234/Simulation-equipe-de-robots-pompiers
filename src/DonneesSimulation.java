@@ -12,6 +12,18 @@ public class DonneesSimulation {
         this.robots = robots;
     }
     
+    public Carte getCarte() {
+        return carte;
+    }
+    
+    public Incendie[] getIncendies() {
+        return incendies;
+    }
+
+    public Robot[] getRobots() {
+        return robots;
+    }
+    
     @Override
     public String toString() {
         return "DonneesSimulation [carte=" + carte + ", incendies=" + Arrays.toString(incendies) + ", robots="

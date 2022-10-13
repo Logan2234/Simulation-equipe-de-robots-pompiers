@@ -26,6 +26,9 @@ all: testInvader testLecture
 testInvader:
 	javac -d bin -classpath bin/gui.jar -sourcepath src src/TestInvader.java
 
+testSimulation:
+	javac -d bin -classpath bin/gui.jar -sourcepath src src/TestSimulation.java
+
 testLecture:
 	javac -d bin -sourcepath src src/TestLecteurDonnees.java
 
@@ -38,7 +41,10 @@ exeInvader:
 	java -classpath bin:bin/gui.jar TestInvader
 
 exeLecture: 
-	java -classpath bin TestLecteurDonnees cartes/carteSujet.map
+	java -classpath bin TestLecteurDonnees cartes/spiralOfMadness-50x50.map
+
+exeSimulation: 
+	java -classpath bin:bin/gui.jar TestSimulation cartes/spiralOfMadness-50x50.map
 
 clean:
 	rm -rf bin/*.class
