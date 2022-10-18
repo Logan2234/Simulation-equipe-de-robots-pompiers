@@ -8,6 +8,10 @@ public class Incendie {
         this.litres_requis = litres_requis;
     }
 
+    public int getLitres(){
+        return this.litres_requis;
+    }
+
     @Override
     public String toString() {
         return "Incendie [position=" + position + ", litres_requis=" + litres_requis + "]";
