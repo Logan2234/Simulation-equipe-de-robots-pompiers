@@ -44,7 +44,7 @@ exeLecture:
 	java -classpath bin TestLecteurDonnees cartes/spiralOfMadness-50x50.map
 
 exeSimulation: 
-	java -classpath bin:bin/gui.jar TestSimulation cartes/spiralOfMadness-50x50.map
+	java -classpath bin:bin/gui.jar TestSimulation cartes/carteSujet.map
 
 clean:
 	rm -rf bin/*.class

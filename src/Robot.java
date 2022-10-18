@@ -20,6 +20,7 @@ public abstract class Robot {
         this.position = position;
     }
     
+    // Méthode uniquement utilisée par le drone qui remplit son reservoir différemment (cf. RobotDrone.java)
     public void fillReservoir() {
         this.reservoir = this.capacite;
     }
