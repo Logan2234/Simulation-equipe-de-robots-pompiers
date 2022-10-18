@@ -23,7 +23,8 @@ public class TestSimulation {
             // crée la fenêtre graphique dans laquelle dessiner
             GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
             // crée l'invader, en l'associant à la fenêtre graphique précédente
-            Simulateur simulateur = new Simulation(gui, donnees);
+            Simulateur simulateur = new Simulateur();
+            Simulation simulation = new Simulation(gui, donnees, simulateur);
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + args[0] + " inconnu ou illisible");
         } catch (DataFormatException e) {
@@ -36,10 +37,12 @@ class Simulation implements Simulable {
     /** L'interface graphique associée */
     private GUISimulator gui;
     private DonneesSimulation donnees;
+    private Simulateur simulateur;
     
     public Simulation(GUISimulator gui, DonneesSimulation donnees) {
         this.gui = gui;
         this.donnees = donnees;
+        this.simulateur = simulateur;
 
         gui.setSimulable(this);
 
@@ -82,11 +85,11 @@ class Simulation implements Simulable {
 
     @Override
     public void next() {
-        //TODO
+        simulateur.incrementeDate();
     }
 
     @Override
     public void restart() {
-        //TODO
+        simulateur.restart();
     }
 }
