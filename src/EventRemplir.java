@@ -1,7 +1,7 @@
 public class EventRemplir extends Evenement {
     private Robot robot;
 
-    public EvenementRemplir(int date, Robot robot){
+    public EventRemplir(long date, Robot robot){
         super(date);
         this.robot = robot;
     }

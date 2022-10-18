@@ -8,6 +8,15 @@ public class RobotChenilles extends Robot {
     }
 
     @Override
+    public void setPosition(Case new_case){
+        NatureTerrain new_terrain = new_case.getNature();
+        if (new_terrain == NatureTerrain.EAU || new_terrain == NatureTerrain.ROCHE){
+            throw new IllegalArgumentException("Le robot à chenilles ne peut pas aller sur de l'eau ou des rochers");
+        }
+        super.setPosition(new_case);
+    }
+
+    @Override
     public double getVitesse(NatureTerrain nature) {
         if (nature == NatureTerrain.FORET)
             return this.getVitesseDefaut() / 2;

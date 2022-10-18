@@ -11,11 +11,11 @@ public class EventIntervenir extends Evenement{
     @Override
     public void execute(){
         int i =0;
-        while (i < incendies.length && !(this.incendies[i].getPosition().equals(robot.getPosition()){
+        while (i < incendies.length && !(this.incendies[i].getPosition().equals(robot.getPosition()))){
             i++;
         }
         if (i >= incendies.length){
-            throw new IllegalArgumentException("il n'y a pas d'incendies ici");
+            throw new IllegalArgumentException("Il n'y a pas d'incendies ici");
         }
         this.robot.deverserEau(this.incendies[i].getLitres());
     }

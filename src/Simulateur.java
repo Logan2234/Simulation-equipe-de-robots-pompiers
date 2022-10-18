@@ -23,7 +23,7 @@ public class Simulateur {
     }
 
     void incrementeDate(){
-        this.dateSimulation = this.dateSimulation + 1
+        this.dateSimulation = this.dateSimulation + 1;
     }
 
     void ajouteEvenement(Evenement e){

@@ -16,8 +16,12 @@ public abstract class Robot {
         return this.position;
     }
 
-    public void setPositon(Case position) {
-        this.position = position;
+    /* 
+     * Méthode de base si on a aucune contrainte en fonction de la nature du terrain.
+     * Sinon on override cette fonction dans les classes filles.
+     */
+    public void setPosition(Case new_pos) {
+        this.position = new_pos;
     }
     
     // Méthode uniquement utilisée par le drone qui remplit son reservoir différemment (cf. RobotDrone.java)
@@ -34,8 +38,8 @@ public abstract class Robot {
     }
 
     public void deverserEau(int quantite) {
-        if (quantite > reservoir) {
-            throw new IllegalArgumentException("On ne peut pas deverser plus d'eau que l'eau dans le réservoir !");
+        if (this.reservoir <= 0) {
+            throw new IllegalArgumentException("On ne peut pas deverser de l'eau si on n'en a pas dans le reservoir !");
         } else {
             this.reservoir -= quantite;
         }
