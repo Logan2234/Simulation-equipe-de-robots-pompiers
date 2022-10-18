@@ -40,7 +40,8 @@ class Simulation implements Simulable {
     private GUISimulator gui;
     private DonneesSimulation donnees;
     private Simulateur simulateur;
-    private Queue<Queue<Evenement>> = new LinkedList();
+    private Queue<Queue<Evenement>> evenements = new LinkedList();
+    // TODO : Il faut remplir la liste chainée de listes chainées.
     
     public Simulation(GUISimulator gui, DonneesSimulation donnees) {
         this.gui = gui;
@@ -50,6 +51,14 @@ class Simulation implements Simulable {
         gui.setSimulable(this);
 
         draw();
+
+        Queue<Evenement> eventActuel;
+        while (evenements.size() != 0){
+            eventActuel = this.evenements.poll();
+            eventActuel.execute();
+            draw();
+        }
+        
     }
 
     private void draw() {
