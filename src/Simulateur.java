@@ -8,15 +8,15 @@ public class Simulateur {
         this.dateSimulation = 0;
     }
 
-    void incrementeDate(){
-        this.dateSimulation = this.dateSimulation + 1
+    private void incrementeDate(){
+        this.dateSimulation = this.dateSimulation + 1;
     }
 
     void ajouteEvenement(Evenement e){
         this.queue.add(e);
     }
 
-    boolean simulationTerminee(){
+    private boolean simulationTerminee(){
         if (this.queue.size() == 0){
             return true;
         }
