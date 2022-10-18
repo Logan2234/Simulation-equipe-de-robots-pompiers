@@ -34,7 +34,7 @@ public class Simulateur {
         Evenement event = new Evenement();
         while (!simulationTerminee()){
             event = this.queue.poll();
-            event.execute;
+            event.execute();
         }
     }
 
