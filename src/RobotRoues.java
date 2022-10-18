@@ -13,7 +13,7 @@ public class RobotRoues extends Robot {
     @Override
     public double getVitesse(NatureTerrain nature) {
         if (nature == NatureTerrain.HABITAT || nature == NatureTerrain.TERRAIN_LIBRE) {
-            return super.getVitesseDefaut();
+            return this.getVitesseDefaut();
         }
         return 0;
     }

@@ -8,7 +8,7 @@ public class RobotPattes extends Robot {
         if (nature == NatureTerrain.ROCHE)
             return 10;
         else if (nature != NatureTerrain.EAU) 
-            return super.getVitesseDefaut();
+            return this.getVitesseDefaut();
         else 
             return 0;
     }
