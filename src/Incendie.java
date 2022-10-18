@@ -12,6 +12,10 @@ public class Incendie {
         return this.litres_requis;
     }
 
+    public Case getPosition(){
+        return this.position;
+    }
+
     @Override
     public String toString() {
         return "Incendie [position=" + position + ", litres_requis=" + litres_requis + "]";
