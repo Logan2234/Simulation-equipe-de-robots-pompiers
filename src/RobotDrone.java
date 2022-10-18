@@ -11,13 +11,13 @@ public class RobotDrone extends Robot {
     public void remplirReservoir() {
         boolean aboveWater = false;
         for (Direction dir : Direction.values()){
-            if (Case.getCarte().getVoisin(super.getPosition(), dir).getNature() == NatureTerrain.EAU){
+            if (Case.getCarte().getVoisin(this.getPosition(), dir).getNature() == NatureTerrain.EAU){
                 aboveWater = true;
                 break;
             }
         }
         if (aboveWater)
-            super.fillReservoir();
+            this.fillReservoir();
         else
             throw new IllegalArgumentException("Il n'est pas possible de remplir le réservoir du drône sans être au-dessus d'une source d'eau");
     }
