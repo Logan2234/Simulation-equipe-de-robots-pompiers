@@ -3,6 +3,8 @@ import java.util.zip.DataFormatException;
 
 import java.awt.Color;
 
+import java.util.*;
+
 import gui.GUISimulator;
 import gui.Rectangle;
 import gui.Simulable;
@@ -23,7 +25,8 @@ public class TestSimulation {
             // crée la fenêtre graphique dans laquelle dessiner
             GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
             // crée l'invader, en l'associant à la fenêtre graphique précédente
-            Simulateur simulateur = new Simulation(gui, donnees);
+            Simulateur simulateur = new Simulateur();
+            Simulation simulation = new Simulation(gui, donnees, simulateur);
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + args[0] + " inconnu ou illisible");
         } catch (DataFormatException e) {
@@ -36,14 +39,26 @@ class Simulation implements Simulable {
     /** L'interface graphique associée */
     private GUISimulator gui;
     private DonneesSimulation donnees;
+    private Simulateur simulateur;
+    private Queue<Queue<Evenement>> evenements = new LinkedList();
+    // TODO : Il faut remplir la liste chainée de listes chainées.
     
     public Simulation(GUISimulator gui, DonneesSimulation donnees) {
         this.gui = gui;
         this.donnees = donnees;
+        this.simulateur = simulateur;
 
         gui.setSimulable(this);
 
         draw();
+
+        Queue<Evenement> eventActuel;
+        while (evenements.size() != 0){
+            eventActuel = this.evenements.poll();
+            eventActuel.execute();
+            draw();
+        }
+        
     }
 
     private void draw() {
@@ -82,11 +97,11 @@ class Simulation implements Simulable {
 
     @Override
     public void next() {
-        //TODO
+        simulateur.incrementeDate();
     }
 
     @Override
     public void restart() {
-        //TODO
+        simulateur.restart();
     }
 }
