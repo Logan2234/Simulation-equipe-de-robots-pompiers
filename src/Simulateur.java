@@ -17,8 +17,7 @@ public class Simulateur {
 
         // On vide la queue
         Evenement poubelle = new Evenement();
-        poubelle = this.queue.poll(); // poll return null si la queue est vide
-        while (poubelle != null){
+        while (!simulationTerminee()){
             poubelle = this.queue.poll();
         }
     }
@@ -29,6 +28,14 @@ public class Simulateur {
 
     void ajouteEvenement(Evenement e){
         this.queue.add(e);
+    }
+
+    void execute(){
+        Evenement event = new Evenement();
+        while (!simulationTerminee()){
+            event = this.queue.poll();
+            event.execute;
+        }
     }
 
     boolean simulationTerminee(){

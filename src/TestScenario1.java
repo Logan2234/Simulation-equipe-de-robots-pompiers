@@ -3,6 +3,8 @@ import java.util.zip.DataFormatException;
 
 import java.awt.Color;
 
+import java.util.*;
+
 import gui.GUISimulator;
 import gui.Rectangle;
 import gui.Simulable;
@@ -38,6 +40,7 @@ class Simulation implements Simulable {
     private GUISimulator gui;
     private DonneesSimulation donnees;
     private Simulateur simulateur;
+    private Queue<Queue<Evenement>> = new LinkedList();
     
     public Simulation(GUISimulator gui, DonneesSimulation donnees) {
         this.gui = gui;
