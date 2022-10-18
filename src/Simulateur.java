@@ -24,14 +24,14 @@ public class Simulateur {
     }
 
     void incrementeDate(){
-        this.dateSimulation = this.dateSimulation + 1
+        this.dateSimulation = this.dateSimulation + 1;
     }
 
     void ajouteEvenement(Evenement e){
         this.queue.add(e);
     }
 
-    boolean simulationTerminee(){
+    private boolean simulationTerminee(){
         if (this.queue.size() == 0){
             return true;
         }
