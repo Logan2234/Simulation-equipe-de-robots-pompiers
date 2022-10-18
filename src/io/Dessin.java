@@ -15,7 +15,8 @@ import Donnees.Robot.Robot;
 import Donnees.Robot.RobotChenilles;
 import Donnees.Robot.RobotDrone;
 import Donnees.Robot.RobotPattes;
-import Donnees.Robot.RobotRoues;;
+import Donnees.Robot.RobotRoues;
+import Evenements.Simulateur;;
 
 // Comme on utilise ces fonctions dans plusieurs fichiers tests
 // différents, on préfère en faire un fichier à part directement
@@ -26,10 +27,12 @@ public class Dessin {
     private GUISimulator gui;
     private int tailleCase;
     private HashMap<Object, String> assimilationRobotString;
+    private Simulateur simulateur;
 
-    public Dessin(DonneesSimulation donnees, GUISimulator gui) {
+    public Dessin(DonneesSimulation donnees, GUISimulator gui, Simulateur simulateur) {
         this.donnees = donnees;
         this.gui = gui;
+        this.simulateur = simulateur;
 
         int largeur_case = 800 / donnees.getCarte().getNbColonnes();
         int hauteur_case = 600 / donnees.getCarte().getNbLignes();
@@ -80,15 +83,20 @@ public class Dessin {
                     tailleCase / 2 + i * tailleCase, Color.GRAY, Color.magenta, tailleCase / 2));
             gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase / 2 + tailleCase * i,
                     Color.BLACK, assimilationRobotString.get(robot.getClass())));
-            gui.addGraphicalElement(new Text(650, 50 * tour + 10, Color.WHITE,
+            gui.addGraphicalElement(new Text(650, 50 * tour + 30, Color.WHITE,
                     assimilationRobotString.get(robot.getClass()) + " : " + Integer.toString(robot.getReservoir())));
         }
+    }
+
+    private void dessinDateSimulation(){
+        gui.addGraphicalElement(new Text(650, 30, Color.WHITE, "Date: " + Long.toString(simulateur.getDateSimulation())));
     }
 
     public void dessin() {
         dessinCases();
         dessinIncendies();
         dessinRobots();
+        dessinDateSimulation();
     }
 
 }
