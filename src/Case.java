@@ -22,15 +22,15 @@ public class Case {
     }
 
     public NatureTerrain getNature() {
-        return nature;
+        return this.nature;
     }
 
     public int getLigne() {
-        return ligne;
+        return this.ligne;
     }
 
     public int getColonne() {
-        return ligne;
+        return this.colonne;
     }
 
     @Override

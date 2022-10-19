@@ -23,7 +23,7 @@ public class TestSimulation {
             // crée la fenêtre graphique dans laquelle dessiner
             GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
             // crée l'invader, en l'associant à la fenêtre graphique précédente
-            Simulateur simulateur = new Simulation(gui, donnees);
+            Simulation simulateur = new Simulation(gui, donnees);
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + args[0] + " inconnu ou illisible");
         } catch (DataFormatException e) {
@@ -77,6 +77,18 @@ class Simulation implements Simulable {
                         break;
                 }
             }
+        }
+        for (Incendie incendie: donnees.getIncendies()){
+            Case pos = incendie.getPosition();
+            int i = pos.getLigne();
+            int j = pos.getColonne();
+            gui.addGraphicalElement(new Rectangle(hauteur_case/2 + largeur_case*j, hauteur_case/2 + i*hauteur_case, Color.RED, Color.RED, hauteur_case/2));
+        }
+        for (Robot robot: donnees.getRobots()){
+            Case pos = robot.getPosition();
+            int i = pos.getLigne();
+            int j = pos.getColonne();
+            gui.addGraphicalElement(new Rectangle(hauteur_case/2 + largeur_case*j, hauteur_case/2 + i*hauteur_case, Color.magenta, Color.magenta, hauteur_case/2));
         }
     }
 
