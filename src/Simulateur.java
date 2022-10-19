@@ -14,16 +14,13 @@ public class Simulateur {
 
     public void restart(){
         this.dateSimulation = 0;
-
         // On vide la queue
-        Evenement poubelle = new Evenement();
-        while (!simulationTerminee()){
-            poubelle = this.queue.poll();
-        }
+        while (!simulationTerminee())
+            this.queue.poll();
     }
 
     void incrementeDate(){
-        this.dateSimulation = this.dateSimulation + 1;
+        this.dateSimulation += 1;
     }
 
     void ajouteEvenement(Evenement e){
@@ -31,7 +28,7 @@ public class Simulateur {
     }
 
     void execute(){
-        Evenement event = new Evenement();
+        Evenement event;
         while (!simulationTerminee()){
             event = this.queue.poll();
             event.execute();
