@@ -8,7 +8,6 @@ public class Simulateur {
         this.dateSimulation = 0;
     }
 
-<<<<<<< HEAD
     public long getDateSimulation(){
         return this.dateSimulation;
     }
@@ -24,9 +23,6 @@ public class Simulateur {
     }
 
     void incrementeDate(){
-=======
-    private void incrementeDate(){
->>>>>>> 4e4f93f (Ajout de l'evenement de deplaement, modification des méthodes setPosition des robots)
         this.dateSimulation = this.dateSimulation + 1;
     }
 
@@ -34,7 +30,6 @@ public class Simulateur {
         this.queue.add(e);
     }
 
-<<<<<<< HEAD
     void execute(){
         Evenement event = new Evenement();
         while (!simulationTerminee()){
@@ -44,9 +39,6 @@ public class Simulateur {
     }
 
     boolean simulationTerminee(){
-=======
-    private boolean simulationTerminee(){
->>>>>>> 4e4f93f (Ajout de l'evenement de deplaement, modification des méthodes setPosition des robots)
         if (this.queue.size() == 0){
             return true;
         }
