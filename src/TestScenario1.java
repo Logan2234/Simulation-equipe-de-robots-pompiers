@@ -41,7 +41,24 @@ class Simulation implements Simulable {
     private DonneesSimulation donnees;
     private Simulateur simulateur;
     private Queue<Queue<Evenement>> evenements = new LinkedList();
-    // TODO : Il faut remplir la liste chainée de listes chainées.
+    RobotRoues robot2 = donnees.getRobots()[1];
+    Queue<Evenement> un = new LinkedList(); un.add(new EventMouvement(1, robot2, NORD));
+    evenements.add(un);
+
+    Queue<Evenement> deux = new LinkedList(); deux.add(new EventIntervenir(robot2, 2, donnees.getIncendies()));
+    evenements.add(deux);
+
+    Queue<Evenement> trois = new LinkedList(); trois.add(new EventMouvement(3, robot2, OUEST));
+    evenements.add(trois); evenements.add(trois);
+
+    Queue<Evenement> quatre = new LinkedList(); quatre.add(new EventMouvement(4, robot2));
+    evenements.add(quatre);
+
+    Queue<Evenement> cinq = new LinkedList(); cinq.add(new EventMouvement(5, robot2, EST));
+    evenements.add(cinq); evenements.add(cinq);
+
+    Queue<Evenement> six = new LinkedList(); six.add(new EventIntervenir(robot2, 6, donnees.getIncendies()));
+    evenements.add(six);
     
     public Simulation(GUISimulator gui, DonneesSimulation donnees) {
         this.gui = gui;
