@@ -10,7 +10,7 @@ import gui.Rectangle;
 import gui.Simulable;
 import gui.Text;
 
-public class TestSimulation {
+public class TestScenario1 {
     public static void main(String[] args) {
         if (args.length < 1) {
             System.out.println("Syntaxe: java TestLecteurDonnees <nomDeFichier>");
@@ -41,38 +41,47 @@ class Simulation implements Simulable {
     private DonneesSimulation donnees;
     private Simulateur simulateur;
     private Queue<Queue<Evenement>> evenements = new LinkedList();
-    RobotRoues robot2 = donnees.getRobots()[1];
-    Queue<Evenement> un = new LinkedList(); un.add(new EventMouvement(1, robot2, NORD));
-    evenements.add(un);
-
-    Queue<Evenement> deux = new LinkedList(); deux.add(new EventIntervenir(robot2, 2, donnees.getIncendies()));
-    evenements.add(deux);
-
-    Queue<Evenement> trois = new LinkedList(); trois.add(new EventMouvement(3, robot2, OUEST));
-    evenements.add(trois); evenements.add(trois);
-
-    Queue<Evenement> quatre = new LinkedList(); quatre.add(new EventMouvement(4, robot2));
-    evenements.add(quatre);
-
-    Queue<Evenement> cinq = new LinkedList(); cinq.add(new EventMouvement(5, robot2, EST));
-    evenements.add(cinq); evenements.add(cinq);
-
-    Queue<Evenement> six = new LinkedList(); six.add(new EventIntervenir(robot2, 6, donnees.getIncendies()));
-    evenements.add(six);
     
-    public Simulation(GUISimulator gui, DonneesSimulation donnees) {
+    
+    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur) {
         this.gui = gui;
         this.donnees = donnees;
         this.simulateur = simulateur;
+
+        RobotRoues robot2 = (RobotRoues) donnees.getRobots()[1];
+        Queue<Evenement> un = new LinkedList(); 
+        un.add(new EventMouvement(1, robot2, Direction.NORD));
+        this.evenements.add(un);
+
+        Queue<Evenement> deux = new LinkedList(); 
+        deux.add(new EventIntervenir(robot2, 2, donnees.getIncendies()));
+        this.evenements.add(deux);
+
+        Queue<Evenement> trois = new LinkedList(); 
+        trois.add(new EventMouvement(3, robot2, Direction.OUEST));
+        trois.add(new EventMouvement(3, robot2, Direction.OUEST));
+        this.evenements.add(trois);
+
+        Queue<Evenement> quatre = new LinkedList(); 
+        quatre.add(new EventRemplir(4, robot2));
+        this.evenements.add(quatre);
+
+        Queue<Evenement> cinq = new LinkedList(); 
+        cinq.add(new EventMouvement(5, robot2, Direction.EST));
+        cinq.add(new EventMouvement(5, robot2, Direction.EST)); 
+        this.evenements.add(cinq);
+
+        Queue<Evenement> six = new LinkedList(); 
+        six.add(new EventIntervenir(robot2, 6, donnees.getIncendies()));
+        this.evenements.add(six);
 
         gui.setSimulable(this);
 
         draw();
 
-        Queue<Evenement> eventActuel;
         while (evenements.size() != 0){
-            eventActuel = this.evenements.poll();
-            eventActuel.execute();
+            simulateur.ajouteListeEvenement(evenements.poll());
+            simulateur.execute();
             draw();
         }
         

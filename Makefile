@@ -29,6 +29,8 @@ testInvader:
 testSimulation:
 	javac -d bin -classpath bin/gui.jar -sourcepath src src/TestSimulation.java
 
+testScenario1:
+	javac -d bin -classpath bin/gui.jar -sourcepath src src/TestScenario1.java
 testLecture:
 	javac -d bin -sourcepath src src/TestLecteurDonnees.java
 

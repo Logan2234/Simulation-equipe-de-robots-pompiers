@@ -27,6 +27,10 @@ public class Simulateur {
         this.queue.add(e);
     }
 
+    void ajouteListeEvenement(Queue<Evenement> liste){
+        this.queue = liste;
+    }
+
     void execute(){
         Evenement event;
         while (!simulationTerminee()){
