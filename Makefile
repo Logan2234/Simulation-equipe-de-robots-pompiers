@@ -48,5 +48,8 @@ exeLecture:
 exeSimulation: 
 	java -classpath bin:bin/gui.jar TestSimulation cartes/carteSujet.map
 
+exeScenario1:
+	java -classpath bin:bin/gui.jar TestScenario1 cartes/carteSujet.map
+
 clean:
 	rm -rf bin/*.class
