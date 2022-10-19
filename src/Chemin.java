@@ -11,6 +11,10 @@ public class Chemin {
         this.chemin.add(new AssociationTempsCase(caseSuiv, date));
     }
 
+    public AssociationTempsCase getElem(int index) {
+        return this.chemin.get(index);
+    }
+
 }
 
 class AssociationTempsCase{
