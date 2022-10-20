@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Simulateur {
     private long dateSimulation;
-    private Queue<Evenement> queue = new LinkedList<>();
+    private Queue<Evenement> evenementsActuels = new LinkedList<>();
 
     public Simulateur(){
         this.dateSimulation = 0;
@@ -16,7 +16,7 @@ public class Simulateur {
         this.dateSimulation = 0;
         // On vide la queue
         while (!simulationTerminee())
-            this.queue.poll();
+            this.evenementsActuels.poll();
     }
 
     void incrementeDate(){
@@ -24,23 +24,19 @@ public class Simulateur {
     }
 
     void ajouteEvenement(Evenement e){
-        this.queue.add(e);
-    }
-
-    void ajouteListeEvenement(Queue<Evenement> liste){
-        this.queue = liste;
+        this.evenementsActuels.add(e);
     }
 
     void execute(){
         Evenement event;
         while (!simulationTerminee()){
-            event = this.queue.poll();
+            event = this.evenementsActuels.poll();
             event.execute();
         }
     }
 
     boolean simulationTerminee(){
-        if (this.queue.size() == 0){
+        if (this.evenementsActuels.size() == 0){
             return true;
         }
         return false;

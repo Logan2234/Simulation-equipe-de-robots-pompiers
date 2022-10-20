@@ -30,10 +30,10 @@ public class LecteurDonnees {
 
         // Création du tableau des incendies
         int nbIncendies = lireIncendies();
-        Incendie[] incendies = new Incendie[nbIncendies];
+        LinkedList<Incendie> incendies = new LinkedList<Incendie>();
 
         for (int i = 0; i < nbIncendies; i++) {
-            incendies[i] = lireIncendie(i);
+            incendies.add(lireIncendie(i));
         }
 
         // Création du tableau des robots

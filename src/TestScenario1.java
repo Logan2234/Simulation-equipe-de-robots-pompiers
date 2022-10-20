@@ -18,7 +18,7 @@ public class TestScenario1 {
         }
 
         DonneesSimulation donnees;
-        
+
         try {
             LecteurDonnees lecteur = new LecteurDonnees();
             donnees = lecteur.creerSimulation(args[0]);
@@ -40,90 +40,96 @@ class Simulation implements Simulable {
     private GUISimulator gui;
     private DonneesSimulation donnees;
     private Simulateur simulateur;
-    private Queue<Queue<Evenement>> evenements = new LinkedList();
-    
-    
+    private Queue<Evenement> evenements = new LinkedList<Evenement>();
+
     public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur) {
         this.gui = gui;
         this.donnees = donnees;
         this.simulateur = simulateur;
 
         RobotRoues robot2 = (RobotRoues) donnees.getRobots()[1];
-        Queue<Evenement> un = new LinkedList(); 
-        un.add(new EventMouvement(1, robot2, Direction.NORD));
-        this.evenements.add(un);
-
-        Queue<Evenement> deux = new LinkedList(); 
-        deux.add(new EventIntervenir(robot2, 2, donnees.getIncendies()));
-        this.evenements.add(deux);
-
-        Queue<Evenement> trois = new LinkedList(); 
-        trois.add(new EventMouvement(3, robot2, Direction.OUEST));
-        trois.add(new EventMouvement(3, robot2, Direction.OUEST));
-        this.evenements.add(trois);
-
-        Queue<Evenement> quatre = new LinkedList(); 
-        quatre.add(new EventRemplir(4, robot2));
-        this.evenements.add(quatre);
-
-        Queue<Evenement> cinq = new LinkedList(); 
-        cinq.add(new EventMouvement(5, robot2, Direction.EST));
-        cinq.add(new EventMouvement(5, robot2, Direction.EST)); 
-        this.evenements.add(cinq);
-
-        Queue<Evenement> six = new LinkedList(); 
-        six.add(new EventIntervenir(robot2, 6, donnees.getIncendies()));
-        this.evenements.add(six);
+        this.evenements.add(new EventMouvement(1, robot2, Direction.NORD));
+        this.evenements.add(new EventIntervenir(2, robot2, donnees.getIncendies()));
+        this.evenements.add(new EventMouvement(3, robot2, Direction.OUEST));
+        this.evenements.add(new EventMouvement(3, robot2, Direction.OUEST));
+        this.evenements.add(new EventRemplir(4, robot2)); 
+        this.evenements.add(new EventMouvement(5, robot2, Direction.EST));
+        this.evenements.add(new EventMouvement(5, robot2, Direction.EST));
+        this.evenements.add(new EventIntervenir(6, robot2, donnees.getIncendies()));
+        this.evenements.add(new EventMouvement(7, robot2, Direction.OUEST));
 
         gui.setSimulable(this);
 
         draw();
-
-        while (evenements.size() != 0){
-            simulateur.ajouteListeEvenement(evenements.poll());
-            simulateur.execute();
-            draw();
-        }
         
     }
 
     private void draw() {
         gui.reset();
-
+        
         Carte carte = donnees.getCarte();
-
+        
         int largeur_case = 800 / carte.getNbColonnes();
         int hauteur_case = 600 / carte.getNbLignes();
 
-        for (int i = 0; i < carte.getNbLignes(); i++){
-            for (int j = 0; j < carte.getNbColonnes(); j++){
+        for (int i = 0; i < carte.getNbLignes(); i++) {
+            for (int j = 0; j < carte.getNbColonnes(); j++) {
                 Case current_case = carte.getCase(i, j);
                 switch (current_case.getNature()) {
                     case EAU:
-                        gui.addGraphicalElement(new Rectangle(hauteur_case/2 + largeur_case*j, hauteur_case/2 + i*hauteur_case, Color.BLUE, Color.BLUE, hauteur_case));
+                        gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
+                                hauteur_case / 2 + i * hauteur_case, Color.BLUE, Color.BLUE, hauteur_case));
                         break;
                     case FORET:
-                        gui.addGraphicalElement(new Rectangle(hauteur_case/2 + largeur_case*j, hauteur_case/2 + i*hauteur_case, Color.GREEN, Color.GREEN, hauteur_case));
+                        gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
+                                hauteur_case / 2 + i * hauteur_case, Color.GREEN, Color.GREEN, hauteur_case));
                         break;
                     case ROCHE:
-                        gui.addGraphicalElement(new Rectangle(hauteur_case/2 + largeur_case*j, hauteur_case/2 + i*hauteur_case, Color.GRAY, Color.GRAY, hauteur_case));
+                        gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
+                                hauteur_case / 2 + i * hauteur_case, Color.GRAY, Color.GRAY, hauteur_case));
                         break;
                     case HABITAT:
-                        gui.addGraphicalElement(new Rectangle(hauteur_case/2 + largeur_case*j, hauteur_case/2 + i*hauteur_case, Color.ORANGE, Color.ORANGE, hauteur_case));
-                        break;
+                    gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
+                    hauteur_case / 2 + i * hauteur_case, Color.ORANGE, Color.ORANGE, hauteur_case));
+                    break;
                     case TERRAIN_LIBRE:
-                        gui.addGraphicalElement(new Rectangle(hauteur_case/2 + largeur_case*j, hauteur_case/2 + i*hauteur_case, Color.WHITE, Color.WHITE, hauteur_case));
-                        break;
+                    gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
+                    hauteur_case / 2 + i * hauteur_case, Color.WHITE, Color.WHITE, hauteur_case));
+                    break;
                     default:
                         break;
+                    }
                 }
-            }
+        }
+        for (Incendie incendie : donnees.getIncendies()) {
+            Case pos = incendie.getPosition();
+            int i = pos.getLigne();
+            int j = pos.getColonne();
+            gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
+            hauteur_case / 2 + i * hauteur_case, Color.RED, Color.RED, hauteur_case / 2));
+        }
+        for (Robot robot : donnees.getRobots()) {
+            Case pos = robot.getPosition();
+            int i = pos.getLigne();
+            int j = pos.getColonne();
+            gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
+            hauteur_case / 2 + i * hauteur_case, Color.magenta, Color.magenta, hauteur_case / 2));
         }
     }
-
+    
     @Override
     public void next() {
-        simulateur.incrementeDate();
+        System.out.println(donnees.getRobots()[1].getReservoir());
+        long date = simulateur.getDateSimulation();
+        Evenement nextEvenement = evenements.element();
+        while (nextEvenement.getDate() == date) {
+            System.out.println("Cic");
+            simulateur.ajouteEvenement(evenements.poll());
+            nextEvenement = evenements.element();
+        }
+        simulateur.execute();
+        draw();
+        simulateur.incrementeDate(); 
     }
 
     @Override

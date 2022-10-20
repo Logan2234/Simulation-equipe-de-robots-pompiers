@@ -16,6 +16,10 @@ public class Incendie {
         return this.position;
     }
 
+    public void eteindre(int qteVersee) {
+        litres_requis -= qteVersee;
+    }
+
     @Override
     public String toString() {
         return "Incendie [position=" + position + ", litres_requis=" + litres_requis + "]";

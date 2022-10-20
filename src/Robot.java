@@ -16,6 +16,10 @@ public abstract class Robot {
         return this.position;
     }
 
+    public int getReservoir(){
+        return this.reservoir;
+    }
+
     /* 
      * Méthode de base si on a aucune contrainte en fonction de la nature du terrain.
      * Sinon on override cette fonction dans les classes filles.
@@ -38,11 +42,7 @@ public abstract class Robot {
     }
 
     public void deverserEau(int quantite) {
-        if (this.reservoir <= 0) {
-            throw new IllegalArgumentException("On ne peut pas deverser de l'eau si on n'en a pas dans le reservoir !");
-        } else {
             this.reservoir -= quantite;
-        }
     }
 
     public void remplirReservoir() {

@@ -1,12 +1,12 @@
 import java.util.Arrays;
+import java.util.LinkedList;
 
-public class DonneesSimulation {
-    
+public class DonneesSimulation {    
     private Carte carte;
-    private Incendie incendies[];
+    private LinkedList<Incendie> incendies;
     private Robot robots[];
     
-    public DonneesSimulation(Carte carte, Incendie[] incendies, Robot[] robots) {
+    public DonneesSimulation(Carte carte, LinkedList<Incendie> incendies, Robot[] robots) {
         this.carte = carte;
         this.incendies = incendies;
         this.robots = robots;
@@ -16,7 +16,7 @@ public class DonneesSimulation {
         return carte;
     }
     
-    public Incendie[] getIncendies() {
+    public LinkedList<Incendie> getIncendies() {
         return incendies;
     }
 
@@ -26,8 +26,8 @@ public class DonneesSimulation {
     
     @Override
     public String toString() {
-        return "DonneesSimulation [carte=" + carte + ", incendies=" + Arrays.toString(incendies) + ", robots="
-                + Arrays.toString(robots) + "]";
+        return "DonneesSimulation [carte=" + carte + ", incendies=" + incendies + ", robots=" + Arrays.toString(robots)
+                + "]";
     }
-    
+
 }
