@@ -9,7 +9,7 @@ public class EventMouvement extends Evenement {
     }
 
     @Override
-    public void execute() {
+    public void execute() throws IllegalArgumentException {
         Case pos = robot.getPosition();
         Carte carte = Case.getCarte();
         Case new_pos = carte.getVoisin(pos, this.dir);

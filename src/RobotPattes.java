@@ -9,6 +9,7 @@ public class RobotPattes extends Robot {
         if (new_terrain == NatureTerrain.EAU){
             throw new IllegalArgumentException("Le robot à pattes ne peut pas aller sur de l'eau");
         }
+        System.out.println(super.getPosition());
         super.setPosition(new_case);
     }
 

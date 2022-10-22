@@ -42,22 +42,26 @@ public class Carte {
             case NORD:
                 if (src.getLigne() == 0)
                     return false;
+                break;
             case SUD:
                 if (src.getLigne() == this.nbLignes - 1)
                     return false;
+                break;
             case OUEST:
                 if (src.getColonne() == 0)
                     return false;
+                break;
             case EST:
                 if (src.getColonne() == this.nbColonnes - 1)
                     return false;
+                break;
             default:
                 break;
         }
         return true;
     }
 
-    public Case getVoisin(Case src, Direction dir) {
+    public Case getVoisin(Case src, Direction dir) throws IllegalArgumentException {
         if (voisinExiste(src, dir)) {
             int ligne = src.getLigne();
             int colonne = src.getColonne();
@@ -74,6 +78,8 @@ public class Carte {
                     break;
             }
         }
+        else
+            throw new IllegalArgumentException("Le robot est sorti de la carte");
         return src;
     }
 
