@@ -10,10 +10,10 @@ import gui.Rectangle;
 import gui.Simulable;
 import gui.Text;
 
-public class TestScenario1 {
+public class TestDeplacementChemin {
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.println("Syntaxe: java TestScenario1 <nomDeFichier>");
+            System.out.println("Syntaxe: java TestDeplacementChemin <nomDeFichier>");
             System.exit(1);
         }
 
@@ -27,8 +27,18 @@ public class TestScenario1 {
             // crée l'invader, en l'associant à la fenêtre graphique précédente
             Simulateur simulateur = new Simulateur();
             Simulation simulation = new Simulation(gui, donnees, simulateur);
-            simulation.Simulation0();
-            simulation.Simulation1();
+            Chemin c = new Chemin();
+            Case pos = donnees.getRobots()[0].getPosition();
+            Case next = donnees.getCarte().getVoisin(pos, Direction.NORD);
+            Case next2 = donnees.getCarte().getVoisin(next, Direction.NORD);
+            Case next3 = donnees.getCarte().getVoisin(next2, Direction.OUEST);
+            Case next4 = donnees.getCarte().getVoisin(next3, Direction.SUD);
+            c.addElement(pos, 0);
+            c.addElement(next, 0);
+            c.addElement(next2, 1);
+            c.addElement(next3, 2);
+            c.addElement(next4, 3);
+            c.CreerEvenements(simulateur, donnees.getRobots()[0]);
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + args[0] + " inconnu ou illisible");
         } catch (DataFormatException e) {
@@ -52,28 +62,6 @@ class Simulation implements Simulable {
         gui.setSimulable(this);
 
         draw();
-    }
-
-    public void Simulation0() {
-        Robot robot1 = donnees.getRobots()[0];
-
-        this.evenements.add(new EventMouvement(0, robot1, Direction.NORD));
-        this.evenements.add(new EventMouvement(1, robot1, Direction.NORD));
-        this.evenements.add(new EventMouvement(2, robot1, Direction.NORD));
-        this.evenements.add(new EventMouvement(3, robot1, Direction.NORD));
-    }
-
-    public void Simulation1() {
-        RobotRoues robot2 = (RobotRoues) donnees.getRobots()[1];
-        this.evenements.add(new EventMouvement(6, robot2, Direction.NORD));
-        this.evenements.add(new EventIntervenir(7, robot2, donnees.getIncendies()));
-        this.evenements.add(new EventMouvement(8, robot2, Direction.OUEST));
-        this.evenements.add(new EventMouvement(8, robot2, Direction.OUEST));
-        this.evenements.add(new EventRemplir(9, robot2));
-        this.evenements.add(new EventMouvement(10, robot2, Direction.EST));
-        this.evenements.add(new EventMouvement(10, robot2, Direction.EST));
-        this.evenements.add(new EventIntervenir(11, robot2, donnees.getIncendies()));
-        this.evenements.add(new EventMouvement(12, robot2, Direction.OUEST));
     }
 
     private void draw() {
@@ -131,29 +119,12 @@ class Simulation implements Simulable {
 
     @Override
     public void next() {
-        long date = simulateur.getDateSimulation();
-        if (simulateur.simulationTerminee() && evenements.size() == 0){
-            return;
-        }
-        Evenement nextEvenement = evenements.element();
-        while (nextEvenement.getDate() == date) {
-            simulateur.ajouteEvenement(evenements.poll());
-            if (evenements.size() == 0)
-                break;
-            nextEvenement = evenements.element();
-        }
-        try{
-            simulateur.execute();
-            draw();
-        }
-        catch (IllegalArgumentException e){
-            System.out.println(e);
-        }
+        simulateur.execute();
         simulateur.incrementeDate();
+        draw();
     }
 
     @Override
     public void restart() {
-        simulateur.restart();
     }
 }

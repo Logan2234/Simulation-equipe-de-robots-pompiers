@@ -31,6 +31,10 @@ testSimulation:
 
 testScenario1:
 	javac -d bin -classpath bin/gui.jar -sourcepath src src/TestScenario1.java
+
+testDeplacementChemin:
+	javac -d bin -classpath bin/gui.jar -sourcepath src src/TestDeplacementChemin.java
+
 testLecture:
 	javac -d bin -sourcepath src src/TestLecteurDonnees.java
 
@@ -50,6 +54,9 @@ exeSimulation:
 
 exeScenario1:
 	java -classpath bin:bin/gui.jar TestScenario1 cartes/carteSujet.map
+
+exeDeplacementChemin:
+	java -classpath bin:bin/gui.jar TestDeplacementChemin cartes/carteSujet.map
 
 clean:
 	rm -rf bin/*.class
