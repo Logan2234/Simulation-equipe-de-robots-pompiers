@@ -42,7 +42,7 @@ class Simulation implements Simulable {
     private GUISimulator gui;
     private DonneesSimulation donnees;
     private Simulateur simulateur;
-    private Queue<Evenement> evenements = new LinkedList<Evenement>();
+    private Queue<Evenement> evenements = new LinkedList<Evenement>(); // TODO: Ca sert a rien ca puisqu'on peut direct utiliser le simulateur
 
     public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur) {
         this.gui = gui;
