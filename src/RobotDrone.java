@@ -10,8 +10,10 @@ public class RobotDrone extends Robot {
     @Override
     public void remplirReservoir() {
         boolean aboveWater = false;
+        Case pos = this.getPosition();
         for (Direction dir : Direction.values()){
-            if (Case.getCarte().getVoisin(this.getPosition(), dir).getNature() == NatureTerrain.EAU){
+
+            if (pos.getCarte().getVoisin(pos, dir).getNature() == NatureTerrain.EAU){
                 aboveWater = true;
                 break;
             }

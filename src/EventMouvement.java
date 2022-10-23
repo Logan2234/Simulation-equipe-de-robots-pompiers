@@ -21,7 +21,7 @@ public class EventMouvement extends Evenement {
     public void execute() throws IllegalArgumentException {
         if (this.dir != null) {
             Case pos = robot.getPosition();
-            Carte carte = Case.getCarte();
+            Carte carte = pos.getCarte();
             Case new_pos = carte.getVoisin(pos, this.dir);
             robot.setPosition(new_pos);
         } else {

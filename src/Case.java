@@ -5,20 +5,17 @@ public class Case {
     private int colonne;
     // Pour trouver les voisins d'une case il faut qu'il y ait un lien entre les
     // cases et la carte
-    private static Carte carte; // TODO: C'est pas bon ca imagine plusieurs instances de données
-
-    public Case(NatureTerrain nature, int ligne, int colonne) {
+    private Carte carte;
+    
+    public Case(NatureTerrain nature, int ligne, int colonne, Carte carte) {
         this.nature = nature;
         this.ligne = ligne;
         this.colonne = colonne;
+        this.carte = carte;
     }
 
-    public static void setCarte(Carte carte) {
-        Case.carte = carte;
-    }
-
-    public static Carte getCarte() {
-        return carte;
+    public Carte getCarte() {
+        return this.carte;
     }
 
     public NatureTerrain getNature() {

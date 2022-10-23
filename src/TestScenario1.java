@@ -42,7 +42,6 @@ class Simulation implements Simulable {
     private GUISimulator gui;
     private DonneesSimulation donnees;
     private Simulateur simulateur;
-    private Queue<Evenement> evenements = new LinkedList<Evenement>(); // TODO: Ca sert a rien ca puisqu'on peut direct utiliser le simulateur
 
     public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur) {
         this.gui = gui;
@@ -57,23 +56,23 @@ class Simulation implements Simulable {
     public void Simulation0() {
         Robot robot1 = donnees.getRobots()[0];
 
-        this.evenements.add(new EventMouvement(0, robot1, Direction.NORD));
-        this.evenements.add(new EventMouvement(1, robot1, Direction.NORD));
-        this.evenements.add(new EventMouvement(2, robot1, Direction.NORD));
-        this.evenements.add(new EventMouvement(3, robot1, Direction.NORD));
+        this.simulateur.ajouteEvenement(new EventMouvement(0, robot1, Direction.NORD));
+        this.simulateur.ajouteEvenement(new EventMouvement(1, robot1, Direction.NORD));
+        this.simulateur.ajouteEvenement(new EventMouvement(2, robot1, Direction.NORD));
+        this.simulateur.ajouteEvenement(new EventMouvement(3, robot1, Direction.NORD));
     }
 
     public void Simulation1() {
         RobotRoues robot2 = (RobotRoues) donnees.getRobots()[1];
-        this.evenements.add(new EventMouvement(6, robot2, Direction.NORD));
-        this.evenements.add(new EventIntervenir(7, robot2, donnees.getIncendies()));
-        this.evenements.add(new EventMouvement(8, robot2, Direction.OUEST));
-        this.evenements.add(new EventMouvement(8, robot2, Direction.OUEST));
-        this.evenements.add(new EventRemplir(9, robot2));
-        this.evenements.add(new EventMouvement(10, robot2, Direction.EST));
-        this.evenements.add(new EventMouvement(10, robot2, Direction.EST));
-        this.evenements.add(new EventIntervenir(11, robot2, donnees.getIncendies()));
-        this.evenements.add(new EventMouvement(12, robot2, Direction.OUEST));
+        this.simulateur.ajouteEvenement(new EventMouvement(6, robot2, Direction.NORD));
+        this.simulateur.ajouteEvenement(new EventIntervenir(7, robot2, donnees.getIncendies()));
+        this.simulateur.ajouteEvenement(new EventMouvement(8, robot2, Direction.OUEST));
+        this.simulateur.ajouteEvenement(new EventMouvement(8, robot2, Direction.OUEST));
+        this.simulateur.ajouteEvenement(new EventRemplir(9, robot2));
+        this.simulateur.ajouteEvenement(new EventMouvement(10, robot2, Direction.EST));
+        this.simulateur.ajouteEvenement(new EventMouvement(10, robot2, Direction.EST));
+        this.simulateur.ajouteEvenement(new EventIntervenir(11, robot2, donnees.getIncendies()));
+        this.simulateur.ajouteEvenement(new EventMouvement(12, robot2, Direction.OUEST));
     }
 
     private void draw() {
@@ -131,25 +130,14 @@ class Simulation implements Simulable {
 
     @Override
     public void next() {
-        long date = simulateur.getDateSimulation();
-        if (simulateur.simulationTerminee() && evenements.size() == 0){
-            return;
-        }
-        Evenement nextEvenement = evenements.element();
-        while (nextEvenement.getDate() == date) {
-            simulateur.ajouteEvenement(evenements.poll());
-            if (evenements.size() == 0)
-                break;
-            nextEvenement = evenements.element();
-        }
         try{
             simulateur.execute();
-            draw();
         }
         catch (IllegalArgumentException e){
             System.out.println(e);
         }
         simulateur.incrementeDate();
+        draw();
     }
 
     @Override

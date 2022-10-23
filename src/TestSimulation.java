@@ -16,7 +16,7 @@ public class TestSimulation {
         }
 
         DonneesSimulation donnees;
-        
+
         try {
             LecteurDonnees lecteur = new LecteurDonnees();
             donnees = lecteur.creerSimulation(args[0]);
@@ -36,7 +36,7 @@ class Simulation implements Simulable {
     /** L'interface graphique associée */
     private GUISimulator gui;
     private DonneesSimulation donnees;
-    
+
     public Simulation(GUISimulator gui, DonneesSimulation donnees) {
         this.gui = gui;
         this.donnees = donnees;
@@ -54,51 +54,56 @@ class Simulation implements Simulable {
         int largeur_case = 800 / carte.getNbColonnes();
         int hauteur_case = 600 / carte.getNbLignes();
 
-        for (int i = 0; i < carte.getNbLignes(); i++){
-            for (int j = 0; j < carte.getNbColonnes(); j++){
+        for (int i = 0; i < carte.getNbLignes(); i++) {
+            for (int j = 0; j < carte.getNbColonnes(); j++) {
                 Case current_case = carte.getCase(i, j);
                 switch (current_case.getNature()) {
                     case EAU:
-                        gui.addGraphicalElement(new Rectangle(hauteur_case/2 + largeur_case*j, hauteur_case/2 + i*hauteur_case, Color.BLUE, Color.BLUE, hauteur_case));
+                        gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
+                                hauteur_case / 2 + i * hauteur_case, Color.BLUE, Color.BLUE, hauteur_case));
                         break;
                     case FORET:
-                        gui.addGraphicalElement(new Rectangle(hauteur_case/2 + largeur_case*j, hauteur_case/2 + i*hauteur_case, Color.GREEN, Color.GREEN, hauteur_case));
+                        gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
+                                hauteur_case / 2 + i * hauteur_case, Color.GREEN, Color.GREEN, hauteur_case));
                         break;
                     case ROCHE:
-                        gui.addGraphicalElement(new Rectangle(hauteur_case/2 + largeur_case*j, hauteur_case/2 + i*hauteur_case, Color.GRAY, Color.GRAY, hauteur_case));
+                        gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
+                                hauteur_case / 2 + i * hauteur_case, Color.GRAY, Color.GRAY, hauteur_case));
                         break;
                     case HABITAT:
-                        gui.addGraphicalElement(new Rectangle(hauteur_case/2 + largeur_case*j, hauteur_case/2 + i*hauteur_case, Color.ORANGE, Color.ORANGE, hauteur_case));
+                        gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
+                                hauteur_case / 2 + i * hauteur_case, Color.ORANGE, Color.ORANGE, hauteur_case));
                         break;
                     case TERRAIN_LIBRE:
-                        gui.addGraphicalElement(new Rectangle(hauteur_case/2 + largeur_case*j, hauteur_case/2 + i*hauteur_case, Color.WHITE, Color.WHITE, hauteur_case));
+                        gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
+                                hauteur_case / 2 + i * hauteur_case, Color.WHITE, Color.WHITE, hauteur_case));
                         break;
                     default:
                         break;
                 }
             }
         }
-        for (Incendie incendie: donnees.getIncendies()){
+        for (Incendie incendie : donnees.getIncendies()) {
             Case pos = incendie.getPosition();
             int i = pos.getLigne();
             int j = pos.getColonne();
-            gui.addGraphicalElement(new Rectangle(hauteur_case/2 + largeur_case*j, hauteur_case/2 + i*hauteur_case, Color.RED, Color.RED, hauteur_case/2));
+            gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
+                    hauteur_case / 2 + i * hauteur_case, Color.RED, Color.RED, hauteur_case / 2));
         }
-        for (Robot robot: donnees.getRobots()){
+        for (Robot robot : donnees.getRobots()) {
             Case pos = robot.getPosition();
             int i = pos.getLigne();
             int j = pos.getColonne();
-            gui.addGraphicalElement(new Rectangle(hauteur_case/2 + largeur_case*j, hauteur_case/2 + i*hauteur_case, Color.magenta, Color.magenta, hauteur_case/2));
+            gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
+                    hauteur_case / 2 + i * hauteur_case, Color.magenta, Color.magenta, hauteur_case / 2));
         }
     }
 
     @Override
     public void next() {
-        //TODO
     }
 
     @Override
     public void restart() {
-        //TODO
     }
 }

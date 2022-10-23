@@ -8,7 +8,7 @@ public abstract class Robot {
     public Robot(Case position, int capacite, double vitesse) {
         this.position = position;
         this.capacite = capacite;
-        this.reservoir = capacite; //TODO: Demander au prof si on commence à 0 ou plein
+        this.reservoir = capacite;
         this.vitesse_defaut = vitesse;
     }
     
@@ -48,7 +48,7 @@ public abstract class Robot {
     public void remplirReservoir() {
         boolean waterNear = false;
         for (Direction dir : Direction.values()){
-            if (Case.getCarte().getVoisin(position, dir).getNature() == NatureTerrain.EAU){
+            if (this.position.getCarte().getVoisin(this.position, dir).getNature() == NatureTerrain.EAU){
                 waterNear = true;
                 break;
             }

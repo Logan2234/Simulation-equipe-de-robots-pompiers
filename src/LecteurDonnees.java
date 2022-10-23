@@ -20,20 +20,18 @@ public class LecteurDonnees {
 
         for (int lig = 0; lig < tailles[0]; lig++) {
             for (int col = 0; col < tailles[1]; col++) {
-                tab_cases[lig][col] = lireCase(lig, col);
+                tab_cases[lig][col] = lireCase(lig, col, carte);
             }
         }
 
         carte.setTab_cases(tab_cases);
-
-        Case.setCarte(carte);
 
         // Création du tableau des incendies
         int nbIncendies = lireIncendies();
         LinkedList<Incendie> incendies = new LinkedList<Incendie>();
 
         for (int i = 0; i < nbIncendies; i++) {
-            incendies.add(lireIncendie(i));
+            incendies.add(lireIncendie(i, carte));
         }
 
         // Création du tableau des robots
@@ -41,7 +39,7 @@ public class LecteurDonnees {
         Robot[] robots = new Robot[nbRobots];
 
         for (int i = 0; i < nbRobots; i++) {
-            robots[i] = lireRobot(i);
+            robots[i] = lireRobot(i, carte);
         }
 
         return new DonneesSimulation(carte, incendies, robots);
@@ -72,7 +70,7 @@ public class LecteurDonnees {
     /**
      * Lit et affiche les donnees d'une case.
      */
-    private Case lireCase(int lig, int col) throws DataFormatException {
+    private Case lireCase(int lig, int col, Carte carte) throws DataFormatException {
         ignorerCommentaires();
 
         try {
@@ -80,7 +78,7 @@ public class LecteurDonnees {
 
             verifieLigneTerminee();
 
-            return new Case(nature, lig, col);
+            return new Case(nature, lig, col, carte);
 
         } catch (NoSuchElementException e) {
             throw new DataFormatException("format de case invalide. "
@@ -107,7 +105,7 @@ public class LecteurDonnees {
      * 
      * @param i
      */
-    private Incendie lireIncendie(int i) throws DataFormatException {
+    private Incendie lireIncendie(int i, Carte carte) throws DataFormatException {
         ignorerCommentaires();
 
         try {
@@ -121,7 +119,7 @@ public class LecteurDonnees {
 
             verifieLigneTerminee();
 
-            return new Incendie(new Case(NatureTerrain.FORET, lig, col), intensite);
+            return new Incendie(carte.getCase(lig, col), intensite);
 
         } catch (NoSuchElementException e) {
             throw new DataFormatException("format d'incendie invalide. "
@@ -148,7 +146,7 @@ public class LecteurDonnees {
      * 
      * @param i
      */
-    private Robot lireRobot(int i) throws DataFormatException {
+    private Robot lireRobot(int i, Carte carte) throws DataFormatException {
         ignorerCommentaires();
 
         try {
@@ -170,18 +168,18 @@ public class LecteurDonnees {
             switch (type) {
                 case "DRONE":
                     if (vitesse != 0)
-                        return new RobotDrone(Case.getCarte().getCase(lig, col), vitesse);
-                    return new RobotDrone(Case.getCarte().getCase(lig, col));
+                        return new RobotDrone(carte.getCase(lig, col), vitesse);
+                    return new RobotDrone(carte.getCase(lig, col));
                 case "ROUES":
                     if (vitesse != 0)
-                        return new RobotRoues(Case.getCarte().getCase(lig, col), vitesse);
-                    return new RobotRoues(Case.getCarte().getCase(lig, col));
+                        return new RobotRoues(carte.getCase(lig, col), vitesse);
+                    return new RobotRoues(carte.getCase(lig, col));
                 case "PATTES":
-                    return new RobotPattes(Case.getCarte().getCase(lig, col));
+                    return new RobotPattes(carte.getCase(lig, col));
                 case "CHENILLES":
                     if (vitesse != 0)
-                        return new RobotChenilles(Case.getCarte().getCase(lig, col), vitesse);
-                    return new RobotChenilles(Case.getCarte().getCase(lig, col));
+                        return new RobotChenilles(carte.getCase(lig, col), vitesse);
+                    return new RobotChenilles(carte.getCase(lig, col));
                 default:
                     throw new DataFormatException(
                             "Un robot ne peut avoir qu'un des types suivant: DRONE, ROUES, PATTES, CHENILLES");
