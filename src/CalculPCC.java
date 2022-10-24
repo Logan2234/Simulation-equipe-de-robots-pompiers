@@ -39,4 +39,14 @@ public class CalculPCC {
             tempsTotal += tpsDpltCaseACase(chemin.getElem(i).get_case(), chemin.getElem(i++).get_case(), robot);
         return tempsTotal;
     }
+
+    public int[][] dijkstra(Case depart){
+        int tailleMatrice = this.donnees.getCarte().getNbLignes() * this.donnees.getCarte().getNbLignes();
+        int[][] dist;
+        dist = new int[this.donnees.getCarte().getNbLignes()][];
+        for (int i = 0; i < this.donnees.getCarte().getNbLignes(); i++) {
+            dist[i] = new int[this.donnees.getCarte().getNbLignes()];
+        }
+        return dist;
+    }
 }
