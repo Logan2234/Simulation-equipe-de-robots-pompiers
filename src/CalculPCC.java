@@ -23,7 +23,7 @@ public class CalculPCC {
     public double tpsDpltCaseACase(Case caseCourante, Case caseSuiv, Robot robot) {
         // On part du principe que le robot se déplace jusqu'au centre de la case
         // suivante
-        int taille_cases = Case.getCarte().getTailleCases();
+        int taille_cases = caseCourante.getCarte().getTailleCases();
 
         double vitesseInit = robot.getVitesse(caseCourante.getNature());
         double vitesseSuiv = robot.getVitesse(caseSuiv.getNature());

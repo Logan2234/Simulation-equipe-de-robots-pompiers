@@ -3,15 +3,17 @@ import java.util.zip.DataFormatException;
 
 import java.awt.Color;
 
+import java.util.*;
+
 import gui.GUISimulator;
 import gui.Rectangle;
 import gui.Simulable;
 import gui.Text;
 
-public class TestSimulation {
+public class TestDeplacementChemin {
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.println("Syntaxe: java TestLecteurDonnees <nomDeFichier>");
+            System.out.println("Syntaxe: java TestDeplacementChemin <nomDeFichier>");
             System.exit(1);
         }
 
@@ -23,7 +25,20 @@ public class TestSimulation {
             // crée la fenêtre graphique dans laquelle dessiner
             GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
             // crée l'invader, en l'associant à la fenêtre graphique précédente
-            Simulation simulateur = new Simulation(gui, donnees);
+            Simulateur simulateur = new Simulateur();
+            Simulation simulation = new Simulation(gui, donnees, simulateur);
+            Chemin c = new Chemin();
+            Case pos = donnees.getRobots()[0].getPosition();
+            Case next = donnees.getCarte().getVoisin(pos, Direction.NORD);
+            Case next2 = donnees.getCarte().getVoisin(next, Direction.NORD);
+            Case next3 = donnees.getCarte().getVoisin(next2, Direction.OUEST);
+            Case next4 = donnees.getCarte().getVoisin(next3, Direction.SUD);
+            c.addElement(pos, 0);
+            c.addElement(next, 0);
+            c.addElement(next2, 1);
+            c.addElement(next3, 2);
+            c.addElement(next4, 3);
+            c.CreerEvenements(simulateur, donnees.getRobots()[0]);
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + args[0] + " inconnu ou illisible");
         } catch (DataFormatException e) {
@@ -36,10 +51,13 @@ class Simulation implements Simulable {
     /** L'interface graphique associée */
     private GUISimulator gui;
     private DonneesSimulation donnees;
+    private Simulateur simulateur;
+    private Queue<Evenement> evenements = new LinkedList<Evenement>();
 
-    public Simulation(GUISimulator gui, DonneesSimulation donnees) {
+    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur) {
         this.gui = gui;
         this.donnees = donnees;
+        this.simulateur = simulateur;
 
         gui.setSimulable(this);
 
@@ -101,6 +119,9 @@ class Simulation implements Simulable {
 
     @Override
     public void next() {
+        simulateur.execute();
+        simulateur.incrementeDate();
+        draw();
     }
 
     @Override

@@ -1,6 +1,7 @@
 import java.util.*;
 
 public class Simulateur {
+
     private long dateSimulation;
     private Queue<Evenement> evenementsActuels = new LinkedList<>();
 
@@ -30,15 +31,24 @@ public class Simulateur {
     void execute() throws IllegalArgumentException {
         Evenement event;
         while (!simulationTerminee()) {
-            event = this.evenementsActuels.poll();
-            event.execute();
+            event = this.evenementsActuels.element();
+            if (event.getDate() == this.dateSimulation) {
+                event = this.evenementsActuels.poll();
+                event.execute();
+                if (!simulationTerminee())
+                    event = this.evenementsActuels.element();
+            } else
+                break;
         }
     }
 
     boolean simulationTerminee() {
-        if (this.evenementsActuels.size() == 0) {
-            return true;
-        }
-        return false;
+        return this.evenementsActuels.size() == 0;
     }
+
+    @Override
+    public String toString() {
+        return "Simulateur [dateSimulation=" + dateSimulation + ", evenementsActuels=" + evenementsActuels + "]";
+    }
+
 }
