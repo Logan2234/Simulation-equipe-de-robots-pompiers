@@ -1,6 +1,7 @@
 import java.util.LinkedList;
 
 public class Chemin {
+
     private LinkedList<AssociationTempsCase> chemin;
 
     public Chemin() {
@@ -16,7 +17,13 @@ public class Chemin {
     }
 
     public AssociationTempsCase getElem(int index) {
-        return this.chemin.get(index);
+        if (index == -1){
+            return this.chemin.getLast();
+        }
+        if (index >= 0 && index < this.chemin.size())
+            return this.chemin.get(index);
+        else
+            throw new IllegalArgumentException("L'index doit être compris entre -1 et taille du chemin - 1");
     }
 
     /**
@@ -34,9 +41,15 @@ public class Chemin {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Chemin [chemin=" + chemin + "]";
+    }
+
 }
 
 class AssociationTempsCase {
+
     private Case _case;
     private int t;
 
@@ -51,5 +64,10 @@ class AssociationTempsCase {
 
     public int getT() {
         return t;
+    }
+
+    @Override
+    public String toString() {
+        return "AssociationTempsCase [_case=" + _case + ", t=" + t + "]";
     }
 }
