@@ -23,7 +23,26 @@ public class TestSimulation {
             // crée la fenêtre graphique dans laquelle dessiner
             GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
             // crée l'invader, en l'associant à la fenêtre graphique précédente
-            Simulation simulateur = new Simulation(gui, donnees);
+            Simulateur simulateur = new Simulateur();
+            Simulation simulation = new Simulation(gui, donnees, simulateur);
+            CalculPCC calculateur = new CalculPCC(donnees, simulateur);
+
+            // Création d'un chemin
+            Chemin c = new Chemin();
+            Robot rob = donnees.getRobots()[0];
+            Case pos = rob.getPosition();
+            Case next = donnees.getCarte().getVoisin(pos, Direction.NORD);
+            Case next2 = donnees.getCarte().getVoisin(next, Direction.NORD);
+            Case next3 = donnees.getCarte().getVoisin(next2, Direction.OUEST);
+            Case next4 = donnees.getCarte().getVoisin(next3, Direction.SUD);
+            c.addElement(pos, 0);
+            c.addElement(next, (int) calculateur.tpsDpltCaseACase(pos, next, rob) / 100000);
+            System.out.println((int) calculateur.tpsDpltCaseACase(pos, next, rob) / 100000);
+            c.addElement(next2, (int) calculateur.tpsDpltCaseACase(next, next2, rob) / 100000);
+            c.addElement(next3, (int) calculateur.tpsDpltCaseACase(next2, next3, rob) / 100000);
+            c.addElement(next4, (int) calculateur.tpsDpltCaseACase(next3, next4, rob) / 100000);
+
+            System.out.println(calculateur.tpsDpltChemin(c, rob));
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + args[0] + " inconnu ou illisible");
         } catch (DataFormatException e) {
@@ -36,11 +55,13 @@ class Simulation implements Simulable {
     /** L'interface graphique associée */
     private GUISimulator gui;
     private DonneesSimulation donnees;
+    private Simulateur simulateur;
 
-    public Simulation(GUISimulator gui, DonneesSimulation donnees) {
+
+    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur) {
         this.gui = gui;
         this.donnees = donnees;
-
+        this.simulateur = simulateur;
         gui.setSimulable(this);
 
         draw();
@@ -101,6 +122,13 @@ class Simulation implements Simulable {
 
     @Override
     public void next() {
+        try {
+            simulateur.execute();
+        } catch (IllegalArgumentException e) {
+            System.out.println(e);
+        }
+        simulateur.incrementeDate();
+        draw();
     }
 
     @Override
