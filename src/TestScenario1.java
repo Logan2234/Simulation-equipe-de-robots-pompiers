@@ -3,12 +3,9 @@ import java.util.zip.DataFormatException;
 
 import java.awt.Color;
 
-import java.util.*;
-
 import gui.GUISimulator;
 import gui.Rectangle;
 import gui.Simulable;
-import gui.Text;
 
 public class TestScenario1 {
     public static void main(String[] args) {

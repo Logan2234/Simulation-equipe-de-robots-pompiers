@@ -1,5 +1,3 @@
-import java.util.LinkedList;
-
 // PCC signifie "Plus Court Chemin"
 public class CalculPCC {
     private DonneesSimulation donnees;
@@ -38,5 +36,9 @@ public class CalculPCC {
         for (int i = 0; i < (chemin.getChemin()).size() - 1; i++)
             tempsTotal += tpsDpltCaseACase(chemin.getElem(i).get_case(), chemin.getElem(i++).get_case(), robot);
         return tempsTotal;
+    }
+
+    public Chemin dijkstra() {
+        return null; //TODO
     }
 }

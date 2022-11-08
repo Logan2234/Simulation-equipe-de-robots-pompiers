@@ -6,7 +6,6 @@ import java.awt.Color;
 import gui.GUISimulator;
 import gui.Rectangle;
 import gui.Simulable;
-import gui.Text;
 
 public class TestDeplacementChemin {
     public static void main(String[] args) {

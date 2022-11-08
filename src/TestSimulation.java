@@ -6,7 +6,6 @@ import java.awt.Color;
 import gui.GUISimulator;
 import gui.Rectangle;
 import gui.Simulable;
-import gui.Text;
 
 public class TestSimulation {
     public static void main(String[] args) {
