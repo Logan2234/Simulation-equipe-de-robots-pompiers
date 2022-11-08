@@ -28,6 +28,11 @@ public class TestDeplacementChemin {
             Simulateur simulateur = new Simulateur();
             Simulation simulation = new Simulation(gui, donnees, simulateur);
             Chemin c = new Chemin();
+            Chemin c1 = new Chemin();
+            
+            Case pos1 = donnees.getRobots()[1].getPosition();
+            Case next1 = donnees.getCarte().getVoisin(pos1, Direction.NORD);
+            
             Case pos = donnees.getRobots()[0].getPosition();
             Case next = donnees.getCarte().getVoisin(pos, Direction.NORD);
             Case next2 = donnees.getCarte().getVoisin(next, Direction.NORD);
@@ -39,6 +44,9 @@ public class TestDeplacementChemin {
             c.addElement(next3, 2);
             c.addElement(next4, 3);
             c.CreerEvenements(simulateur, donnees.getRobots()[0]);
+            c1.addElement(pos1, 0);
+            c1.addElement(next1, 1);
+            c1.CreerEvenements(simulateur, donnees.getRobots()[1]);
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + args[0] + " inconnu ou illisible");
         } catch (DataFormatException e) {

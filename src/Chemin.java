@@ -50,8 +50,8 @@ public class Chemin {
 
 class AssociationTempsCase {
 
-    private Case _case;
-    private int t;
+        private Case _case;
+        private int t;
 
     public AssociationTempsCase(Case _case, int t) {
         this._case = _case;
