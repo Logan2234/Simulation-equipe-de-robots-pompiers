@@ -22,4 +22,9 @@ public class RobotPattes extends Robot {
         else 
             return 0;
     }
+
+    @Override
+    public String toString() {
+        return "RobotPattes " + super.toString();
+    }    
 }

@@ -8,9 +8,9 @@ public class RobotChenilles extends Robot {
     }
 
     @Override
-    public void setPosition(Case new_case){
+    public void setPosition(Case new_case) {
         NatureTerrain new_terrain = new_case.getNature();
-        if (new_terrain == NatureTerrain.EAU || new_terrain == NatureTerrain.ROCHE){
+        if (new_terrain == NatureTerrain.EAU || new_terrain == NatureTerrain.ROCHE) {
             throw new IllegalArgumentException("Le robot à chenilles ne peut pas aller sur de l'eau ou des rochers");
         }
         super.setPosition(new_case);
@@ -22,7 +22,12 @@ public class RobotChenilles extends Robot {
             return this.getVitesseDefaut() / 2;
         else if (nature != NatureTerrain.EAU && nature != NatureTerrain.ROCHE)
             return this.getVitesseDefaut();
-        else 
+        else
             return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "RobotChenilles " + super.toString();
     }
 }

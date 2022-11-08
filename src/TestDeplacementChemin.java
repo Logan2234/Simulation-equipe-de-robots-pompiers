@@ -3,8 +3,6 @@ import java.util.zip.DataFormatException;
 
 import java.awt.Color;
 
-import java.util.*;
-
 import gui.GUISimulator;
 import gui.Rectangle;
 import gui.Simulable;
@@ -17,59 +15,66 @@ public class TestDeplacementChemin {
             System.exit(1);
         }
 
-        DonneesSimulation donnees;
-
-        try {
-            LecteurDonnees lecteur = new LecteurDonnees();
-            donnees = lecteur.creerSimulation(args[0]);
-            // crée la fenêtre graphique dans laquelle dessiner
-            GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
-            // crée l'invader, en l'associant à la fenêtre graphique précédente
-            Simulateur simulateur = new Simulateur();
-            Simulation simulation = new Simulation(gui, donnees, simulateur);
-            Chemin c = new Chemin();
-            Chemin c1 = new Chemin();
-            
-            Case pos1 = donnees.getRobots()[1].getPosition();
-            Case next1 = donnees.getCarte().getVoisin(pos1, Direction.NORD);
-            
-            Case pos = donnees.getRobots()[0].getPosition();
-            Case next = donnees.getCarte().getVoisin(pos, Direction.NORD);
-            Case next2 = donnees.getCarte().getVoisin(next, Direction.NORD);
-            Case next3 = donnees.getCarte().getVoisin(next2, Direction.OUEST);
-            Case next4 = donnees.getCarte().getVoisin(next3, Direction.SUD);
-            c.addElement(pos, 0);
-            c.addElement(next, 0);
-            c.addElement(next2, 1);
-            c.addElement(next3, 2);
-            c.addElement(next4, 3);
-            c.CreerEvenements(simulateur, donnees.getRobots()[0]);
-            c1.addElement(pos1, 0);
-            c1.addElement(next1, 1);
-            c1.CreerEvenements(simulateur, donnees.getRobots()[1]);
-        } catch (FileNotFoundException e) {
-            System.out.println("fichier " + args[0] + " inconnu ou illisible");
-        } catch (DataFormatException e) {
-            System.out.println("\n\t**format du fichier " + args[0] + " invalide: " + e.getMessage());
-        }
+        // crée la fenêtre graphique dans laquelle dessiner
+        GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
+        // crée l'invader, en l'associant à la fenêtre graphique précédente
+        Simulateur simulateur = new Simulateur();
+        Simulation simulation = new Simulation(gui, simulateur, args[0]);
     }
 }
 
 class Simulation implements Simulable {
     /** L'interface graphique associée */
     private GUISimulator gui;
-    private DonneesSimulation donnees;
+    private String fichier_utilise;
     private Simulateur simulateur;
-    private Queue<Evenement> evenements = new LinkedList<Evenement>();
+    private DonneesSimulation donnees;
 
-    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur) {
+    public Simulation(GUISimulator gui, Simulateur simulateur, String fichier_utilise) {
         this.gui = gui;
-        this.donnees = donnees;
+        this.fichier_utilise = fichier_utilise;
         this.simulateur = simulateur;
 
         gui.setSimulable(this);
 
+        initialize();
         draw();
+    }
+
+    private void initialize() {
+        LecteurDonnees lecteur = new LecteurDonnees();
+
+        try {
+            this.donnees = lecteur.creerSimulation(fichier_utilise);
+        } catch (FileNotFoundException e) {
+            System.out.println("fichier " + fichier_utilise + " inconnu ou illisible");
+            return;
+        } catch (DataFormatException e) {
+            System.out.println("\n\t**format du fichier " + fichier_utilise + " invalide: " + e.getMessage());
+            return;
+        }
+
+        System.out.println(donnees.getRobots()[0]);
+        Chemin c = new Chemin();
+        Chemin c1 = new Chemin();
+
+        Case pos1 = donnees.getRobots()[1].getPosition();
+        Case next1 = donnees.getCarte().getVoisin(pos1, Direction.NORD);
+
+        Case pos = donnees.getRobots()[0].getPosition();
+        Case next = donnees.getCarte().getVoisin(pos, Direction.NORD);
+        Case next2 = donnees.getCarte().getVoisin(next, Direction.NORD);
+        Case next3 = donnees.getCarte().getVoisin(next2, Direction.OUEST);
+        Case next4 = donnees.getCarte().getVoisin(next3, Direction.SUD);
+        c.addElement(pos, 0);
+        c.addElement(next, 0);
+        c.addElement(next2, 1);
+        c.addElement(next3, 2);
+        c.addElement(next4, 3);
+        c.CreerEvenements(simulateur, donnees.getRobots()[0]);
+        c1.addElement(pos1, 0);
+        c1.addElement(next1, 1);
+        c1.CreerEvenements(simulateur, donnees.getRobots()[1]);
     }
 
     private void draw() {
@@ -134,5 +139,8 @@ class Simulation implements Simulable {
 
     @Override
     public void restart() {
+        simulateur.resetDate();
+        initialize();
+        draw();
     }
 }

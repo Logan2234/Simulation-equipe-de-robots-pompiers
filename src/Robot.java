@@ -1,4 +1,5 @@
 public abstract class Robot {
+    
     private Case position;
     private int capacite;
     private int reservoir;
@@ -15,13 +16,13 @@ public abstract class Robot {
     public Case getPosition() {
         return this.position;
     }
-
+    
     public int getReservoir(){
         return this.reservoir;
     }
-
+    
     /* 
-     * Méthode de base si on a aucune contrainte en fonction de la nature du terrain.
+    * Méthode de base si on a aucune contrainte en fonction de la nature du terrain.
      * Sinon on override cette fonction dans les classes filles.
      */
     public void setPosition(Case new_pos) {
@@ -32,15 +33,15 @@ public abstract class Robot {
     public void fillReservoir() {
         this.reservoir = this.capacite;
     }
-
+    
     public double getVitesseDefaut() {
         return this.vitesse_defaut;
     }
-
+    
     public double getVitesse(NatureTerrain nature){
         return this.vitesse_defaut;
     }
-
+    
     public void deverserEau(int quantite) {
             this.reservoir -= quantite;
     }
@@ -54,8 +55,15 @@ public abstract class Robot {
             }
         }
         if (waterNear)
-            this.reservoir = this.capacite;
+        this.reservoir = this.capacite;
         else
-            throw new IllegalArgumentException("Il n'est pas possible de remplir un réservoir sans être à proximité d'une source d'eau");
+        throw new IllegalArgumentException("Il n'est pas possible de remplir un réservoir sans être à proximité d'une source d'eau");
     }
+    
+    @Override
+    public String toString() {
+        return "[position=" + position + ", capacite=" + capacite + ", reservoir=" + reservoir
+                + ", vitesse_defaut=" + vitesse_defaut + "]";
+    }
+    
 }

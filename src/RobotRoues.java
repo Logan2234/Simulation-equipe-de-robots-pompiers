@@ -26,4 +26,9 @@ public class RobotRoues extends Robot {
         }
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return "RobotRoues " + super.toString();
+    }    
 }

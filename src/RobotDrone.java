@@ -11,9 +11,9 @@ public class RobotDrone extends Robot {
     public void remplirReservoir() {
         boolean aboveWater = false;
         Case pos = this.getPosition();
-        for (Direction dir : Direction.values()){
+        for (Direction dir : Direction.values()) {
 
-            if (pos.getCarte().getVoisin(pos, dir).getNature() == NatureTerrain.EAU){
+            if (pos.getCarte().getVoisin(pos, dir).getNature() == NatureTerrain.EAU) {
                 aboveWater = true;
                 break;
             }
@@ -21,6 +21,12 @@ public class RobotDrone extends Robot {
         if (aboveWater)
             this.fillReservoir();
         else
-            throw new IllegalArgumentException("Il n'est pas possible de remplir le réservoir du drône sans être au-dessus d'une source d'eau");
+            throw new IllegalArgumentException(
+                    "Il n'est pas possible de remplir le réservoir du drône sans être au-dessus d'une source d'eau");
     }
+
+    @Override
+    public String toString() {
+        return "RobotDrone " + super.toString();
+    }    
 }
