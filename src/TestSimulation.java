@@ -54,11 +54,14 @@ class Simulation implements Simulable {
     private GUISimulator gui;
     private DonneesSimulation donnees;
     private Simulateur simulateur;
+    private Dessin fonctionDessin;
 
     public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur) {
         this.gui = gui;
         this.donnees = donnees;
         this.simulateur = simulateur;
+        this.fonctionDessin = new Dessin(this.donnees, this.gui);
+        
         gui.setSimulable(this);
 
         draw();
@@ -66,55 +69,7 @@ class Simulation implements Simulable {
 
     private void draw() {
         gui.reset();
-
-        Carte carte = donnees.getCarte();
-
-        int largeur_case = 800 / carte.getNbColonnes();
-        int hauteur_case = 600 / carte.getNbLignes();
-
-        for (int i = 0; i < carte.getNbLignes(); i++) {
-            for (int j = 0; j < carte.getNbColonnes(); j++) {
-                Case current_case = carte.getCase(i, j);
-                switch (current_case.getNature()) {
-                    case EAU:
-                        gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
-                                hauteur_case / 2 + i * hauteur_case, Color.BLUE, Color.BLUE, hauteur_case));
-                        break;
-                    case FORET:
-                        gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
-                                hauteur_case / 2 + i * hauteur_case, Color.GREEN, Color.GREEN, hauteur_case));
-                        break;
-                    case ROCHE:
-                        gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
-                                hauteur_case / 2 + i * hauteur_case, Color.GRAY, Color.GRAY, hauteur_case));
-                        break;
-                    case HABITAT:
-                        gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
-                                hauteur_case / 2 + i * hauteur_case, Color.ORANGE, Color.ORANGE, hauteur_case));
-                        break;
-                    case TERRAIN_LIBRE:
-                        gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
-                                hauteur_case / 2 + i * hauteur_case, Color.WHITE, Color.WHITE, hauteur_case));
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
-        for (Incendie incendie : donnees.getIncendies()) {
-            Case pos = incendie.getPosition();
-            int i = pos.getLigne();
-            int j = pos.getColonne();
-            gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
-                    hauteur_case / 2 + i * hauteur_case, Color.RED, Color.RED, hauteur_case / 2));
-        }
-        for (Robot robot : donnees.getRobots()) {
-            Case pos = robot.getPosition();
-            int i = pos.getLigne();
-            int j = pos.getColonne();
-            gui.addGraphicalElement(new Rectangle(hauteur_case / 2 + largeur_case * j,
-                    hauteur_case / 2 + i * hauteur_case, Color.magenta, Color.magenta, hauteur_case / 2));
-        }
+        fonctionDessin.dessin();
     }
 
     @Override
@@ -125,7 +80,6 @@ class Simulation implements Simulable {
             System.out.println(e);
         }
         simulateur.incrementeDate();
-        System.out.println(simulateur.getDateSimulation());
         draw();
     }
 
