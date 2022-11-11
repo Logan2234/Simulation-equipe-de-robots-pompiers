@@ -13,6 +13,7 @@ import Donnees.DonneesSimulation;
 import Donnees.LecteurDonnees;
 import Donnees.Robot.Robot;
 import Evenements.EventIntervenir;
+import Evenements.EventRemplir;
 import Evenements.Simulateur;
 import Exceptions.IllegalCheminRobotException;
 import Exceptions.NoFireException;
@@ -69,11 +70,18 @@ public class TestSimulation {
             
             simulateur.ajouteEvenement(new EventIntervenir(date + 1, robot, donnees.getIncendies()));
             
-            nextCase = carte.getVoisin(pos, Direction.NORD);
-            date += calculateur.tpsDpltCaseACase(pos, nextCase, robot);
-            chemin.addElement(nextCase, date);
-
+            Direction[] moves2 = {Direction.OUEST, Direction.OUEST, Direction.OUEST, Direction.OUEST};
+            
+            for (Direction dir : moves2) {
+                nextCase = carte.getVoisin(pos, dir);
+                date += calculateur.tpsDpltCaseACase(pos, nextCase, robot);
+                chemin.addElement(nextCase, date);
+                pos = nextCase;
+            }
+            
             chemin.creerEvenements(simulateur, robot);
+
+            simulateur.ajouteEvenement(new EventRemplir(date, robot));
 
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + args[0] + " inconnu ou illisible");
@@ -112,6 +120,7 @@ class Simulation implements Simulable {
     @Override
     public void next() {
         try {
+            System.out.println(donnees.getRobots()[0].getReservoir());
             simulateur.execute();
         } catch (NoFireException e) {
             System.out.println(e);

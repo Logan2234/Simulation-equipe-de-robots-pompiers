@@ -1,10 +1,8 @@
 - Faire Dijkstra (Jorge is on it)
 
-- Compléter le fichier de testSimulation comme indiqué dans le TODO du fichier (Logan is on it)
-
 - Faire des docstrings (celles de Donnees sont déjà faites)
 
-- Gérer le fait que le déversement d'eau et le remplissage ne se fait pas instantanément
+- Gérer le fait que le déversement d'eau ne se fait pas instantanément (Logan is on it)
 
 - Implémenter la classe simulation pour éviter les redondances (dans les fichiers tests)
 
