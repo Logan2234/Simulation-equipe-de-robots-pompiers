@@ -4,4 +4,4 @@
 
 - Vérifier que le système temps/Evenement est opérationnel (pas d'abérration)
 
-- Faire des docstrings
+- Faire des docstrings (celles de Donnees sont déjà faites)
