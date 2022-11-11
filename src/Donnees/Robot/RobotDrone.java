@@ -5,6 +5,8 @@ import Donnees.Direction;
 import Donnees.NatureTerrain;
 
 public class RobotDrone extends Robot {
+
+
     public RobotDrone(Case position) {
         super(position, 10000, 100, 30, 10000, 1800);
     }
@@ -13,6 +15,10 @@ public class RobotDrone extends Robot {
         super(position, 10000, Math.min(vitesse, 150), 30, 10000, 1800);
     }
 
+    /** 
+     * Remplit le réservoir du drone avec {@code fillReservoir} s'il est bien au-dessus de l'eau.
+     * @exception IllegalArgumentException on n'est pas au-dessus d'un réservoir
+     */
     @Override
     public void remplirReservoir() {
         boolean aboveWater = false;
@@ -31,6 +37,11 @@ public class RobotDrone extends Robot {
                     "Il n'est pas possible de remplir le réservoir du drône sans être au-dessus d'une source d'eau");
     }
 
+    
+    /** 
+     * @return String : affiche le type de robot, la {@code position}, la {@code capacite} maximale, le {@code reservoir} actuel et la {@code vitesseDefaut}
+     * du robot.
+     */
     @Override
     public String toString() {
         return "RobotDrone " + super.toString();

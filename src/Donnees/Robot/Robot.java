@@ -110,7 +110,8 @@ public abstract class Robot {
     }
 
     /** 
-     * Cette méthode sera uniquement appelée pour remplir le réservoir du drone car il se remplit différemment.
+     * Cette méthode sera uniquement appelée pour remplir le réservoir du drone car il se remplit différemment 
+     * (i.e. l'eau est sur notre position et non à côté).
      * Pour les autres robots, il faudra appeler {@code remplirReservoir}.
      */
     public void fillReservoir() {
@@ -129,8 +130,10 @@ public abstract class Robot {
     }
 
     /** 
-     * Remplit le réservoir d'un robot terrestre s'il est à coté d'une case de type Eau.
-     * Si ce n'est pas le cas, il lance une exception.
+     * Remplit le réservoir d'un robot terrestre s'il est à côté d'une case de type Eau.
+     * 
+     * Cette méthode sera override dans le cas du drone.
+     * {@exception IllegalArgumentException} on n'est pas à côté d'un réservoir
      * 
      */
     public void remplirReservoir() {
