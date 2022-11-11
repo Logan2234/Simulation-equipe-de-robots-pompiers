@@ -2,7 +2,6 @@ package Tests;
 
 import java.awt.Color;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 
 import Autre.CalculPCC;
@@ -14,9 +13,11 @@ import Donnees.DonneesSimulation;
 import Donnees.LecteurDonnees;
 import Donnees.Robot.Robot;
 import Evenements.EventIntervenir;
+import Evenements.EventRemplir;
 import Evenements.Simulateur;
 import Exceptions.IllegalCheminRobotException;
 import Exceptions.NoFireException;
+
 import gui.GUISimulator;
 import gui.Simulable;
 import io.Dessin;
@@ -44,6 +45,7 @@ public class TestSimulation {
             Robot robot = donnees.getRobots()[0];
             Chemin chemin = new Chemin();
             Case pos = robot.getPosition();
+            Case nextCase;
             int date = 0;
 
             chemin.addElement(pos, 0);
@@ -51,26 +53,35 @@ public class TestSimulation {
             Direction[] moves = { Direction.SUD, Direction.SUD, Direction.EST, Direction.EST };
 
             for (Direction dir : moves) {
-                Case nextCase = carte.getVoisin(pos, dir);
+                nextCase = carte.getVoisin(pos, dir);
+                date += calculateur.tpsDpltCaseACase(pos, nextCase, robot);
+                chemin.addElement(nextCase, date);
+                pos = nextCase;
+            }
+
+            simulateur.ajouteEvenement(new EventIntervenir(date + 1, robot, donnees.getIncendies()));
+            
+            for (Direction dir : moves) {
+                nextCase = carte.getVoisin(pos, dir);
                 date += calculateur.tpsDpltCaseACase(pos, nextCase, robot);
                 chemin.addElement(nextCase, date);
                 pos = nextCase;
             }
             
+            simulateur.ajouteEvenement(new EventIntervenir(date + 1, robot, donnees.getIncendies()));
             
-            simulateur.ajouteEvenement(new EventIntervenir(date, robot, donnees.getIncendies()));
+            Direction[] moves2 = {Direction.OUEST, Direction.OUEST, Direction.OUEST, Direction.OUEST};
             
-            for (Direction dir : moves) {
-                Case nextCase = carte.getVoisin(pos, dir);
+            for (Direction dir : moves2) {
+                nextCase = carte.getVoisin(pos, dir);
                 date += calculateur.tpsDpltCaseACase(pos, nextCase, robot);
                 chemin.addElement(nextCase, date);
                 pos = nextCase;
             }
             
             chemin.creerEvenements(simulateur, robot);
-            // chemin.creerEvenements(simulateur, robot);
-            
-            System.out.println(chemin);
+
+            simulateur.ajouteEvenement(new EventRemplir(date, robot));
 
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + args[0] + " inconnu ou illisible");

@@ -6,7 +6,7 @@ import Exceptions.NoFireException;
 
 public class Simulateur {
 
-    private long dateSimulation;
+    private long dateSimulation; // TODO: Changer dans tout les fichiers les int en long lorsqu'on parle de date
     private PriorityQueue<Evenement> evenementsActuels = new PriorityQueue<Evenement>();
 
     public Simulateur() {
@@ -33,21 +33,21 @@ public class Simulateur {
     }
 
     public void execute() throws NoFireException, IllegalArgumentException {
-        Evenement event;
-        while (!simulationTerminee()) {
-            event = this.evenementsActuels.element();
-            if (event.getDate() == this.dateSimulation) {
+        if (this.evenementsActuels.size() > 0) {
+            Evenement event = this.evenementsActuels.element();
+            while (event.getDate() == this.dateSimulation) {
                 event = this.evenementsActuels.poll();
                 event.execute();
                 if (!simulationTerminee())
                     event = this.evenementsActuels.element();
-            } else
-                break;
+                else
+                    break;
+            }
         }
     }
 
     public boolean simulationTerminee() {
-        return this.evenementsActuels.size() == 0;
+        return (this.evenementsActuels.size() == 0);
     }
 
     @Override

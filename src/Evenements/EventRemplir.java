@@ -6,7 +6,7 @@ public class EventRemplir extends Evenement {
     private Robot robot;
 
     public EventRemplir(long date, Robot robot) {
-        super(date);
+        super(date + (long)(robot.getTmpRemplissage() * 1 - robot.getReservoir() / robot.getCapacite()));
         this.robot = robot;
     }
 
