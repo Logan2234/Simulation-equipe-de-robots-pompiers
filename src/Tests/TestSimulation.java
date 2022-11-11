@@ -15,6 +15,7 @@ import Donnees.Robot.Robot;
 import Evenements.EventIntervenir;
 import Evenements.EventRemplir;
 import Evenements.Simulateur;
+import Exceptions.CaseOutOfMapException;
 import Exceptions.IllegalCheminRobotException;
 import gui.GUISimulator;
 
@@ -32,7 +33,7 @@ public class TestSimulation {
             Chemin chemin = new Chemin();
             Case pos = robot.getPosition();
             Case nextCase;
-            int date = 0;
+            long date = 0;
 
             chemin.addElement(pos, 0);
 
@@ -41,11 +42,13 @@ public class TestSimulation {
             for (Direction dir : moves) {
                 nextCase = carte.getVoisin(pos, dir);
                 date += calculateur.tpsDpltCaseACase(pos, nextCase, robot);
+                System.out.println(date);
                 chemin.addElement(nextCase, date);
+
                 pos = nextCase;
             }
-
-            simulateur.ajouteEvenement(new EventIntervenir(date, robot, donnees.getIncendies()));
+            
+            simulateur.ajouteEvenement(new EventIntervenir(date + 2, robot, donnees.getIncendies()));
 
             for (Direction dir : moves) {
                 nextCase = carte.getVoisin(pos, dir);
@@ -55,7 +58,6 @@ public class TestSimulation {
             }
 
             simulateur.ajouteEvenement(new EventIntervenir(date + 1, robot, donnees.getIncendies()));
-
             Direction[] moves2 = { Direction.OUEST, Direction.OUEST, Direction.OUEST, Direction.OUEST };
 
             for (Direction dir : moves2) {
@@ -77,12 +79,14 @@ public class TestSimulation {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {
             System.out.println("\n\t**format du fichier " + fichier + " invalide: " + e.getMessage());
+        } catch (CaseOutOfMapException e) {
+            System.out.println(e);
         }
     }
 
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.println("Syntaxe: java TestLecteurDonnees <nomDeFichier>");
+            System.out.println("Syntaxe: java TestSimulation <nomDeFichier>");
             System.exit(1);
         }
         // crée la fenêtre graphique dans laquelle dessiner

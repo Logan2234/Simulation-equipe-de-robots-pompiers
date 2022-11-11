@@ -1,6 +1,6 @@
 package Tests;
 
-public enum Test{
-    TestSimulation
-    
+public enum Test {
+    TestSimulation,
+    TestScenarios,
 }

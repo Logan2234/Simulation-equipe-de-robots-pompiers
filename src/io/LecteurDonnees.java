@@ -34,8 +34,7 @@ public class LecteurDonnees {
      * 
      * @param fichierDonnees nom du fichier à lire
      */
-    public static void lire(String fichierDonnees)
-            throws FileNotFoundException, DataFormatException {
+    public static void lire(String fichierDonnees) throws FileNotFoundException, DataFormatException {
         System.out.println("\n == Lecture du fichier" + fichierDonnees);
         LecteurDonnees lecteur = new LecteurDonnees(fichierDonnees);
         lecteur.lireCarte();
@@ -54,8 +53,7 @@ public class LecteurDonnees {
      * 
      * @param fichierDonnees nom du fichier a lire
      */
-    private LecteurDonnees(String fichierDonnees)
-            throws FileNotFoundException {
+    private LecteurDonnees(String fichierDonnees) throws FileNotFoundException {
         scanner = new Scanner(new File(fichierDonnees));
         scanner.useLocale(Locale.US);
     }

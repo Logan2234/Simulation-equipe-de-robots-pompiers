@@ -2,7 +2,9 @@ package Evenements;
 
 import java.util.PriorityQueue;
 
+import Exceptions.CaseOutOfMapException;
 import Exceptions.NoFireException;
+import Exceptions.NoWaterException;
 
 public class Simulateur {
 
@@ -19,9 +21,7 @@ public class Simulateur {
 
     public void restart() {
         this.dateSimulation = 0;
-        // On vide la queue
-        while (!simulationTerminee())
-            this.evenementsActuels.clear();
+        this.evenementsActuels.clear();
     }
 
     public void incrementeDate() {
@@ -32,7 +32,7 @@ public class Simulateur {
         this.evenementsActuels.add(e);
     }
 
-    public void execute() throws NoFireException, IllegalArgumentException {
+    public void execute() throws NoFireException, CaseOutOfMapException, NoWaterException {
         if (this.evenementsActuels.size() > 0) {
             Evenement event = this.evenementsActuels.element();
             while (event.getDate() == this.dateSimulation) {

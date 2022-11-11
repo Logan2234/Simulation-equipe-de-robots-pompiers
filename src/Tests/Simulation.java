@@ -2,7 +2,9 @@ package Tests;
 
 import Donnees.DonneesSimulation;
 import Evenements.Simulateur;
+import Exceptions.CaseOutOfMapException;
 import Exceptions.NoFireException;
+import Exceptions.NoWaterException;
 import gui.GUISimulator;
 import gui.Simulable;
 import io.Dessin;
@@ -16,7 +18,8 @@ class Simulation implements Simulable {
     private Test classeAppelante;
     private String fichier;
 
-    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test classeAppelante, String fichier) {
+    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test classeAppelante,
+            String fichier) {
         this.gui = gui;
         this.donnees = donnees;
         this.simulateur = simulateur;
@@ -40,6 +43,10 @@ class Simulation implements Simulable {
             simulateur.execute();
         } catch (NoFireException e) {
             System.out.println(e);
+        } catch (CaseOutOfMapException e) {
+            System.out.println(e);
+        } catch (NoWaterException e) {
+            System.out.println(e);
         }
         simulateur.incrementeDate();
         draw();
@@ -49,12 +56,16 @@ class Simulation implements Simulable {
     public void restart() {
         simulateur.restart();
 
-        switch (classeAppelante)
-        {
+        switch (classeAppelante) {
             case TestSimulation:
                 TestSimulation.initialize(fichier, gui);
-
-        } 
+                break;
+            case TestScenarios:
+                TestScenarios.initialize(fichier, gui);
+                break;
+            default:
+                break;
+        }
 
     }
 }

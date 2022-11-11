@@ -4,6 +4,7 @@ import Donnees.Carte;
 import Donnees.Case;
 import Donnees.Direction;
 import Donnees.Robot.Robot;
+import Exceptions.CaseOutOfMapException;
 
 public class EventMouvement extends Evenement {
     private Robot robot;
@@ -25,7 +26,7 @@ public class EventMouvement extends Evenement {
     }
 
     @Override
-    public void execute() throws IllegalArgumentException {
+    public void execute() throws CaseOutOfMapException {
         if (this.dir != null) {
             Case pos = robot.getPosition();
             Carte carte = pos.getCarte();
