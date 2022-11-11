@@ -6,11 +6,11 @@ import Donnees.NatureTerrain;
 
 public class RobotDrone extends Robot {
     public RobotDrone(Case position) {
-        super(position, 10000, 100, 30, 10000, 1800);
+        super(position, 10000, 100/3.6, 30, 10000, 1800);
     }
 
     public RobotDrone(Case position, int vitesse) {
-        super(position, 10000, Math.min(vitesse, 150), 30, 10000, 1800);
+        super(position, 10000, Math.min(vitesse, 150)/3.6, 30, 10000, 1800);
     }
 
     @Override

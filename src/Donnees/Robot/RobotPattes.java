@@ -5,7 +5,7 @@ import Donnees.NatureTerrain;
 
 public class RobotPattes extends Robot {
     public RobotPattes(Case position) {
-        super(position, -1, 30, 1, 10, -1);
+        super(position, -1, 30/3.6, 1, 10, -1);
     }
 
     @Override

@@ -7,13 +7,13 @@ import Donnees.NatureTerrain;
 public abstract class Robot {
 
     private Case position;
-    private int capacite;
-    private int reservoir;
+    private int capacite; // en L.
+    private int reservoir; // en L.
     private int tmpVersement; // en s.
-    private int qteVersement;
+    private int qteVersement; // en L.
     private int tmpRemplissage; // en s.
 
-    private double vitesseDefaut;
+    private double vitesseDefaut; // en m/s.
 
     public Robot(Case position, int capacite, double vitesse, int tmpVersement, int qteVersement, int tmpReplissage) {
         this.position = position;

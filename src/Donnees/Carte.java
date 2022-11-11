@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class Carte {
 
-    private int tailleCases;
+    private int tailleCases; // En m.
     private int nbLignes;
     private int nbColonnes;
     private Case[][] tab_cases;

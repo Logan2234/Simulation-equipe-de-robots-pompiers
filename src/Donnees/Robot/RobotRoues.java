@@ -8,11 +8,11 @@ public class RobotRoues extends Robot {
     // Intervention unitaire : 100 litres / 5secs
 
     public RobotRoues(Case position) {
-        super(position, 5000, 80, 5, 100, 600);
+        super(position, 5000, 80/3.6, 5, 100, 600);
     }
 
     public RobotRoues(Case position, double vitesse) {
-        super(position, 5000, vitesse, 5, 100, 600);
+        super(position, 5000, vitesse/3.6, 5, 100, 600);
     }
 
     @Override

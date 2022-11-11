@@ -5,11 +5,11 @@ import Donnees.NatureTerrain;
 
 public class RobotChenilles extends Robot {
     public RobotChenilles(Case position) {
-        super(position, 2000, 60, 8, 100, 300);
+        super(position, 2000, 60/3.6, 8, 100, 300);
     }
 
     public RobotChenilles(Case position, double vitesse) {
-        super(position, 2000, Math.min(vitesse, 80), 8, 100, 300);
+        super(position, 2000, Math.min(vitesse, 80)/3.6, 8, 100, 300);
     }
 
     @Override

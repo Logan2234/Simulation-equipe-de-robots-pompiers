@@ -1,4 +1,4 @@
-package Chemin;
+package Autre;
 
 import java.util.LinkedList;
 
@@ -20,7 +20,8 @@ public class Chemin {
     }
 
     public void addElement(Case caseSuiv, int date) {
-        this.chemin.add(new AssociationTempsCase(caseSuiv, date));
+        // L'addition à la fin est nécessaire pour avoir un bon ordonnancement du temps
+        this.chemin.add(new AssociationTempsCase(caseSuiv, date + this.getElem(-1).getT()));
     }
 
     public AssociationTempsCase getElem(int index) {
@@ -42,7 +43,7 @@ public class Chemin {
     public void CreerEvenements(Simulateur simulateur, Robot robot) {
         for (AssociationTempsCase tc : this.chemin) {
             // Si c'est la première case ça sert à rien de s'y déplacer
-            if (tc.get_case() != this.chemin.get(0).get_case()) {
+            if (tc != this.chemin.get(0)) {
                 simulateur.ajouteEvenement(new EventMouvement(tc.getT(), robot, tc.get_case()));
             }
         }

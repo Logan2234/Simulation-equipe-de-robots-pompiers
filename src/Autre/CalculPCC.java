@@ -1,4 +1,4 @@
-package Chemin;
+package Autre;
 
 import Donnees.Case;
 import Donnees.DonneesSimulation;
@@ -26,8 +26,7 @@ public class CalculPCC {
      *         une autre.
      */
     public double tpsDpltCaseACase(Case caseCourante, Case caseSuiv, Robot robot) {
-        // On part du principe que le robot se déplace jusqu'au centre de la case
-        // suivante
+        // On part du principe que le robot va jusqu'au centre de la case d'après
         int taille_cases = caseCourante.getCarte().getTailleCases();
 
         double vitesseInit = robot.getVitesse(caseCourante.getNature());
@@ -46,6 +45,6 @@ public class CalculPCC {
     }
 
     public Chemin dijkstra() {
-        return null; //TODO
+        return null; // TODO
     }
 }

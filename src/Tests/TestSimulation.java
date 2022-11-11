@@ -2,11 +2,17 @@ package Tests;
 
 import java.awt.Color;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 
 import Chemin.CalculPCC;
+import Chemin.Chemin;
+import Donnees.Carte;
+import Donnees.Case;
+import Donnees.Direction;
 import Donnees.DonneesSimulation;
 import Donnees.LecteurDonnees;
+import Donnees.Robot.Robot;
 import Evenements.Simulateur;
 import gui.GUISimulator;
 import gui.Simulable;
@@ -30,9 +36,23 @@ public class TestSimulation {
             Simulateur simulateur = new Simulateur();
             Simulation simulation = new Simulation(gui, donnees, simulateur);
             CalculPCC calculateur = new CalculPCC(donnees, simulateur);
+            
+            Carte carte = donnees.getCarte();
+            Robot robot = donnees.getRobots()[0];
+            
+            System.out.println(robot.getReservoir());
+            
+            Case pos = robot.getPosition();
+            Chemin chemin = new Chemin();
 
-            // TODO: Faire un chemin à la main allant jusqu'à un incendie, déverser l'eau
-            // TODO: Remplir le robot sur de l'eau, tout ça pour tester le temps.
+            chemin.addElement(pos, 0);
+
+            Direction[] moves = {Direction.SUD, Direction.SUD, Direction.EST, Direction.EST};
+            
+            for (Direction dir : moves){
+                Case nextCase = carte.getVoisin(pos, dir);
+                chemin.addElement(nextCase, (int) calculateur.tpsDpltCaseACase(pos, nextCase, robot));
+            }
 
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + args[0] + " inconnu ou illisible");
