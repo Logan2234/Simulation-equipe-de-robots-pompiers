@@ -125,7 +125,6 @@ public abstract class Robot {
      * @param quantite : quantité d'eau (en L) à déverser.
      */
     public void deverserEau(int quantite) {
-        //TODO : considérer le cas où on a une quantité à déverser supérieure à notre réservoir.
         this.reservoir -= quantite;
     }
 

@@ -35,7 +35,7 @@ public class RobotPattes extends Robot {
     @Override
     public double getVitesse(NatureTerrain nature) {
         if (nature == NatureTerrain.ROCHE)
-            return 10;
+            return 10/3.6;
         else if (nature != NatureTerrain.EAU)
             return this.getVitesseDefaut();
         else

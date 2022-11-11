@@ -5,15 +5,18 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.zip.DataFormatException;
 
-import Chemin.CalculPCC;
-import Chemin.Chemin;
+import Autre.CalculPCC;
+import Autre.Chemin;
 import Donnees.Carte;
 import Donnees.Case;
 import Donnees.Direction;
 import Donnees.DonneesSimulation;
 import Donnees.LecteurDonnees;
 import Donnees.Robot.Robot;
+import Evenements.EventIntervenir;
 import Evenements.Simulateur;
+import Exceptions.IllegalCheminRobotException;
+import Exceptions.NoFireException;
 import gui.GUISimulator;
 import gui.Simulable;
 import io.Dessin;
@@ -36,29 +39,47 @@ public class TestSimulation {
             Simulateur simulateur = new Simulateur();
             Simulation simulation = new Simulation(gui, donnees, simulateur);
             CalculPCC calculateur = new CalculPCC(donnees, simulateur);
-            
+
             Carte carte = donnees.getCarte();
             Robot robot = donnees.getRobots()[0];
-            
-            System.out.println(robot.getReservoir());
-            
-            Case pos = robot.getPosition();
             Chemin chemin = new Chemin();
+            Case pos = robot.getPosition();
+            int date = 0;
 
             chemin.addElement(pos, 0);
 
-            Direction[] moves = {Direction.SUD, Direction.SUD, Direction.EST, Direction.EST};
-            
-            for (Direction dir : moves){
+            Direction[] moves = { Direction.SUD, Direction.SUD, Direction.EST, Direction.EST };
+
+            for (Direction dir : moves) {
                 Case nextCase = carte.getVoisin(pos, dir);
-                chemin.addElement(nextCase, (int) calculateur.tpsDpltCaseACase(pos, nextCase, robot));
+                date += calculateur.tpsDpltCaseACase(pos, nextCase, robot);
+                chemin.addElement(nextCase, date);
+                pos = nextCase;
             }
+            
+            
+            simulateur.ajouteEvenement(new EventIntervenir(date, robot, donnees.getIncendies()));
+            
+            for (Direction dir : moves) {
+                Case nextCase = carte.getVoisin(pos, dir);
+                date += calculateur.tpsDpltCaseACase(pos, nextCase, robot);
+                chemin.addElement(nextCase, date);
+                pos = nextCase;
+            }
+            
+            chemin.creerEvenements(simulateur, robot);
+            // chemin.creerEvenements(simulateur, robot);
+            
+            System.out.println(chemin);
 
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + args[0] + " inconnu ou illisible");
         } catch (DataFormatException e) {
             System.out.println("\n\t**format du fichier " + args[0] + " invalide: " + e.getMessage());
+        } catch (IllegalCheminRobotException e) {
+            System.out.println(e.getMessage());
         }
+
     }
 }
 
@@ -88,8 +109,9 @@ class Simulation implements Simulable {
     @Override
     public void next() {
         try {
+            System.out.println(donnees.getRobots()[0].getReservoir());
             simulateur.execute();
-        } catch (IllegalArgumentException e) {
+        } catch (NoFireException e) {
             System.out.println(e);
         }
         simulateur.incrementeDate();

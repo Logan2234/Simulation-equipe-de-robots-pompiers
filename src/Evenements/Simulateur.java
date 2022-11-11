@@ -2,6 +2,8 @@ package Evenements;
 
 import java.util.PriorityQueue;
 
+import Exceptions.NoFireException;
+
 public class Simulateur {
 
     private long dateSimulation;
@@ -30,7 +32,7 @@ public class Simulateur {
         this.evenementsActuels.add(e);
     }
 
-    public void execute() throws IllegalArgumentException {
+    public void execute() throws NoFireException, IllegalArgumentException {
         Evenement event;
         while (!simulationTerminee()) {
             event = this.evenementsActuels.element();
