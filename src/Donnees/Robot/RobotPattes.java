@@ -30,7 +30,7 @@ public class RobotPattes extends Robot {
      * Renvoie la vitesse (en m/s) du robot pour la nature du terrain où il se situe.
      * 
      * @param nature
-     * @return double
+     * @return double : la vitesse (en m/s)
      */
     @Override
     public double getVitesse(NatureTerrain nature) {
