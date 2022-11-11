@@ -100,8 +100,8 @@ public abstract class Robot {
 
     
     /** 
-     * Modifie la position du robot si on n'a pas de contrainte de terrain.
-     * Sinon, elle sera override dans ses filles.
+     * Modifie la position du robot.
+     * Elle sera override dans ses filles.
      * 
      * @param new_pos : case indiquant la nouvelle position du robot
      */
@@ -133,7 +133,7 @@ public abstract class Robot {
      * Remplit le réservoir d'un robot terrestre s'il est à côté d'une case de type Eau.
      * 
      * Cette méthode sera override dans le cas du drone.
-     * {@exception IllegalArgumentException} on n'est pas à côté d'un réservoir
+     * @exception IllegalArgumentException on n'est pas à côté d'un réservoir
      * 
      */
     public void remplirReservoir() {
@@ -155,6 +155,8 @@ public abstract class Robot {
     /** 
      * @return String : affiche la {@code position}, la {@code capacite} maximale, le {@code reservoir} actuel et la {@code vitesseDefaut}
      * du robot.
+     * 
+     * Elle sera override dans les classes filles
      */
     @Override
     public String toString() {
