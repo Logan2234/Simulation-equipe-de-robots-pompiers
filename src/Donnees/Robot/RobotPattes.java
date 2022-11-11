@@ -4,6 +4,9 @@ import Donnees.Case;
 import Donnees.NatureTerrain;
 
 public class RobotPattes extends Robot {
+    /**
+     * @param position : spécifie la position actuelle du robot
+     */
     public RobotPattes(Case position) {
         super(position, -1, 30/3.6, 1, 10, -1);
     }
@@ -12,7 +15,7 @@ public class RobotPattes extends Robot {
     /** 
      * Modifie la position du robot à condition que la nouvelle case ne soit pas de l'eau.
      * 
-     * @param new_case Case : la nouvelle case où le déplacer
+     * @param new_case : la nouvelle case où le déplacer
      * 
      * @exception IllegalArgumentException on va dans l'eau
      */
@@ -29,8 +32,8 @@ public class RobotPattes extends Robot {
     /** 
      * Renvoie la vitesse (en m/s) du robot pour la nature du terrain où il se situe.
      * 
-     * @param nature
-     * @return double
+     * @param nature : nature du terrain
+     * @return double : la vitesse (en m/s)
      */
     @Override
     public double getVitesse(NatureTerrain nature) {

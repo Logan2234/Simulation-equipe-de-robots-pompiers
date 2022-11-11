@@ -9,6 +9,13 @@ public class Case {
     // cases et la carte
     private Carte carte;
 
+    /**
+     * 
+     * @param nature : nature de la case
+     * @param ligne : ligne où se situe la case
+     * @param colonne : colonne où se situe la case
+     * @param carte : carte où est située la case
+     */
     public Case(NatureTerrain nature, int ligne, int colonne, Carte carte) {
         this.nature = nature;
         this.ligne = ligne;
@@ -16,27 +23,54 @@ public class Case {
         this.carte = carte;
     }
 
+    
+    /** 
+     * @return Carte : carte associée à la case
+     */
     public Carte getCarte() {
         return this.carte;
     }
 
+    
+    /** 
+     * @return NatureTerrain : nature de la case
+     */
     public NatureTerrain getNature() {
         return this.nature;
     }
 
+    
+    /** 
+     * @return int : ligne de la case
+     */
     public int getLigne() {
         return this.ligne;
     }
 
+    
+    /** 
+     * @return int : colonne de la case
+     */
     public int getColonne() {
         return this.colonne;
     }
 
+    
+    /** 
+     * @return String : comporte la {@code nature}, la {@code ligne} et la {@code colonne} de la case.
+     */
     @Override
     public String toString() {
         return "Case [nature=" + nature + ", ligne=" + ligne + ", colonne=" + colonne + "]";
     }
 
+    
+    /** 
+     * Regarde si l'objet est identique à la case appelée.
+     * 
+     * @param obj : objet de comparaison
+     * @return boolean : true si on est sur la même ligne et même colonne
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null || getClass() != obj.getClass())

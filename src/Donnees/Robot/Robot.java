@@ -51,7 +51,7 @@ public abstract class Robot {
 
     
     /** 
-     * @return double : la vitesse (en km/h) par défaut du robot
+     * @return double : la vitesse (en m/s) par défaut du robot
      */
     public double getVitesseDefaut() {
         return this.vitesseDefaut;
@@ -60,7 +60,7 @@ public abstract class Robot {
     
     /** 
      * @param nature
-     * @return double : la vitesse (en km/h) du robot pour une nature donnée
+     * @return double : la vitesse (en m/s) du robot pour une nature donnée
      */
     public double getVitesse(NatureTerrain nature) {
         return this.vitesseDefaut;
