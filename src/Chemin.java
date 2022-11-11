@@ -16,6 +16,10 @@ public class Chemin {
         this.chemin.add(new AssociationTempsCase(caseSuiv, date));
     }
 
+    public int getLastDate(){
+        return this.chemin.getLast().getT();
+    }
+
     public AssociationTempsCase getElem(int index) {
         if (index == -1){
             return this.chemin.getLast();

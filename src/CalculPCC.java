@@ -1,4 +1,6 @@
 // PCC signifie "Plus Court Chemin"
+import java.util.*;
+
 public class CalculPCC {
     private DonneesSimulation donnees;
     private Simulateur simulateur;
@@ -38,7 +40,77 @@ public class CalculPCC {
         return tempsTotal;
     }
 
-    public Chemin dijkstra() {
-        return null; //TODO
+    public Chemin dijkstra(Case caseCourante, Case caseSuiv, Robot robot) {
+        double distance[][] = new double[this.donnees.getCarte().getNbLignes()][this.donnees.getCarte().getNbColonnes()];
+        Chemin chemins[][] = new Chemin[this.donnees.getCarte().getNbLignes()][this.donnees.getCarte().getNbColonnes()];
+        distance[caseCourante.getLigne()][caseCourante.getColonne()] = 0;
+        chemins[caseCourante.getLigne()][caseCourante.getColonne()].addElement(caseCourante, 0);
+        ArrayList<Coordonees> ouverts = new ArrayList<Coordonees>();
+        for (int i = 0; i < this.donnees.getCarte().getNbLignes(); i++) {
+            for (int j = 0; j < this.donnees.getCarte().getNbColonnes(); j++) {
+                distance[i][j] = Double.MAX_VALUE;
+                ouverts.add(new Coordonees(i, j));
+            }
+        }
+
+        Case caseATraiter;
+        Case caseMinimale;
+        double minDistance;
+        Coordonees minCoordonees;
+        while (!ouverts.isEmpty()){
+
+            // On cherche valeur minimale de distance 
+            minDistance = Double.MAX_VALUE;
+            minCoordonees = ouverts.get(0); // On initialise avec le premier élèment, mais que importe
+            for (int i = 0; i < ouverts.size(); i++) {
+                if (distance[ouverts.get(i).getI()][ouverts.get(i).getJ()] < minDistance) {
+                    minCoordonees = ouverts.get(i);
+                    minDistance = distance[ouverts.get(i).getI()][ouverts.get(i).getJ()];
+                }
+            }
+
+            ouverts.remove(minCoordonees);
+
+            // On cherche le chemin
+
+            caseMinimale = caseCourante.getCarte().getCase(minCoordonees.getI(), minCoordonees.getJ());
+            double distanceCaseMinimale = distance[minCoordonees.getI()][minCoordonees.getJ()];
+            
+            if (caseCourante.getCarte().voisinExiste(caseCourante, NORD)){
+                caseATraiter = caseCourante.getCarte().getVoisin(caseCourante, NORD);
+                double temps = tpsDpltCaseACase(caseCourante, caseATraiter, robot);
+                double tempsTotal = temps + distanceCaseMinimale;
+                if (tempsTotal < distance[minCoordonees.getI() - 1][minCoordonees.getJ()]){
+                    distance[minCoordonees.getI() - 1][minCoordonees.getJ()] = tempsTotal;
+                    chemins[minCoordonees.getI() - 1][minCoordonees.getJ()] = chemins[minCoordonees.getI() - 1][minCoordonees.getJ()];
+                    chemins[minCoordonees.getI() - 1][minCoordonees.getJ()].addElement(caseMinimale, chemins[minCoordonees.getI()][minCoordonees.getJ()].getLastDate() + temps);
+                }
+            }
+
+            
+
+        }
+
+
+        return null;
+    }
+
+}
+
+class Coordonees {
+    private int i;
+    private int j;
+
+    public Coordonees(int i, int j) {
+        this.i = i;
+        this.j = j;
+    }
+
+    public int getI() {
+        return i;
+    }
+
+    public int getJ() {
+        return j;
     }
 }
