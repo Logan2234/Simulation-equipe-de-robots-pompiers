@@ -32,4 +32,9 @@ public abstract class Evenement implements Comparable<Evenement> {
         }
         return false;
     }
+
+    @Override
+    public String toString() {
+        return "Evenement [date=" + date + "]";
+    }
 }
