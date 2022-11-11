@@ -1,3 +1,5 @@
+package Donnees;
+
 import java.awt.Color;
 
 public enum NatureTerrain {
@@ -9,11 +11,11 @@ public enum NatureTerrain {
 
     private Color color;
 
-    private NatureTerrain(Color color){
+    private NatureTerrain(Color color) {
         this.color = color;
     }
 
-    public Color getColor(){
+    public Color getColor() {
         return this.color;
     }
 }

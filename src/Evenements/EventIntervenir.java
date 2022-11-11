@@ -1,4 +1,9 @@
+package Evenements;
+
 import java.util.LinkedList;
+
+import Donnees.Incendie;
+import Donnees.Robot.Robot;
 
 public class EventIntervenir extends Evenement {
     private Robot robot;

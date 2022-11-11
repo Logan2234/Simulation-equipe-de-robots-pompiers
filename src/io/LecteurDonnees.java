@@ -1,11 +1,8 @@
 package io;
 
-
 import java.io.*;
 import java.util.*;
 import java.util.zip.DataFormatException;
-
-
 
 /**
  * Lecteur de cartes au format spectifié dans le sujet.
@@ -22,23 +19,23 @@ import java.util.zip.DataFormatException;
  *
  * Vous pouvez par exemple ajouter une méthode qui crée et retourne un objet
  * contenant toutes les données lues:
- *    public static DonneesSimulation creeDonnees(String fichierDonnees);
+ * public static DonneesSimulation creeDonnees(String fichierDonnees);
  * Et faire des méthode creeCase(), creeRobot(), ... qui lisent les données,
  * créent les objets adéquats et les ajoutent ds l'instance de
  * DonneesSimulation.
  */
 public class LecteurDonnees {
 
-
     /**
      * Lit et affiche le contenu d'un fichier de donnees (cases,
      * robots et incendies).
      * Ceci est méthode de classe; utilisation:
      * LecteurDonnees.lire(fichierDonnees)
+     * 
      * @param fichierDonnees nom du fichier à lire
      */
     public static void lire(String fichierDonnees)
-        throws FileNotFoundException, DataFormatException {
+            throws FileNotFoundException, DataFormatException {
         System.out.println("\n == Lecture du fichier" + fichierDonnees);
         LecteurDonnees lecteur = new LecteurDonnees(fichierDonnees);
         lecteur.lireCarte();
@@ -48,25 +45,24 @@ public class LecteurDonnees {
         System.out.println("\n == Lecture terminee");
     }
 
-
-
-
     // Tout le reste de la classe est prive!
 
     private static Scanner scanner;
 
     /**
      * Constructeur prive; impossible d'instancier la classe depuis l'exterieur
+     * 
      * @param fichierDonnees nom du fichier a lire
      */
     private LecteurDonnees(String fichierDonnees)
-        throws FileNotFoundException {
+            throws FileNotFoundException {
         scanner = new Scanner(new File(fichierDonnees));
         scanner.useLocale(Locale.US);
     }
 
     /**
      * Lit et affiche les donnees de la carte.
+     * 
      * @throws ExceptionFormatDonnees
      */
     private void lireCarte() throws DataFormatException {
@@ -74,7 +70,7 @@ public class LecteurDonnees {
         try {
             int nbLignes = scanner.nextInt();
             int nbColonnes = scanner.nextInt();
-            int tailleCases = scanner.nextInt();	// en m
+            int tailleCases = scanner.nextInt(); // en m
             System.out.println("Carte " + nbLignes + "x" + nbColonnes
                     + "; taille des cases = " + tailleCases);
 
@@ -91,9 +87,6 @@ public class LecteurDonnees {
         // une ExceptionFormat levee depuis lireCase est remontee telle quelle
     }
 
-
-
-
     /**
      * Lit et affiche les donnees d'une case.
      */
@@ -101,13 +94,13 @@ public class LecteurDonnees {
         ignorerCommentaires();
         System.out.print("Case (" + lig + "," + col + "): ");
         String chaineNature = new String();
-        //		NatureTerrain nature;
+        // NatureTerrain nature;
 
         try {
             chaineNature = scanner.next();
             // si NatureTerrain est un Enum, vous pouvez recuperer la valeur
             // de l'enum a partir d'une String avec:
-            //			NatureTerrain nature = NatureTerrain.valueOf(chaineNature);
+            // NatureTerrain nature = NatureTerrain.valueOf(chaineNature);
 
             verifieLigneTerminee();
 
@@ -120,7 +113,6 @@ public class LecteurDonnees {
 
         System.out.println();
     }
-
 
     /**
      * Lit et affiche les donnees des incendies.
@@ -140,9 +132,9 @@ public class LecteurDonnees {
         }
     }
 
-
     /**
      * Lit et affiche les donnees du i-eme incendie.
+     * 
      * @param i
      */
     private void lireIncendie(int i) throws DataFormatException {
@@ -168,7 +160,6 @@ public class LecteurDonnees {
         }
     }
 
-
     /**
      * Lit et affiche les donnees des robots.
      */
@@ -187,9 +178,9 @@ public class LecteurDonnees {
         }
     }
 
-
     /**
      * Lit et affiche les donnees du i-eme robot.
+     * 
      * @param i
      */
     private void lireRobot(int i) throws DataFormatException {
@@ -204,11 +195,10 @@ public class LecteurDonnees {
 
             System.out.print("\t type = " + type);
 
-
             // lecture eventuelle d'une vitesse du robot (entier)
             System.out.print("; \t vitesse = ");
-            String s = scanner.findInLine("(\\d+)");	// 1 or more digit(s) ?
-            // pour lire un flottant:    ("(\\d+(\\.\\d+)?)");
+            String s = scanner.findInLine("(\\d+)"); // 1 or more digit(s) ?
+            // pour lire un flottant: ("(\\d+(\\.\\d+)?)");
 
             if (s == null) {
                 System.out.print("valeur par defaut");
@@ -226,18 +216,16 @@ public class LecteurDonnees {
         }
     }
 
-
-
-
     /** Ignore toute (fin de) ligne commencant par '#' */
     private void ignorerCommentaires() {
-        while(scanner.hasNext("#.*")) {
+        while (scanner.hasNext("#.*")) {
             scanner.nextLine();
         }
     }
 
     /**
      * Verifie qu'il n'y a plus rien a lire sur cette ligne (int ou float).
+     * 
      * @throws ExceptionFormatDonnees
      */
     private void verifieLigneTerminee() throws DataFormatException {

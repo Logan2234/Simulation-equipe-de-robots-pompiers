@@ -1,10 +1,16 @@
+package Tests;
+
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 
-import java.awt.Color;
-
+import Chemin.CalculPCC;
+import Donnees.DonneesSimulation;
+import Donnees.LecteurDonnees;
+import Evenements.Simulateur;
 import gui.GUISimulator;
 import gui.Simulable;
+import io.Dessin;
 
 public class TestSimulation {
     public static void main(String[] args) {
@@ -48,7 +54,7 @@ class Simulation implements Simulable {
         this.donnees = donnees;
         this.simulateur = simulateur;
         this.fonctionDessin = new Dessin(this.donnees, this.gui);
-        
+
         gui.setSimulable(this);
 
         draw();

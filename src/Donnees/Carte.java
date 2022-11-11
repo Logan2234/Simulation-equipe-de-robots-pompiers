@@ -1,3 +1,5 @@
+package Donnees;
+
 import java.util.Arrays;
 
 public class Carte {
@@ -77,8 +79,7 @@ public class Carte {
                 default:
                     break;
             }
-        }
-        else
+        } else
             throw new IllegalArgumentException("Le robot est sorti de la carte");
         return src;
     }

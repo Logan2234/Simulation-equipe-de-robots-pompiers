@@ -1,3 +1,9 @@
+package Donnees.Robot;
+
+import Donnees.Case;
+import Donnees.Direction;
+import Donnees.NatureTerrain;
+
 public class RobotDrone extends Robot {
     public RobotDrone(Case position) {
         super(position, 10000, 100, 30, 10000, 1800);
@@ -28,5 +34,5 @@ public class RobotDrone extends Robot {
     @Override
     public String toString() {
         return "RobotDrone " + super.toString();
-    }    
+    }
 }

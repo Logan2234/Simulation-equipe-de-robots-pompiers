@@ -1,6 +1,14 @@
+package Donnees;
+
 import java.io.*;
 import java.util.*;
 import java.util.zip.DataFormatException;
+
+import Donnees.Robot.Robot;
+import Donnees.Robot.RobotChenilles;
+import Donnees.Robot.RobotDrone;
+import Donnees.Robot.RobotPattes;
+import Donnees.Robot.RobotRoues;
 
 public class LecteurDonnees {
     private static Scanner scanner;

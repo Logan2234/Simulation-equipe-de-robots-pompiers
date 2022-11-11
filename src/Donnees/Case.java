@@ -1,3 +1,5 @@
+package Donnees;
+
 public class Case {
 
     private NatureTerrain nature;
@@ -6,7 +8,7 @@ public class Case {
     // Pour trouver les voisins d'une case il faut qu'il y ait un lien entre les
     // cases et la carte
     private Carte carte;
-    
+
     public Case(NatureTerrain nature, int ligne, int colonne, Carte carte) {
         this.nature = nature;
         this.ligne = ligne;

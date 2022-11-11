@@ -1,3 +1,4 @@
+package Tests;
 
 import io.LecteurDonnees;
 
@@ -22,4 +23,3 @@ public class TestLecteurDonnees {
     }
 
 }
-

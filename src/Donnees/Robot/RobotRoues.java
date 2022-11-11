@@ -1,3 +1,8 @@
+package Donnees.Robot;
+
+import Donnees.Case;
+import Donnees.NatureTerrain;
+
 public class RobotRoues extends Robot {
     // private int tempsRemplissage = 10;
     // Intervention unitaire : 100 litres / 5secs
@@ -11,10 +16,12 @@ public class RobotRoues extends Robot {
     }
 
     @Override
-    public void setPosition(Case new_case){
+    public void setPosition(Case new_case) {
         NatureTerrain new_terrain = new_case.getNature();
-        if (new_terrain == NatureTerrain.EAU || new_terrain == NatureTerrain.ROCHE || new_terrain == NatureTerrain.FORET){
-            throw new IllegalArgumentException("Le robot à roues ne peut se déplacer que sur du terrain libre ou des habitats.");
+        if (new_terrain == NatureTerrain.EAU || new_terrain == NatureTerrain.ROCHE
+                || new_terrain == NatureTerrain.FORET) {
+            throw new IllegalArgumentException(
+                    "Le robot à roues ne peut se déplacer que sur du terrain libre ou des habitats.");
         }
         super.setPosition(new_case);
     }
@@ -30,5 +37,5 @@ public class RobotRoues extends Robot {
     @Override
     public String toString() {
         return "RobotRoues " + super.toString();
-    }    
+    }
 }

@@ -1,3 +1,5 @@
+package Donnees;
+
 public class Incendie {
 
     private Case position;
@@ -8,11 +10,11 @@ public class Incendie {
         this.litres_requis = litres_requis;
     }
 
-    public int getLitres(){
+    public int getLitres() {
         return this.litres_requis;
     }
 
-    public Case getPosition(){
+    public Case getPosition() {
         return this.position;
     }
 

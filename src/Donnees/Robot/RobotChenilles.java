@@ -1,3 +1,8 @@
+package Donnees.Robot;
+
+import Donnees.Case;
+import Donnees.NatureTerrain;
+
 public class RobotChenilles extends Robot {
     public RobotChenilles(Case position) {
         super(position, 2000, 60, 8, 100, 300);

@@ -1,3 +1,5 @@
+package Evenements;
+
 public abstract class Evenement implements Comparable<Evenement> {
     private long date;
 
