@@ -1,5 +1,3 @@
-import java.util.LinkedList;
-
 // PCC signifie "Plus Court Chemin"
 public class CalculPCC {
     private DonneesSimulation donnees;
@@ -40,13 +38,7 @@ public class CalculPCC {
         return tempsTotal;
     }
 
-    public int[][] dijkstra(Case depart){
-        int tailleMatrice = this.donnees.getCarte().getNbLignes() * this.donnees.getCarte().getNbLignes();
-        int[][] dist;
-        dist = new int[this.donnees.getCarte().getNbLignes()][];
-        for (int i = 0; i < this.donnees.getCarte().getNbLignes(); i++) {
-            dist[i] = new int[this.donnees.getCarte().getNbLignes()];
-        }
-        return dist;
+    public Chemin dijkstra() {
+        return null; //TODO
     }
 }

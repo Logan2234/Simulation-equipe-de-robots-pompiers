@@ -3,7 +3,7 @@ import java.util.*;
 public class Simulateur {
 
     private long dateSimulation;
-    private Queue<Evenement> evenementsActuels = new LinkedList<>();
+    private PriorityQueue<Evenement> evenementsActuels = new PriorityQueue<Evenement>();
 
     public Simulateur() {
         this.dateSimulation = 0;
@@ -50,5 +50,4 @@ public class Simulateur {
     public String toString() {
         return "Simulateur [dateSimulation=" + dateSimulation + ", evenementsActuels=" + evenementsActuels + "]";
     }
-
 }
