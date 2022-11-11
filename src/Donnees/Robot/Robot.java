@@ -7,13 +7,13 @@ import Donnees.NatureTerrain;
 public abstract class Robot {
 
     private Case position;
-    private int capacite;
-    private int reservoir;
+    private int capacite; // en L.
+    private int reservoir; // en L.
     private int tmpVersement; // en s.
-    private int qteVersement;
+    private int qteVersement; // en L.
     private int tmpRemplissage; // en s.
 
-    private double vitesseDefaut;
+    private double vitesseDefaut; // en m/s.
 
     /**
      * @param position : spécifie la position actuelle du robot
@@ -125,7 +125,6 @@ public abstract class Robot {
      * @param quantite : quantité d'eau (en L) à déverser.
      */
     public void deverserEau(int quantite) {
-        //TODO : considérer le cas où on a une quantité à déverser supérieure à notre réservoir.
         this.reservoir -= quantite;
     }
 

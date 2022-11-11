@@ -15,6 +15,7 @@ import Evenements.EventIntervenir;
 import Evenements.EventMouvement;
 import Evenements.EventRemplir;
 import Evenements.Simulateur;
+import Exceptions.NoFireException;
 
 import java.awt.Color;
 
@@ -144,7 +145,7 @@ class Simulation implements Simulable {
     public void next() {
         try {
             simulateur.execute();
-        } catch (IllegalArgumentException e) {
+        } catch (NoFireException e) {
             System.out.println(e);
         }
         simulateur.incrementeDate();

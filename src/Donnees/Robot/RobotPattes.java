@@ -8,7 +8,7 @@ public class RobotPattes extends Robot {
      * @param position : spécifie la position actuelle du robot
      */
     public RobotPattes(Case position) {
-        super(position, -1, 30, 1, 10, -1);
+        super(position, -1, 30/3.6, 1, 10, -1);
     }
 
     
@@ -38,7 +38,7 @@ public class RobotPattes extends Robot {
     @Override
     public double getVitesse(NatureTerrain nature) {
         if (nature == NatureTerrain.ROCHE)
-            return 10;
+            return 10/3.6;
         else if (nature != NatureTerrain.EAU)
             return this.getVitesseDefaut();
         else

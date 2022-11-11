@@ -11,7 +11,7 @@ public class RobotRoues extends Robot {
      * @param position : spécifie la position actuelle du robot
      */
     public RobotRoues(Case position) {
-        super(position, 5000, 80, 5, 100, 600);
+        super(position, 5000, 80/3.6, 5, 100, 600);
     }
 
     /**
@@ -19,7 +19,7 @@ public class RobotRoues extends Robot {
      * @param vitesse : indique la vitesse (en km/h) par défaut du robot
      */
     public RobotRoues(Case position, double vitesse) {
-        super(position, 5000, vitesse, 5, 100, 600);
+        super(position, 5000, vitesse/3.6, 5, 100, 600);
     }
 
     

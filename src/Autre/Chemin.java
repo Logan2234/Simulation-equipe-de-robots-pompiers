@@ -1,4 +1,4 @@
-package Chemin;
+package Autre;
 
 import java.util.LinkedList;
 
@@ -6,6 +6,7 @@ import Donnees.Case;
 import Donnees.Robot.Robot;
 import Evenements.EventMouvement;
 import Evenements.Simulateur;
+import Exceptions.IllegalCheminRobotException;
 
 public class Chemin {
 
@@ -24,7 +25,7 @@ public class Chemin {
     }
 
     public AssociationTempsCase getElem(int index) {
-        if (index == -1){
+        if (index == -1) {
             return this.chemin.getLast();
         }
         if (index >= 0 && index < this.chemin.size())
@@ -39,11 +40,15 @@ public class Chemin {
      * @param simulateur : Simulateur permettant l'ajout d'évènements
      * @param robot      : Robot concerné par le déplacement sur le chemin
      */
-    public void CreerEvenements(Simulateur simulateur, Robot robot) {
+    public void creerEvenements(Simulateur simulateur, Robot robot) throws IllegalCheminRobotException {
         for (AssociationTempsCase tc : this.chemin) {
             // Si c'est la première case ça sert à rien de s'y déplacer
-            if (tc.get_case() != this.chemin.get(0).get_case()) {
-                simulateur.ajouteEvenement(new EventMouvement(tc.getT(), robot, tc.get_case()));
+            if (tc != this.chemin.get(0)) {
+                Case _case = tc.getCase();
+                if (robot.getVitesse(_case.getNature()) == 0) {
+                    throw new IllegalCheminRobotException();
+                }
+                simulateur.ajouteEvenement(new EventMouvement(tc.getT(), robot, _case));
             }
         }
     }
@@ -52,20 +57,19 @@ public class Chemin {
     public String toString() {
         return "Chemin [chemin=" + chemin + "]";
     }
-
 }
 
 class AssociationTempsCase {
 
-        private Case _case;
-        private int t;
+    private Case _case;
+    private int t;
 
     public AssociationTempsCase(Case _case, int t) {
         this._case = _case;
         this.t = t;
     }
 
-    public Case get_case() {
+    public Case getCase() {
         return _case;
     }
 

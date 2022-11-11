@@ -1,5 +1,7 @@
 package Evenements;
 
+import Exceptions.NoFireException;
+
 public abstract class Evenement implements Comparable<Evenement> {
     private long date;
 
@@ -11,7 +13,7 @@ public abstract class Evenement implements Comparable<Evenement> {
         return this.date;
     }
 
-    public abstract void execute();
+    public abstract void execute() throws NoFireException;
 
     @Override
     public int compareTo(Evenement e) {

@@ -9,7 +9,7 @@ public class RobotChenilles extends Robot {
      * @param position : spécifie la position actuelle du robot
      */
     public RobotChenilles(Case position) {
-        super(position, 2000, 60, 8, 100, 300);
+        super(position, 2000, 60/3.6, 8, 100, 300);
     }
 
     /**
@@ -17,7 +17,7 @@ public class RobotChenilles extends Robot {
      * @param vitesse : indique la vitesse (en km/h) par défaut du robot
      */
     public RobotChenilles(Case position, double vitesse) {
-        super(position, 2000, Math.min(vitesse, 80), 8, 100, 300);
+        super(position, 2000, Math.min(vitesse, 80)/3.6, 8, 100, 300);
     }
 
     
