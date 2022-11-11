@@ -9,36 +9,82 @@ public class Carte {
     private int nbColonnes;
     private Case[][] tab_cases;
 
+    /**
+     * Initialise la carte de notre situation
+     * 
+     * @param nbLignes : nombre de lignes
+     * @param nbColonnes : nombre de colonnes
+     */
     public Carte(int nbLignes, int nbColonnes) {
         this.nbLignes = nbLignes;
         this.nbColonnes = nbColonnes;
         tab_cases = new Case[nbLignes][nbColonnes];
     }
 
+    
+    /** 
+     * @return int : taille d'un côté d'une case (de forme carrée)
+     */
     public int getTailleCases() {
         return tailleCases;
     }
 
+    
+    /** 
+     * Modifie la taille d'un côté de nos cases (de forme carrée)
+     * 
+     * @param tailleCases : nouvelle taille des cases
+     */
     public void setTailleCases(int tailleCases) {
         this.tailleCases = tailleCases;
     }
 
+    
+    /** 
+     * @return int : le nombre de ligne de notre carte
+     */
     public int getNbLignes() {
         return nbLignes;
     }
 
+    
+    /** 
+     * @return int : le nombre de colonnes de notre carte
+     */
     public int getNbColonnes() {
         return nbColonnes;
     }
 
+    
+    /** 
+     * Crée notre table avec toutes les cases
+     * 
+     * @param tab_cases : table de cases
+     */
     public void setTab_cases(Case[][] tab_cases) {
         this.tab_cases = tab_cases;
     }
 
+    
+    /** 
+     * Renvoie la case de la ligne {@code lig} et de la colonne {@code col}
+     *
+     * @param lig : indicée à partir de 0
+     * @param col : indicée à partir de 0
+     */
     public Case getCase(int lig, int col) {
+        // TODO : lancer une exception si la case est en dehors de notre tables
         return tab_cases[lig][col];
     }
 
+    
+    /** 
+     * Vérifie si la case {@code src} possède un voisin dans la direction {@code dir} demandée.
+     * 
+     * @param src
+     * @param dir
+     * @return boolean : true si {@code src} possède une case adjacente pour {@code dir} donnée sinon false.
+     */
     public boolean voisinExiste(Case src, Direction dir) {
         switch (dir) {
             case NORD:
@@ -63,6 +109,15 @@ public class Carte {
         return true;
     }
 
+    
+    /** 
+     * Donne le voisin pour la direction donnée
+     * 
+     * @param src : la case regardée
+     * @param dir : direction regardée par rapport à la case
+     * @return Case : case voisine
+     * @throws IllegalArgumentException on est sorti de la carte où on n'a pas de voisin
+     */
     public Case getVoisin(Case src, Direction dir) throws IllegalArgumentException {
         if (voisinExiste(src, dir)) {
             int ligne = src.getLigne();
@@ -84,6 +139,10 @@ public class Carte {
         return src;
     }
 
+    
+    /** 
+     * @return String : la {@code tailleCases}, {@code nbLignes}, {@code nbColonnes} et la {@code tab_cases} l'ensemble des cases
+     */
     @Override
     public String toString() {
         return "Carte [tailleCases=" + tailleCases + ", nbLignes=" + nbLignes + ", nbColonnes=" + nbColonnes

@@ -4,10 +4,18 @@ import Donnees.Case;
 import Donnees.NatureTerrain;
 
 public class RobotChenilles extends Robot {
+
+    /**
+     * @param position : spécifie la position actuelle du robot
+     */
     public RobotChenilles(Case position) {
         super(position, 2000, 60, 8, 100, 300);
     }
 
+    /**
+     * @param position : spécifie la position actuelle du robot
+     * @param vitesse : indique la vitesse (en km/h) par défaut du robot
+     */
     public RobotChenilles(Case position, double vitesse) {
         super(position, 2000, Math.min(vitesse, 80), 8, 100, 300);
     }
@@ -16,7 +24,7 @@ public class RobotChenilles extends Robot {
    /** 
      * Modifie la position du robot à condition que la nouvelle case ne soit pas de l'eau ou de la roche.
      * 
-     * @param new_case Case : la nouvelle case où le déplacer
+     * @param new_case : la nouvelle case où le déplacer
      * 
      * @exception IllegalArgumentException on va dans l'eau ou dans les rochers
      */
@@ -33,7 +41,7 @@ public class RobotChenilles extends Robot {
     /** 
      * Renvoie la vitesse (en m/s) du robot pour la nature du terrain où il se situe.
      * 
-     * @param nature
+     * @param nature : nature du terrain
      * @return double : la vitesse (en m/s)
      */
     @Override

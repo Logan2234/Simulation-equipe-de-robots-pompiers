@@ -6,18 +6,24 @@ import Donnees.NatureTerrain;
 
 public class RobotDrone extends Robot {
 
-
+    /**
+     * @param position : spécifie la position actuelle du robot
+     */
     public RobotDrone(Case position) {
         super(position, 10000, 100, 30, 10000, 1800);
     }
 
+    /**
+     * @param position : spécifie la position actuelle du robot
+     * @param vitesse : indique la vitesse (en km/h) par défaut du robot
+     */
     public RobotDrone(Case position, int vitesse) {
         super(position, 10000, Math.min(vitesse, 150), 30, 10000, 1800);
     }
 
     /** 
      * Remplit le réservoir du drone avec {@code fillReservoir} s'il est bien au-dessus de l'eau.
-     * @exception IllegalArgumentException on n'est pas au-dessus d'un réservoir
+     * @exception IllegalArgumentException on n'est pas au-dessus d'une source d'eau
      */
     @Override
     public void remplirReservoir() {
