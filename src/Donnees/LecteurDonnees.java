@@ -1,10 +1,29 @@
-import java.io.*;
-import java.util.*;
+package Donnees;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 import java.util.zip.DataFormatException;
+
+import Donnees.Robot.Robot;
+import Donnees.Robot.RobotChenilles;
+import Donnees.Robot.RobotDrone;
+import Donnees.Robot.RobotPattes;
+import Donnees.Robot.RobotRoues;
 
 public class LecteurDonnees {
     private static Scanner scanner;
 
+    
+    /** 
+     * @param fichierDonnees : fichier à lire pour initialiser la simulation
+     * @return DonneesSimulation : état initial de la simulation avec les données
+     * @throws FileNotFoundException pas de fichier fourni
+     * @throws DataFormatException mauvais format de fichier
+     */
     public DonneesSimulation creerSimulation(String fichierDonnees)
             throws FileNotFoundException, DataFormatException {
         scanner = new Scanner(new File(fichierDonnees));
@@ -48,7 +67,7 @@ public class LecteurDonnees {
     /**
      * Lit et affiche les donnees de la carte.
      * 
-     * @throws ExceptionFormatDonnees
+     * @throws ExceptionFormatDonnees format des données invalide
      */
     private int[] lireCarte() throws DataFormatException {
         ignorerCommentaires();
@@ -69,6 +88,12 @@ public class LecteurDonnees {
 
     /**
      * Lit et affiche les donnees d'une case.
+     * 
+     * @param lig : ligne de la case
+     * @param col : colonne de la case
+     * @param carte : carte à lire
+     * 
+     * @throws DataFormatException
      */
     private Case lireCase(int lig, int col, Carte carte) throws DataFormatException {
         ignorerCommentaires();
@@ -88,6 +113,7 @@ public class LecteurDonnees {
 
     /**
      * Lit et affiche les donnees des incendies.
+     * 
      */
     private int lireIncendies() throws DataFormatException {
         ignorerCommentaires();
@@ -103,7 +129,10 @@ public class LecteurDonnees {
     /**
      * Lit et affiche les donnees du i-eme incendie.
      * 
-     * @param i
+     * @param i : numéro de l'incendie
+     * @param carte : carte où se situe l'incendie
+     * 
+     * @throws DataFormatException
      */
     private Incendie lireIncendie(int i, Carte carte) throws DataFormatException {
         ignorerCommentaires();
@@ -129,6 +158,8 @@ public class LecteurDonnees {
 
     /**
      * Lit et affiche les donnees des robots.
+     * 
+     * @throws DataFormatException
      */
     private int lireRobots() throws DataFormatException {
         ignorerCommentaires();
@@ -144,7 +175,10 @@ public class LecteurDonnees {
     /**
      * Lit et affiche les donnees du i-eme robot.
      * 
-     * @param i
+     * @param i : numéro du robot
+     * @param carte : carte où se situe le robot
+     * 
+     * @throws DataFormatException
      */
     private Robot lireRobot(int i, Carte carte) throws DataFormatException {
         ignorerCommentaires();

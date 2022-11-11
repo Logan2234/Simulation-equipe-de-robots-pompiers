@@ -1,5 +1,21 @@
+package Tests;
+
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
+
+import Donnees.Carte;
+import Donnees.Case;
+import Donnees.Direction;
+import Donnees.DonneesSimulation;
+import Donnees.Incendie;
+import Donnees.LecteurDonnees;
+import Donnees.Robot.Robot;
+import Donnees.Robot.RobotRoues;
+import Evenements.EventIntervenir;
+import Evenements.EventMouvement;
+import Evenements.EventRemplir;
+import Evenements.Simulateur;
+import Exceptions.NoFireException;
 
 import java.awt.Color;
 
@@ -127,10 +143,9 @@ class Simulation implements Simulable {
 
     @Override
     public void next() {
-        try{
+        try {
             simulateur.execute();
-        }
-        catch (IllegalArgumentException e){
+        } catch (NoFireException e) {
             System.out.println(e);
         }
         simulateur.incrementeDate();

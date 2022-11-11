@@ -1,9 +1,21 @@
+package io;
+
 import gui.Rectangle;
 import gui.GUISimulator;
 import gui.Text;
 
 import java.awt.Color;
-import java.util.HashMap;;
+import java.util.HashMap;
+
+import Donnees.Carte;
+import Donnees.Case;
+import Donnees.DonneesSimulation;
+import Donnees.Incendie;
+import Donnees.Robot.Robot;
+import Donnees.Robot.RobotChenilles;
+import Donnees.Robot.RobotDrone;
+import Donnees.Robot.RobotPattes;
+import Donnees.Robot.RobotRoues;;
 
 // Comme on utilise ces fonctions dans plusieurs fichiers tests
 // différents, on préfère en faire un fichier à part directement
@@ -55,6 +67,7 @@ public class Dessin {
         }
     }
 
+    
     private void dessinRobots() {
         for (Robot robot : donnees.getRobots()) {
             Case pos = robot.getPosition();

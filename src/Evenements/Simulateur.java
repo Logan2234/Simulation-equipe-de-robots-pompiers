@@ -1,4 +1,8 @@
-import java.util.*;
+package Evenements;
+
+import java.util.PriorityQueue;
+
+import Exceptions.NoFireException;
 
 public class Simulateur {
 
@@ -20,15 +24,15 @@ public class Simulateur {
             this.evenementsActuels.poll();
     }
 
-    void incrementeDate() {
+    public void incrementeDate() {
         this.dateSimulation += 1;
     }
 
-    void ajouteEvenement(Evenement e) {
+    public void ajouteEvenement(Evenement e) {
         this.evenementsActuels.add(e);
     }
 
-    void execute() throws IllegalArgumentException {
+    public void execute() throws NoFireException, IllegalArgumentException {
         Evenement event;
         while (!simulationTerminee()) {
             event = this.evenementsActuels.element();
@@ -42,7 +46,7 @@ public class Simulateur {
         }
     }
 
-    boolean simulationTerminee() {
+    public boolean simulationTerminee() {
         return this.evenementsActuels.size() == 0;
     }
 

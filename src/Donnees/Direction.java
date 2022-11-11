@@ -1,3 +1,4 @@
+package Donnees;
 
 public enum Direction {
     NORD,
