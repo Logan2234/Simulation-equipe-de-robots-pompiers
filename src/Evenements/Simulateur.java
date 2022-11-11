@@ -21,7 +21,7 @@ public class Simulateur {
         this.dateSimulation = 0;
         // On vide la queue
         while (!simulationTerminee())
-            this.evenementsActuels.poll();
+            this.evenementsActuels.clear();
     }
 
     public void incrementeDate() {

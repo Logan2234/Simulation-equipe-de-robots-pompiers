@@ -16,29 +16,15 @@ import Evenements.EventIntervenir;
 import Evenements.EventRemplir;
 import Evenements.Simulateur;
 import Exceptions.IllegalCheminRobotException;
-import Exceptions.NoFireException;
-
 import gui.GUISimulator;
-import gui.Simulable;
-import io.Dessin;
 
 public class TestSimulation {
-    public static void main(String[] args) {
-        if (args.length < 1) {
-            System.out.println("Syntaxe: java TestLecteurDonnees <nomDeFichier>");
-            System.exit(1);
-        }
-
-        DonneesSimulation donnees;
-
+    public static void initialize(String fichier, GUISimulator gui) {
         try {
             LecteurDonnees lecteur = new LecteurDonnees();
-            donnees = lecteur.creerSimulation(args[0]);
-            // crée la fenêtre graphique dans laquelle dessiner
-            GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
-            // crée l'invader, en l'associant à la fenêtre graphique précédente
+            DonneesSimulation donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            Simulation simulation = new Simulation(gui, donnees, simulateur);
+            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestSimulation, fichier);
             CalculPCC calculateur = new CalculPCC(donnees, simulateur);
 
             Carte carte = donnees.getCarte();
@@ -59,77 +45,49 @@ public class TestSimulation {
                 pos = nextCase;
             }
 
-            simulateur.ajouteEvenement(new EventIntervenir(date + 1, robot, donnees.getIncendies()));
-            
+            simulateur.ajouteEvenement(new EventIntervenir(date, robot, donnees.getIncendies()));
+
             for (Direction dir : moves) {
                 nextCase = carte.getVoisin(pos, dir);
                 date += calculateur.tpsDpltCaseACase(pos, nextCase, robot);
                 chemin.addElement(nextCase, date);
                 pos = nextCase;
             }
-            
+
             simulateur.ajouteEvenement(new EventIntervenir(date + 1, robot, donnees.getIncendies()));
-            
-            Direction[] moves2 = {Direction.OUEST, Direction.OUEST, Direction.OUEST, Direction.OUEST};
-            
+
+            Direction[] moves2 = { Direction.OUEST, Direction.OUEST, Direction.OUEST, Direction.OUEST };
+
             for (Direction dir : moves2) {
                 nextCase = carte.getVoisin(pos, dir);
                 date += calculateur.tpsDpltCaseACase(pos, nextCase, robot);
                 chemin.addElement(nextCase, date);
                 pos = nextCase;
             }
-            
+
             chemin.creerEvenements(simulateur, robot);
 
             simulateur.ajouteEvenement(new EventRemplir(date, robot));
 
-        } catch (FileNotFoundException e) {
-            System.out.println("fichier " + args[0] + " inconnu ou illisible");
-        } catch (DataFormatException e) {
-            System.out.println("\n\t**format du fichier " + args[0] + " invalide: " + e.getMessage());
+            date += (long) (robot.getTmpRemplissage() * 1 - robot.getReservoir() / robot.getCapacite());
+
         } catch (IllegalCheminRobotException e) {
-            System.out.println(e.getMessage());
-        }
-
-    }
-}
-
-class Simulation implements Simulable {
-    /** L'interface graphique associée */
-    private GUISimulator gui;
-    private DonneesSimulation donnees;
-    private Simulateur simulateur;
-    private Dessin fonctionDessin;
-
-    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur) {
-        this.gui = gui;
-        this.donnees = donnees;
-        this.simulateur = simulateur;
-        this.fonctionDessin = new Dessin(this.donnees, this.gui);
-
-        gui.setSimulable(this);
-
-        draw();
-    }
-
-    private void draw() {
-        gui.reset();
-        fonctionDessin.dessin();
-    }
-
-    @Override
-    public void next() {
-        try {
-            System.out.println(donnees.getRobots()[0].getReservoir());
-            simulateur.execute();
-        } catch (NoFireException e) {
             System.out.println(e);
+        } catch (FileNotFoundException e) {
+            System.out.println("fichier " + fichier + " inconnu ou illisible");
+        } catch (DataFormatException e) {
+            System.out.println("\n\t**format du fichier " + fichier + " invalide: " + e.getMessage());
         }
-        simulateur.incrementeDate();
-        draw();
     }
 
-    @Override
-    public void restart() {
+    public static void main(String[] args) {
+        if (args.length < 1) {
+            System.out.println("Syntaxe: java TestLecteurDonnees <nomDeFichier>");
+            System.exit(1);
+        }
+        // crée la fenêtre graphique dans laquelle dessiner
+        GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
+
+        initialize(args[0], gui);
     }
 }
