@@ -24,10 +24,6 @@ public class Simulateur {
         this.dateSimulation += 1;
     }
 
-    public void resetDate() {
-        this.dateSimulation = 0;
-    }
-
     void ajouteEvenement(Evenement e) {
         this.evenementsActuels.add(e);
     }

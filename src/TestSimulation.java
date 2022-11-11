@@ -4,7 +4,6 @@ import java.util.zip.DataFormatException;
 import java.awt.Color;
 
 import gui.GUISimulator;
-import gui.Rectangle;
 import gui.Simulable;
 
 public class TestSimulation {
@@ -26,21 +25,9 @@ public class TestSimulation {
             Simulation simulation = new Simulation(gui, donnees, simulateur);
             CalculPCC calculateur = new CalculPCC(donnees, simulateur);
 
-            // Création d'un chemin
-            Carte carte = donnees.getCarte();
-            Chemin c = new Chemin();
-            Robot rob = donnees.getRobots()[0];
-            Case pos = rob.getPosition();
-            Case next = carte.getVoisin(pos, Direction.NORD);
-            Case next2 = carte.getVoisin(next, Direction.NORD);
-            Case next3 = carte.getVoisin(next2, Direction.OUEST);
-            Case next4 = carte.getVoisin(next3, Direction.SUD);
-            c.addElement(pos, 0);
-            c.addElement(next, (int) calculateur.tpsDpltCaseACase(pos, next, rob) / 100000);
-            c.addElement(next2, (int) calculateur.tpsDpltCaseACase(next, next2, rob) / 100000 + c.getElem(-1).getT());
-            c.addElement(next3, (int) calculateur.tpsDpltCaseACase(next2, next3, rob) / 100000 + c.getElem(-1).getT());
-            c.addElement(next4, (int) calculateur.tpsDpltCaseACase(next3, next4, rob) / 100000 + c.getElem(-1).getT());
-            c.CreerEvenements(simulateur, rob);
+            // TODO: Faire un chemin à la main allant jusqu'à un incendie, déverser l'eau
+            // TODO: Remplir le robot sur de l'eau, tout ça pour tester le temps.
+
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + args[0] + " inconnu ou illisible");
         } catch (DataFormatException e) {

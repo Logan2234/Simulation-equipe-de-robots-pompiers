@@ -1,6 +1,6 @@
 public class RobotPattes extends Robot {
     public RobotPattes(Case position) {
-        super(position, -1, 30);
+        super(position, -1, 30, 1, 10, -1);
     }
 
     @Override
@@ -9,7 +9,6 @@ public class RobotPattes extends Robot {
         if (new_terrain == NatureTerrain.EAU){
             throw new IllegalArgumentException("Le robot à pattes ne peut pas aller sur de l'eau");
         }
-        System.out.println(super.getPosition());
         super.setPosition(new_case);
     }
 

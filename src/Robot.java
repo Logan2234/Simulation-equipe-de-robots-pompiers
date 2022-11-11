@@ -3,14 +3,19 @@ public abstract class Robot {
     private Case position;
     private int capacite;
     private int reservoir;
+    private int tmpVersement; // en s.
+    private int qteVersement;
+    private int tmpRemplissage; // en s.
     
-    private double vitesse_defaut;
+    private double vitesseDefaut;
     
-    public Robot(Case position, int capacite, double vitesse) {
+    public Robot(Case position, int capacite, double vitesse, int tmpVersement, int qteVersement, int tmpReplissage) {
         this.position = position;
         this.capacite = capacite;
         this.reservoir = capacite;
-        this.vitesse_defaut = vitesse;
+        this.tmpVersement = tmpVersement;
+        this.qteVersement = qteVersement;
+        this.tmpRemplissage = tmpReplissage;
     }
     
     public Case getPosition() {
@@ -19,6 +24,30 @@ public abstract class Robot {
     
     public int getReservoir(){
         return this.reservoir;
+    }
+
+    public double getVitesseDefaut() {
+        return this.vitesseDefaut;
+    }
+    
+    public double getVitesse(NatureTerrain nature){
+        return this.vitesseDefaut;
+    }
+    
+    public int getCapacite() {
+        return capacite;
+    }
+
+    public int getTmpVersement() {
+        return tmpVersement;
+    }
+    
+    public int getQteVersement() {
+        return qteVersement;
+    }
+    
+    public int getTmpRemplissage() {
+        return tmpRemplissage;
     }
     
     /* 
@@ -32,14 +61,6 @@ public abstract class Robot {
     // Méthode uniquement utilisée par le drone qui remplit son reservoir différemment (cf. RobotDrone.java)
     public void fillReservoir() {
         this.reservoir = this.capacite;
-    }
-    
-    public double getVitesseDefaut() {
-        return this.vitesse_defaut;
-    }
-    
-    public double getVitesse(NatureTerrain nature){
-        return this.vitesse_defaut;
     }
     
     public void deverserEau(int quantite) {
@@ -63,7 +84,8 @@ public abstract class Robot {
     @Override
     public String toString() {
         return "[position=" + position + ", capacite=" + capacite + ", reservoir=" + reservoir
-                + ", vitesse_defaut=" + vitesse_defaut + "]";
+                + ", vitesse_defaut=" + vitesseDefaut + "]";
     }
+
     
 }

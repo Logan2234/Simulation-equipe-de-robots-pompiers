@@ -57,7 +57,6 @@ public class Dessin {
 
     private void dessinRobots() {
         for (Robot robot : donnees.getRobots()) {
-            System.out.println(robot.getClass());
             Case pos = robot.getPosition();
             int i = pos.getLigne();
             int j = pos.getColonne();
