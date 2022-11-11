@@ -73,7 +73,6 @@ public class Carte {
      * @param col : indicée à partir de 0
      */
     public Case getCase(int lig, int col) {
-        // TODO : lancer une exception si la case est en dehors de notre tables
         return tab_cases[lig][col];
     }
 

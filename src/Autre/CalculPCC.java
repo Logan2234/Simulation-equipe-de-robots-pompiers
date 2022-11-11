@@ -40,6 +40,16 @@ public class CalculPCC {
         return temps;
     }
 
+
+    
+    /** 
+     * Calcul le temps nécessaire à un robot donné pour se déplacer
+     * d'une case à une autre case dans un chemin. 
+     * @param chemin - Chemin à parcourir
+     * @param robot  - Robot effectuant le déplacement
+     * @return Temps pris (en s) par à un robot pour se déplacer du centre d'une case à
+     *         une autre.
+     */
     public int tpsDpltChemin(Chemin chemin, Robot robot) {
         int tempsTotal = 0;
         for (int i = 0; i < (chemin.getChemin()).size() - 1; i++)
@@ -47,6 +57,15 @@ public class CalculPCC {
         return tempsTotal;
     }
 
+    
+    /** 
+     * Calcul du chemin optimal entre deux cases. La fonction suit l'algorithme de Dijkstra.
+     * 
+     * @param caseCourante - Case de départ
+     * @param caseSuiv     - Case d'arrivée
+     * @param robot        - Robot effectuant le déplacement
+     * @return Chemin optimal que le robot devrait prendre pour aller d'une case à l'autre.
+     */
     public Chemin dijkstra(Case caseCourante, Case caseSuiv, Robot robot) {
         int distance[][] = new int[this.donnees.getCarte().getNbLignes()][this.donnees.getCarte().getNbColonnes()];
         Chemin chemins[][] = new Chemin[this.donnees.getCarte().getNbLignes()][this.donnees.getCarte().getNbColonnes()];
@@ -130,6 +149,9 @@ public class CalculPCC {
 
 }
 
+/**
+ * Sous-classe représentant un tuple de coordonées.
+ */
 class Coordonees {
     private int i;
     private int j;

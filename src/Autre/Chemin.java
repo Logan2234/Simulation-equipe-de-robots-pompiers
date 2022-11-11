@@ -16,18 +16,44 @@ public class Chemin {
         this.chemin = new LinkedList<AssociationTempsCase>();
     }
 
+    
+    /** 
+     * Renvoie le chemin 
+     * 
+     * @return Chemin sous forme de liste chainée
+     */
     public LinkedList<AssociationTempsCase> getChemin() {
         return chemin;
     }
 
+    
+    /** 
+     * Ajoute un élément au chemin
+     * 
+     * @param caseSuiv  - Nouveau élément à ajouter
+     * @param date      - Date de passage par le nouveau élément
+     */
     public void addElement(Case caseSuiv, int date) {
         this.chemin.add(new AssociationTempsCase(caseSuiv, date));
     }
 
+    
+    /** 
+     * Retourne la date du dernier élément du chemin
+     * 
+     * @return Date du dernier élément du chemin
+     */
     public int getLastDate(){
         return this.chemin.getLast().getT();
     }
 
+    
+    /** 
+     * Retourne le iº élément du chemin
+     * 
+     * @param index                 - indice de l'élément à retourner
+     * @return AssociationTempsCase - Retourne l'élément et la date de passage par l'élément
+     */
     public AssociationTempsCase getElem(int index) {
         if (index == -1) {
             return this.chemin.getLast();
@@ -57,6 +83,12 @@ public class Chemin {
         }
     }
 
+    
+    /** 
+     * Fonction renvoyant la transcription du chemin à String
+     * 
+     * @return String renvoyé
+     */
     @Override
     public String toString() {
         return "Chemin [chemin=" + chemin + "]";
