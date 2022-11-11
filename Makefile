@@ -21,22 +21,20 @@
 #   -classpath : repertoire dans lequel sont cherches les .class deja compiles
 #   -sourcepath : repertoire dans lequel sont cherches les .java (dependances)
 
-all: testInvader testLecture
+all: testScenario1 testSimulation
 
 testInvader:
-	javac -d bin -classpath bin/gui.jar -sourcepath src src/TestInvader.java
-
-testSimulation:
-	javac -d bin -classpath bin/gui.jar -sourcepath src src/TestSimulation.java
-
-testScenario1:
-	javac -d bin -classpath bin/gui.jar -sourcepath src src/TestScenario1.java
-
-testDeplacementChemin:
-	javac -d bin -classpath bin/gui.jar -sourcepath src src/TestDeplacementChemin.java
+	javac -d bin -classpath bin/gui.jar -sourcepath src src/Tests/TestInvader.java
 
 testLecture:
-	javac -d bin -sourcepath src src/TestLecteurDonnees.java
+	javac -d bin -sourcepath src src/Tests/TestLecteurDonnees.java
+
+# Nos tests sont en-dessous de ce commentaire
+testSimulation:
+	javac -d bin -classpath bin/gui.jar -sourcepath src src/Tests/TestSimulation.java
+
+testScenario1:
+	javac -d bin -classpath bin/gui.jar -sourcepath src src/Tests/TestScenario1.java
 
 # Execution:
 # on peut taper directement la ligne de commande :
@@ -49,14 +47,12 @@ exeInvader:
 exeLecture: 
 	java -classpath bin TestLecteurDonnees cartes/spiralOfMadness-50x50.map
 
+# Nos tests sont en dessous de ce commentaire
 exeSimulation: 
-	java -classpath bin:bin/gui.jar TestSimulation cartes/carteSujet.map
+	java -classpath bin:bin/gui.jar Tests/TestSimulation cartes/carteSujet.map
 
 exeScenario1:
-	java -classpath bin:bin/gui.jar TestScenario1 cartes/carteSujet.map
-
-exeDeplacementChemin:
-	java -classpath bin:bin/gui.jar TestDeplacementChemin cartes/carteSujet.map
+	java -classpath bin:bin/gui.jar Tests/TestScenario1 cartes/carteSujet.map
 
 clean:
-	rm -rf bin/*.class
+	rm -rf bin/Donnees bin/Evenements bin/Tests bin/io bin/Chemin

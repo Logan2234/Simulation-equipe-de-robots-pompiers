@@ -67,6 +67,7 @@ public class Dessin {
         }
     }
 
+    
     private void dessinRobots() {
         for (Robot robot : donnees.getRobots()) {
             Case pos = robot.getPosition();

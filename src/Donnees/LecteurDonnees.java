@@ -1,7 +1,11 @@
 package Donnees;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.LinkedList;
+import java.util.Locale;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 import java.util.zip.DataFormatException;
 
 import Donnees.Robot.Robot;
