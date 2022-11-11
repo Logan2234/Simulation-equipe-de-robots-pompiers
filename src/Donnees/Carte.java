@@ -141,7 +141,7 @@ public class Carte {
 
     
     /** 
-     * @return String : la {@code tailleCases}, {@code nbLignes}, {@code nbColonnes} et la {@code tab_cases} l'ensemble des cases
+     * @return String : comporte la {@code tailleCases}, {@code nbLignes}, {@code nbColonnes} et la {@code tab_cases} l'ensemble des cases
      */
     @Override
     public String toString() {
