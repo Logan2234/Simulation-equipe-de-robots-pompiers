@@ -1,3 +1,10 @@
+package Chemin;
+
+import Donnees.Case;
+import Donnees.DonneesSimulation;
+import Donnees.Robot.Robot;
+import Evenements.Simulateur;
+
 // PCC signifie "Plus Court Chemin"
 public class CalculPCC {
     private DonneesSimulation donnees;

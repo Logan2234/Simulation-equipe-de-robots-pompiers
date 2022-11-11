@@ -1,4 +1,11 @@
+package Chemin;
+
 import java.util.LinkedList;
+
+import Donnees.Case;
+import Donnees.Robot.Robot;
+import Evenements.EventMouvement;
+import Evenements.Simulateur;
 
 public class Chemin {
 

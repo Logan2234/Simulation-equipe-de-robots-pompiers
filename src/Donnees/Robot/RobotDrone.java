@@ -10,7 +10,7 @@ public class RobotDrone extends Robot {
     }
 
     public RobotDrone(Case position, int vitesse) {
-        super(position, 10000, vitesse, 30, 10000, 1800);
+        super(position, 10000, Math.min(vitesse, 150), 30, 10000, 1800);
     }
 
     @Override

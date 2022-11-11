@@ -9,7 +9,7 @@ public class RobotChenilles extends Robot {
     }
 
     public RobotChenilles(Case position, double vitesse) {
-        super(position, 2000, vitesse, 8, 100, 300);
+        super(position, 2000, Math.min(vitesse, 80), 8, 100, 300);
     }
 
     @Override
