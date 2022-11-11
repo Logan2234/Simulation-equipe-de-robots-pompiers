@@ -69,15 +69,16 @@ public class CalculPCC {
     public Chemin dijkstra(Case caseCourante, Case caseSuiv, Robot robot) {
         int distance[][] = new int[this.donnees.getCarte().getNbLignes()][this.donnees.getCarte().getNbColonnes()];
         Chemin chemins[][] = new Chemin[this.donnees.getCarte().getNbLignes()][this.donnees.getCarte().getNbColonnes()];
-        distance[caseCourante.getLigne()][caseCourante.getColonne()] = 0;
-        chemins[caseCourante.getLigne()][caseCourante.getColonne()].addElement(caseCourante, 0);
         ArrayList<Coordonees> ouverts = new ArrayList<Coordonees>();
         for (int i = 0; i < this.donnees.getCarte().getNbLignes(); i++) {
             for (int j = 0; j < this.donnees.getCarte().getNbColonnes(); j++) {
                 distance[i][j] = Integer.MAX_VALUE;
                 ouverts.add(new Coordonees(i, j));
+                chemins[i][j] = new Chemin();
             }
         }
+        distance[caseCourante.getLigne()][caseCourante.getColonne()] = 0;
+        chemins[caseCourante.getLigne()][caseCourante.getColonne()].addElement(caseCourante, 0);
 
         Case caseATraiter;
         Case caseMinimale;
@@ -86,7 +87,7 @@ public class CalculPCC {
         while (!ouverts.isEmpty()){
 
             // On cherche valeur minimale de distance 
-            minDistance = Integer.MAX_VALUE;
+            minDistance = distance[ouverts.get(0).getI()][ouverts.get(0).getJ()];
             minCoordonees = ouverts.get(0); // On initialise avec le premier élèment, mais que importe
             for (int i = 0; i < ouverts.size(); i++) {
                 if (distance[ouverts.get(i).getI()][ouverts.get(i).getJ()] < minDistance) {
@@ -115,6 +116,9 @@ public class CalculPCC {
             if (caseCourante.getCarte().voisinExiste(caseMinimale, Direction.EST)){
                 caseATraiter = caseCourante.getCarte().getVoisin(caseMinimale, Direction.EST);
                 int temps = tpsDpltCaseACase(caseMinimale, caseATraiter, robot);
+                // System.out.println(caseMinimale.toString());
+                // System.out.println(caseCourante.toString());
+                // System.out.println(caseATraiter.toString());
                 int tempsTotal = temps + distanceCaseMinimale;
                 if (tempsTotal < distance[minCoordonees.getI()][minCoordonees.getJ() + 1]){
                     distance[minCoordonees.getI()][minCoordonees.getJ() + 1] = tempsTotal;

@@ -37,7 +37,7 @@ testScenario1:
 	javac -d bin -classpath bin/gui.jar -sourcepath src src/Tests/TestScenario1.java
 
 testDijkstra:
-	javac -d bin -classpath bin/gui.jar -sourcepath src src/Tests/testDijkstra.java
+	javac -d bin -classpath bin/gui.jar -sourcepath src src/Tests/TestDijkstra.java
 
 # Execution:
 # on peut taper directement la ligne de commande :
