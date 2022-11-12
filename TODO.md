@@ -6,8 +6,6 @@
 
 - Implementer deux classes chef pompier avec :
 1) Méthode pour algo élémentaire
--> Méthode pour donner des ordres entre chef pompier et 
--> Méthode pour voir si un robot est occupé
 -> Structure pour voir quel robot occupé (arrayList de Robot)
 -> Structure avec quel incendie pris en charge par robot i (hashMap <Incendie, Robot>)
 2) Méthode pour algo avancé

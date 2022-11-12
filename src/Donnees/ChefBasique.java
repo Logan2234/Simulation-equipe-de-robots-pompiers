@@ -3,6 +3,11 @@ package Donnees;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import Exceptions.IllegalCheminRobotException;
+import Exceptions.PasDeCheminException;
+
+import Autre.CalculPCC;
+import Autre.Chemin;
 import Donnees.Robot.Robot;
 import Evenements.Simulateur;
 
@@ -12,6 +17,7 @@ public class ChefBasique {
     private Simulateur simulateur;
     private HashMap<Incendie, Robot> incendies_rob;
     private ArrayList<Robot> occupes;
+    private CalculPCC calculateur;
 
     public ChefBasique(Carte carte, DonneesSimulation donnees, Simulateur simulateur){
         this.carte = carte;
@@ -19,14 +25,24 @@ public class ChefBasique {
         this.simulateur = simulateur;
         this.occupes = new ArrayList<Robot>();
         this.incendies_rob = new HashMap<Incendie, Robot>();
+        calculateur = new CalculPCC(donnees, simulateur);
         for (Incendie incendie :donnees.getIncendies()){
             incendies_rob.put(incendie, null);
         }
     }
 
-    public void donneOrdre(Robot robot, Incendie incendie){
-        incendies_rob.put(incendie, robot);
-        occupes.add(robot);
+    public void donneOrdre(Robot robot, Incendie incendie)throws PasDeCheminException{
+        try{
+            incendies_rob.put(incendie, robot);
+            occupes.add(robot);
+            Chemin chemin = new Chemin();
+            chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot);
+            chemin.creerEvenements(this.simulateur, robot);
+
+        } catch (IllegalCheminRobotException e){
+            System.out.println(e);
+        }
+        
     }
 
     public void gestionIncendies(){
