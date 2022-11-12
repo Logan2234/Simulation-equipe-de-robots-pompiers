@@ -69,6 +69,9 @@ public class Chemin {
      * 
      * @param simulateur : Simulateur permettant l'ajout d'évènements
      * @param robot      : Robot concerné par le déplacement sur le chemin
+     * 
+     * @exception IllegalCheminRobotException Le chemin n'est pas traversable par le
+     *                                        robot
      */
     public void creerEvenements(Simulateur simulateur, Robot robot) throws IllegalCheminRobotException {
         for (AssociationTempsCase tc : this.chemin) {
@@ -98,9 +101,9 @@ public class Chemin {
 class AssociationTempsCase {
 
     private Case _case;
-    private int t;
+    private long t;
 
-    public AssociationTempsCase(Case _case, int t) {
+    public AssociationTempsCase(Case _case, long t) {
         this._case = _case;
         this.t = t;
     }
@@ -109,7 +112,7 @@ class AssociationTempsCase {
         return _case;
     }
 
-    public int getT() {
+    public long getT() {
         return t;
     }
 
