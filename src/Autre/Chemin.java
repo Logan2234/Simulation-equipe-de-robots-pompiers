@@ -11,11 +11,9 @@ import Exceptions.IllegalCheminRobotException;
 public class Chemin {
 
     private LinkedList<AssociationTempsCase> chemin;
-    private String test;
 
     public Chemin() {
         this.chemin = new LinkedList<AssociationTempsCase>();
-        this.test = "Test "; // !
     }
 
     
@@ -27,14 +25,6 @@ public class Chemin {
     public LinkedList<AssociationTempsCase> getChemin() {
         return chemin;
     }
-
-    public void addText(String text){
-        this.test = this.test + text;
-    }
-
-    public String getTexte(){
-        return this.test;
-    }
     
     /** 
      * Ajoute un élément au chemin
@@ -42,7 +32,7 @@ public class Chemin {
      * @param caseSuiv  - Nouveau élément à ajouter
      * @param date      - Date de passage par le nouveau élément
      */
-    public void addElement(Case caseSuiv, int date) {
+    public void addElement(Case caseSuiv, long date) {
         this.chemin.add(new AssociationTempsCase(caseSuiv, date));
     }
 
@@ -52,8 +42,12 @@ public class Chemin {
      * 
      * @return Date du dernier élément du chemin
      */
-    public int getLastDate(){
+    public long getLastDate(){
         return this.chemin.getLast().getT();
+    }
+
+    public long getTempsChemin(){
+        return this.chemin.getLast().getT() - this.chemin.getFirst().getT();
     }
 
     
@@ -78,9 +72,9 @@ public class Chemin {
      * 
      * @param simulateur : Simulateur permettant l'ajout d'évènements
      * @param robot      : Robot concerné par le déplacement sur le chemin
-     * 
-     * @exception IllegalCheminRobotException Le chemin n'est pas traversable par le
-     *                                        robot
+* 
+     * @exception IllegalCheminRobotException Le chemin n'est pas traversable par le robot
+     *         
      */
     public void creerEvenements(Simulateur simulateur, Robot robot) throws IllegalCheminRobotException {
         for (AssociationTempsCase tc : this.chemin) {
