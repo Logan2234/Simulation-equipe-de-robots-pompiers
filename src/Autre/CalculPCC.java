@@ -101,7 +101,6 @@ public class CalculPCC {
                     minDistance = distance[ouverts.get(i).getI()][ouverts.get(i).getJ()];
                 }
             }
-            System.out.println(minCoordonees.toString());
             ouverts.remove(minCoordonees);
 
             int I = minCoordonees.getI();
@@ -121,9 +120,6 @@ public class CalculPCC {
                     if (tempsTotal < distance[I - 1][J]){
                         distance[I - 1][J] = tempsTotal;
                         chemins[I - 1][J] = chemins[I][J].deepCopyChemin();
-                        System.out.println(I);
-                        System.out.println(J);
-                        System.out.println(chemins[I][J].toString());
                         chemins[I - 1][J].addElement(caseATraiter, chemins[I][J].getLastDate() + temps);
                     }
                 } catch (CaseOutOfMapException e){
