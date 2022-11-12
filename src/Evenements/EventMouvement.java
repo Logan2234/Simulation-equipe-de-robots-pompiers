@@ -37,4 +37,9 @@ public class EventMouvement extends Evenement {
         }
     }
 
+    @Override
+    public String toString() {
+        return "EventMouvement [date=" + this.getDate() + "]";
+    }
+
 }

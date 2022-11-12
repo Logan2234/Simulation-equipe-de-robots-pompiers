@@ -20,7 +20,7 @@ public class TestScenarios {
             LecteurDonnees lecteur = new LecteurDonnees();
             DonneesSimulation donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestScenarios, fichier);
+            Simulation simulation = new Simulation(gui, donnees, Test.TestScenarios, fichier);
             Robot robot1 = donnees.getRobots()[0];
             Robot robot2 = donnees.getRobots()[1];
 

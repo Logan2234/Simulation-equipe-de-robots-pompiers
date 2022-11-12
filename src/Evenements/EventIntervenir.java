@@ -11,7 +11,7 @@ public class EventIntervenir extends Evenement {
     private LinkedList<Incendie> incendies;
 
     public EventIntervenir(long date, Robot robot, LinkedList<Incendie> incendies) {
-        super(date);
+        super(date + robot.getTmpVersement());
         this.robot = robot;
         this.incendies = incendies;
     }
@@ -25,12 +25,17 @@ public class EventIntervenir extends Evenement {
         if (i >= incendies.size())
             throw new NoFireException();
 
-        int qteRequise = this.incendies.get(i).getLitres();
-        int qteVersee = Math.min(qteRequise, this.robot.getReservoir());
+            int qteRequise = this.incendies.get(i).getLitres();
+            int qteVersee = Math.min(qteRequise, Math.min(this.robot.getQteVersement(), this.robot.getReservoir()));
         this.robot.deverserEau(qteVersee);
         if (qteRequise == qteVersee)
             this.incendies.remove(i);
         else
             this.incendies.get(i).eteindre(qteVersee);
+    }
+
+    @Override
+    public String toString() {
+        return "EventIntervenir [date=" + this.getDate() + "]";
     }
 }

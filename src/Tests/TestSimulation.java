@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 
-import Autre.CalculPCC;
 import Autre.Chemin;
 import Donnees.Carte;
 import Donnees.Case;
@@ -25,54 +24,50 @@ public class TestSimulation {
             LecteurDonnees lecteur = new LecteurDonnees();
             DonneesSimulation donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestSimulation, fichier);
-            CalculPCC calculateur = new CalculPCC(donnees, simulateur);
+            Simulation simulation = new Simulation(gui, donnees, Test.TestSimulation, fichier);
 
             Carte carte = donnees.getCarte();
             Robot robot = donnees.getRobots()[0];
             Chemin chemin = new Chemin();
             Case pos = robot.getPosition();
             Case nextCase;
-            long date = 0;
-
-            chemin.addElement(pos, 0);
-
+            
             Direction[] moves = { Direction.SUD, Direction.SUD, Direction.EST, Direction.EST };
 
             for (Direction dir : moves) {
                 nextCase = carte.getVoisin(pos, dir);
-                date += calculateur.tpsDpltCaseACase(pos, nextCase, robot);
-                System.out.println(date);
-                chemin.addElement(nextCase, date);
-
-                pos = nextCase;
-            }
-            
-            simulateur.ajouteEvenement(new EventIntervenir(date + 2, robot, donnees.getIncendies()));
-
-            for (Direction dir : moves) {
-                nextCase = carte.getVoisin(pos, dir);
-                date += calculateur.tpsDpltCaseACase(pos, nextCase, robot);
-                chemin.addElement(nextCase, date);
-                pos = nextCase;
-            }
-
-            simulateur.ajouteEvenement(new EventIntervenir(date + 1, robot, donnees.getIncendies()));
-            Direction[] moves2 = { Direction.OUEST, Direction.OUEST, Direction.OUEST, Direction.OUEST };
-
-            for (Direction dir : moves2) {
-                nextCase = carte.getVoisin(pos, dir);
-                date += calculateur.tpsDpltCaseACase(pos, nextCase, robot);
-                chemin.addElement(nextCase, date);
+                chemin.addElement(nextCase, simulateur.getDateDernierEvenement());
                 pos = nextCase;
             }
 
             chemin.creerEvenements(simulateur, robot);
+            simulateur.ajouteEvenement(new EventIntervenir(simulateur.getDateDernierEvenement(), robot, donnees.getIncendies()));
+            chemin.getChemin().clear();
+            
+            for (Direction dir : moves) {
+                nextCase = carte.getVoisin(pos, dir);
+                chemin.addElement(nextCase, simulateur.getDateDernierEvenement());
+                pos = nextCase;
+            }
+            
+            chemin.creerEvenements(simulateur, robot);
+            simulateur.ajouteEvenement(new EventIntervenir(simulateur.getDateDernierEvenement(), robot, donnees.getIncendies()));
+            chemin.getChemin().clear();
 
-            simulateur.ajouteEvenement(new EventRemplir(date, robot));
+            Direction[] moves2 = { Direction.OUEST, Direction.OUEST, Direction.OUEST, Direction.OUEST };
+            for (Direction dir : moves2) {
+                nextCase = carte.getVoisin(pos, dir);
+                chemin.addElement(nextCase, simulateur.getDateDernierEvenement());
+                pos = nextCase;
+            }
+            
+            chemin.creerEvenements(simulateur, robot);
+            simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot));
+            chemin.getChemin().clear();
 
-            date += (long) (robot.getTmpRemplissage() * 1 - robot.getReservoir() / robot.getCapacite());
-
+            chemin.addElement(carte.getVoisin(pos, Direction.NORD), simulateur.getDateDernierEvenement());
+            chemin.creerEvenements(simulateur, robot);
+            
         } catch (IllegalCheminRobotException e) {
             System.out.println(e);
         } catch (FileNotFoundException e) {
