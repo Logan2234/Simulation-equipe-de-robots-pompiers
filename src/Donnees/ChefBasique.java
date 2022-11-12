@@ -31,7 +31,7 @@ public class ChefBasique {
         }
     }
 
-    public void donneOrdre(Robot robot, Incendie incendie)throws PasDeCheminException{
+    public void donneOrdre(Robot robot, Incendie incendie) throws PasDeCheminException{
         try{
             incendies_rob.put(incendie, robot);
             occupes.add(robot);
@@ -64,11 +64,12 @@ public class ChefBasique {
 
                     // Si le robot qu'on cherche à attribué n'est pas occupé :
                     if (!occupes.contains(robot)){
-                        if (robot.getReservoir() > incendie.getLitres()) {
-                            incendies_rob.remove(incendie);
+                        try {
+                            donneOrdre(robot, incendie);
+                            break; // et on arrête de chercher un robot puisqu'on l'a déjà trouvé
+                        } catch (PasDeCheminException e){
+                            continue;
                         }
-                        donneOrdre(robot, incendie);
-                        break; // et on arrête de chercher un robot puisqu'on l'a déjà trouvé
                     }
                 }
             }
