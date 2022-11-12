@@ -46,4 +46,10 @@ public class ChefBasique {
             }
         }
     }
+
+    public void strategie(){
+        while (!incendies_rob.isEmpty() ){ // TODO 
+
+        }
+    }
 }
