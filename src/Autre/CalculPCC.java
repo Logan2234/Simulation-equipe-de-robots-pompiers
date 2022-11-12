@@ -109,7 +109,12 @@ public class CalculPCC {
                 int tempsTotal = temps + distanceCaseMinimale;
                 if (tempsTotal < distance[minCoordonees.getI() - 1][minCoordonees.getJ()]){
                     distance[minCoordonees.getI() - 1][minCoordonees.getJ()] = tempsTotal;
+                    System.out.println(chemins[minCoordonees.getI()][minCoordonees.getJ()].getTexte());
                     chemins[minCoordonees.getI() - 1][minCoordonees.getJ()] = chemins[minCoordonees.getI()][minCoordonees.getJ()];
+                    chemins[minCoordonees.getI() - 1][minCoordonees.getJ()].addText(" pasado crack. Y ahora : ");
+                    System.out.println(chemins[minCoordonees.getI() - 1][minCoordonees.getJ()].getTexte());
+                    System.out.println(chemins[minCoordonees.getI()][minCoordonees.getJ()].getTexte());
+                    System.out.println("----------------------------------------------------------------");
                     chemins[minCoordonees.getI() - 1][minCoordonees.getJ()].addElement(caseATraiter, chemins[minCoordonees.getI()][minCoordonees.getJ()].getLastDate() + temps);
                 }
             }

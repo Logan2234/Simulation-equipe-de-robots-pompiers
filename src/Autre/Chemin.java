@@ -11,9 +11,11 @@ import Exceptions.IllegalCheminRobotException;
 public class Chemin {
 
     private LinkedList<AssociationTempsCase> chemin;
+    private String test;
 
     public Chemin() {
         this.chemin = new LinkedList<AssociationTempsCase>();
+        this.test = "Test "; // !
     }
 
     
@@ -26,6 +28,13 @@ public class Chemin {
         return chemin;
     }
 
+    public void addText(String text){
+        this.test = this.test + text;
+    }
+
+    public String getTexte(){
+        return this.test;
+    }
     
     /** 
      * Ajoute un élément au chemin
