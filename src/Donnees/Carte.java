@@ -3,6 +3,9 @@ package Donnees;
 import java.util.Arrays;
 
 import Exceptions.CaseOutOfMapException;
+import Donnees.Robot.*;
+import Donnees.Direction;
+import Donnees.NatureTerrain;
 
 public class Carte {
 
@@ -103,6 +106,15 @@ public class Carte {
                 break;
         }
         return true;
+    }
+
+    public boolean voisinExiste(Case src, Direction dir, Robot robot) {
+        try {
+            boolean natureCompatible = robot.getVitesse(this.getVoisin(src, dir).getNature()) != 0;
+            return this.voisinExiste(src, dir) && natureCompatible;
+        } catch (CaseOutOfMapException e){
+            return false;
+        }
     }
 
     /**

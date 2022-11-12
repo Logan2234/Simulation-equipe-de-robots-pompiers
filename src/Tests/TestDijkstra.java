@@ -26,13 +26,16 @@ public class TestDijkstra {
             CalculPCC calculateur = new CalculPCC(donnees, simulateur);
 
             Carte carte = donnees.getCarte();
-            Robot robot = donnees.getRobots()[0];
+            Robot robot = donnees.getRobots()[2];
             Incendie incendie = donnees.getIncendies().getFirst();
             Chemin chemin = new Chemin();
             Case pos = robot.getPosition();
             long date = 0;
-
+            System.out.println(robot.getPosition().toString());
+            System.out.println(incendie.getPosition().toString());
+            
             chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot);
+            System.out.println(chemin.toString());
             chemin.creerEvenements(simulateur, robot);
 
             simulateur.ajouteEvenement(new EventRemplir(date, robot));
@@ -45,9 +48,7 @@ public class TestDijkstra {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {
             System.out.println("\n\t**format du fichier " + fichier + " invalide: " + e.getMessage());
-        } catch (CaseOutOfMapException e) {
-            System.out.println(e);
-        }
+        } 
     }
 
     public static void main(String[] args) {

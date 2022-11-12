@@ -25,6 +25,14 @@ public class Chemin {
     public LinkedList<AssociationTempsCase> getChemin() {
         return chemin;
     }
+
+    public Chemin deepCopyChemin(){
+        Chemin cheminCopy = new Chemin();
+        for(AssociationTempsCase temp : this.chemin){
+            cheminCopy.addElement(temp.getCase(), temp.getT());
+        }
+        return cheminCopy;
+    }
     
     /** 
      * Ajoute un élément au chemin
