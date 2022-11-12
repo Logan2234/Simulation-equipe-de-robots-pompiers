@@ -25,17 +25,18 @@ public class CalculPCC {
      * @param caseCourante - Case de départ
      * @param caseSuiv     - Case d'arrivée
      * @param robot        - Robot effectuant le déplacement
-     * @return Temps pris (en s) par à un robot pour se déplacer du centre d'une case à
+     * @return Temps pris (en s) par à un robot pour se déplacer du centre d'une
+     *         case à
      *         une autre.
      */
-    public int tpsDpltCaseACase(Case caseCourante, Case caseSuiv, Robot robot) {
+    public long tpsDpltCaseACase(Case caseCourante, Case caseSuiv, Robot robot) {
         // On part du principe que le robot va jusqu'au centre de la case d'après
         int taille_cases = caseCourante.getCarte().getTailleCases();
 
         double vitesseInit = robot.getVitesse(caseCourante.getNature());
         double vitesseSuiv = robot.getVitesse(caseSuiv.getNature());
 
-        int temps = (int)(taille_cases / ((vitesseInit + vitesseSuiv) / 2));
+        long temps = (long) (taille_cases / ((vitesseInit + vitesseSuiv) / 2));
 
         return temps;
     }
