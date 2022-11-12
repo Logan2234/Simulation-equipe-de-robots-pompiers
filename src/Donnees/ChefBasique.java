@@ -2,6 +2,7 @@ package Donnees;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import Exceptions.IllegalCheminRobotException;
 import Exceptions.PasDeCheminException;
@@ -9,6 +10,7 @@ import Exceptions.PasDeCheminException;
 import Autre.CalculPCC;
 import Autre.Chemin;
 import Donnees.Robot.Robot;
+import Evenements.EventIntervenir;
 import Evenements.Simulateur;
 
 public class ChefBasique {
@@ -31,13 +33,19 @@ public class ChefBasique {
         }
     }
 
-    public void donneOrdre(Robot robot, Incendie incendie) throws PasDeCheminException{
+    public void donneOrdre(Robot robot, Incendie incendie, long date) throws PasDeCheminException{
         try{
             incendies_rob.put(incendie, robot);
             occupes.add(robot);
             Chemin chemin = new Chemin();
             chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot);
             chemin.creerEvenements(this.simulateur, robot);
+            if (robot.getReservoir() >= incendie.getLitres()){
+                incendies_rob.remove(incendie);
+            }
+            LinkedList<Incendie> incendie_l = new LinkedList<Incendie>();
+            incendie_l.add(incendie);
+            simulateur.ajouteEvenement(new EventIntervenir(date + chemin.getTempsChemin(), robot, incendie_l));
 
         } catch (IllegalCheminRobotException e){
             System.out.println(e);
@@ -54,7 +62,7 @@ public class ChefBasique {
         return true;
     }
 
-    public void gestionIncendies(){
+    public void gestionIncendies(long date){
         for (Incendie incendie :donnees.getIncendies()){
             Robot robotIncendie = incendies_rob.get(incendie);
 
@@ -65,7 +73,7 @@ public class ChefBasique {
                     // Si le robot qu'on cherche à attribué n'est pas occupé :
                     if (!occupes.contains(robot)){
                         try {
-                            donneOrdre(robot, incendie);
+                            donneOrdre(robot, incendie, date);
                             break; // et on arrête de chercher un robot puisqu'on l'a déjà trouvé
                         } catch (PasDeCheminException e){
                             continue;
@@ -76,9 +84,11 @@ public class ChefBasique {
         }
     }
 
-    public void strategie(){
+    public void strategie(int n){
+        long date = 0;
         while (!incendies_rob.isEmpty() && !robotsVides()){
-
+            gestionIncendies(date);
+            date += n;
         }
     }
 }
