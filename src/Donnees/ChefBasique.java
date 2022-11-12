@@ -62,8 +62,9 @@ public class ChefBasique {
         return true;
     }
 
-    public void gestionIncendies(long date){
-        for (Incendie incendie :donnees.getIncendies()){
+    public void gestionIncendies(){
+        for (Incendie incendie : incendies_rob.keySet()){
+            
             Robot robotIncendie = incendies_rob.get(incendie);
 
             // Si aucun robot est attribué : 
