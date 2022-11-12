@@ -25,4 +25,12 @@ public class ChefBasique {
         incendies_rob.put(incendie, robot);
         occupes.add(robot);
     }
+
+    public void gestionIncendies(){
+        for (Incendie incendie :donnees.getIncendies()){
+            Robot robot = incendies_rob.get(incendie);
+            if (robot == null){
+                
+            }
+    }
 }
