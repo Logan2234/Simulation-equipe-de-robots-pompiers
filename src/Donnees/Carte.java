@@ -2,6 +2,7 @@ package Donnees;
 
 import java.util.Arrays;
 
+import Donnees.Robot.Robot;
 import Exceptions.CaseOutOfMapException;
 
 public class Carte {
@@ -69,7 +70,6 @@ public class Carte {
      * @param col : indicée à partir de 0
      */
     public Case getCase(int lig, int col) {
-        // TODO : lancer une exception si la case est en dehors de notre tables
         return tab_cases[lig][col];
     }
 
@@ -104,6 +104,15 @@ public class Carte {
                 break;
         }
         return true;
+    }
+
+    public boolean voisinExiste(Case src, Direction dir, Robot robot) {
+        try {
+            boolean natureCompatible = robot.getVitesse(this.getVoisin(src, dir).getNature()) != 0;
+            return this.voisinExiste(src, dir) && natureCompatible;
+        } catch (CaseOutOfMapException e){
+            return false;
+        }
     }
 
     /**

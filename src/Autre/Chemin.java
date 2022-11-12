@@ -16,14 +16,55 @@ public class Chemin {
         this.chemin = new LinkedList<AssociationTempsCase>();
     }
 
+    
+    /** 
+     * Renvoie le chemin 
+     * 
+     * @return Chemin sous forme de liste chainée
+     */
     public LinkedList<AssociationTempsCase> getChemin() {
         return chemin;
     }
 
+    public Chemin deepCopyChemin(){
+        Chemin cheminCopy = new Chemin();
+        for(AssociationTempsCase temp : this.chemin){
+            cheminCopy.addElement(temp.getCase(), temp.getT());
+        }
+        return cheminCopy;
+    }
+    
+    /** 
+     * Ajoute un élément au chemin
+     * 
+     * @param caseSuiv  - Nouveau élément à ajouter
+     * @param date      - Date de passage par le nouveau élément
+     */
     public void addElement(Case caseSuiv, long date) {
         this.chemin.add(new AssociationTempsCase(caseSuiv, date));
     }
 
+    
+    /** 
+     * Retourne la date du dernier élément du chemin
+     * 
+     * @return Date du dernier élément du chemin
+     */
+    public long getLastDate(){
+        return this.chemin.getLast().getT();
+    }
+
+    public long getTempsChemin(){
+        return this.chemin.getLast().getT() - this.chemin.getFirst().getT();
+    }
+
+    
+    /** 
+     * Retourne le iº élément du chemin
+     * 
+     * @param index                 - indice de l'élément à retourner
+     * @return AssociationTempsCase - Retourne l'élément et la date de passage par l'élément
+     */
     public AssociationTempsCase getElem(int index) {
         if (index == -1) {
             return this.chemin.getLast();
@@ -39,9 +80,9 @@ public class Chemin {
      * 
      * @param simulateur : Simulateur permettant l'ajout d'évènements
      * @param robot      : Robot concerné par le déplacement sur le chemin
-     * 
-     * @exception IllegalCheminRobotException Le chemin n'est pas traversable par le
-     *                                        robot
+* 
+     * @exception IllegalCheminRobotException Le chemin n'est pas traversable par le robot
+     *         
      */
     public void creerEvenements(Simulateur simulateur, Robot robot) throws IllegalCheminRobotException {
         AssociationTempsCase oldCase = this.chemin.get(0);
@@ -59,6 +100,12 @@ public class Chemin {
         }
     }
 
+    
+    /** 
+     * Fonction renvoyant la transcription du chemin à String
+     * 
+     * @return String renvoyé
+     */
     @Override
     public String toString() {
         return "Chemin [chemin=" + chemin + "]";
