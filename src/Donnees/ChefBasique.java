@@ -21,5 +21,8 @@ public class ChefBasique {
         }
     }
 
-    public donneOrdre(Robot robot, Incendie incendie);
+    public void donneOrdre(Robot robot, Incendie incendie){
+        incendies_rob.put(incendie, robot);
+        occupes.add(robot);
+    }
 }
