@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import Exceptions.IllegalCheminRobotException;
+import Exceptions.PasDeCheminException;
+
 import Autre.CalculPCC;
 import Autre.Chemin;
 import Donnees.Robot.Robot;
