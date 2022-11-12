@@ -3,7 +3,6 @@ package Tests;
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 import Exceptions.IllegalCheminRobotException;
-import Exceptions.CaseOutOfMapException;
 
 import Autre.*;
 import Donnees.*;
@@ -22,25 +21,17 @@ public class TestDijkstra {
             LecteurDonnees lecteur = new LecteurDonnees();
             DonneesSimulation donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestSimulation, fichier);
+            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestDijkstra, fichier);
             CalculPCC calculateur = new CalculPCC(donnees, simulateur);
 
-            Carte carte = donnees.getCarte();
             Robot robot = donnees.getRobots()[2];
             Incendie incendie = donnees.getIncendies().getFirst();
             Chemin chemin = new Chemin();
-            Case pos = robot.getPosition();
-            long date = 0;
-            System.out.println(robot.getPosition().toString());
-            System.out.println(incendie.getPosition().toString());
-            
+
             chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot);
             System.out.println(chemin.toString());
             chemin.creerEvenements(simulateur, robot);
 
-            simulateur.ajouteEvenement(new EventRemplir(date, robot));
-
-            date += (long) (robot.getTmpRemplissage() * 1 - robot.getReservoir() / robot.getCapacite());
 
         } catch (IllegalCheminRobotException e) {
             System.out.println(e);
@@ -48,12 +39,12 @@ public class TestDijkstra {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {
             System.out.println("\n\t**format du fichier " + fichier + " invalide: " + e.getMessage());
-        } 
+        }
     }
 
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.println("Syntaxe: java TestSimulation <nomDeFichier>");
+            System.out.println("Syntaxe: java TestDijkstra <nomDeFichier>");
             System.exit(1);
         }
         // crée la fenêtre graphique dans laquelle dessiner
