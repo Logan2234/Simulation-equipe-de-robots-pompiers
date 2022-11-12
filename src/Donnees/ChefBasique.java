@@ -45,6 +45,15 @@ public class ChefBasique {
         
     }
 
+    public boolean robotsVides(){
+        for (Robot robot:donnees.getRobots()){
+            if (robot.getReservoir() != 0){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void gestionIncendies(){
         for (Incendie incendie :donnees.getIncendies()){
             Robot robotIncendie = incendies_rob.get(incendie);
@@ -55,6 +64,9 @@ public class ChefBasique {
 
                     // Si le robot qu'on cherche à attribué n'est pas occupé :
                     if (!occupes.contains(robot)){
+                        if (robot.getReservoir() > incendie.getLitres()) {
+                            incendies_rob.remove(incendie);
+                        }
                         donneOrdre(robot, incendie);
                         break; // et on arrête de chercher un robot puisqu'on l'a déjà trouvé
                     }
@@ -64,7 +76,7 @@ public class ChefBasique {
     }
 
     public void strategie(){
-        while (!incendies_rob.isEmpty() ){ // TODO 
+        while (!incendies_rob.isEmpty() && !robotsVides()){
 
         }
     }
