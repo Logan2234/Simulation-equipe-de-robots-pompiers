@@ -68,9 +68,7 @@ public class TestSimulation {
             chemin.addElement(carte.getVoisin(pos, Direction.NORD), simulateur.getDateDernierEvenement());
             chemin.creerEvenements(simulateur, robot);
             chemin.getChemin().clear();
-            
-            System.out.println("Maintenant le robot à pattes va essayer de se remplir");
-            
+                        
             robot = donnees.getRobots()[2];
             pos = robot.getPosition();
             
