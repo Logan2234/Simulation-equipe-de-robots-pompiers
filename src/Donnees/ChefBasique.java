@@ -31,7 +31,7 @@ public class ChefBasique {
         }
     }
 
-    public void donneOrdre(Robot robot, Incendie incendie)throws IllegalCheminRobotException{
+    public void donneOrdre(Robot robot, Incendie incendie) throws PasDeCheminException{
         try{
             incendies_rob.put(incendie, robot);
             occupes.add(robot);
@@ -58,7 +58,7 @@ public class ChefBasique {
                         try {
                             donneOrdre(robot, incendie);
                             break; // et on arrête de chercher un robot puisqu'on l'a déjà trouvé
-                        } catch (IllegalCheminRobotException e){
+                        } catch (PasDeCheminException e){
                             continue;
                         }
                     }
