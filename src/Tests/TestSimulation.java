@@ -10,6 +10,7 @@ import Donnees.Carte;
 import Donnees.Case;
 import Donnees.Direction;
 import Donnees.DonneesSimulation;
+import Donnees.Incendie;
 import Donnees.LecteurDonnees;
 import Donnees.Robot.Robot;
 import Evenements.EventIntervenir;
@@ -47,8 +48,8 @@ public class TestSimulation {
 
                 pos = nextCase;
             }
-            
-            simulateur.ajouteEvenement(new EventIntervenir(date + 2, robot, donnees.getIncendies()));
+            for (Incendie incendie : donnees.getIncendies() ){
+                simulateur.ajouteEvenement(new EventIntervenir(date + 2, robot, incendie));}
 
             for (Direction dir : moves) {
                 nextCase = carte.getVoisin(pos, dir);
@@ -57,7 +58,8 @@ public class TestSimulation {
                 pos = nextCase;
             }
 
-            simulateur.ajouteEvenement(new EventIntervenir(date + 1, robot, donnees.getIncendies()));
+            for (Incendie incendie : donnees.getIncendies() ){
+            simulateur.ajouteEvenement(new EventIntervenir(date + 1, robot, incendie));}
             Direction[] moves2 = { Direction.OUEST, Direction.OUEST, Direction.OUEST, Direction.OUEST };
 
             for (Direction dir : moves2) {

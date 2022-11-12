@@ -28,6 +28,10 @@ public class Simulateur {
         this.dateSimulation += 1;
     }
 
+    public void incrementeDate(int n) {
+        this.dateSimulation += n;
+    }
+
     public void ajouteEvenement(Evenement e) {
         this.evenementsActuels.add(e);
     }

@@ -30,13 +30,13 @@ public class TestScenarios {
             simulateur.ajouteEvenement(new EventMouvement(3, robot1, Direction.NORD));
 
             simulateur.ajouteEvenement(new EventMouvement(6, robot2, Direction.NORD));
-            simulateur.ajouteEvenement(new EventIntervenir(7, robot2, donnees.getIncendies()));
+            simulateur.ajouteEvenement(new EventIntervenir(7, robot2, donnees.getIncendies().getFirst()));
             simulateur.ajouteEvenement(new EventMouvement(8, robot2, Direction.OUEST));
             simulateur.ajouteEvenement(new EventMouvement(8, robot2, Direction.OUEST));
             simulateur.ajouteEvenement(new EventRemplir(9, robot2));
             simulateur.ajouteEvenement(new EventMouvement(10, robot2, Direction.EST));
             simulateur.ajouteEvenement(new EventMouvement(10, robot2, Direction.EST));
-            simulateur.ajouteEvenement(new EventIntervenir(11, robot2, donnees.getIncendies()));
+            simulateur.ajouteEvenement(new EventIntervenir(11, robot2, donnees.getIncendies().getLast()));
             simulateur.ajouteEvenement(new EventMouvement(12, robot2, Direction.OUEST));
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
