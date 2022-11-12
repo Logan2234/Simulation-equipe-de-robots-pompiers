@@ -3,7 +3,9 @@ package Donnees;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import Autre.Chemin;
 import Donnees.Robot.Robot;
+import Evenements.Simulateur;
 
 public class ChefBasique {
     private Carte carte;
@@ -24,6 +26,8 @@ public class ChefBasique {
     public void donneOrdre(Robot robot, Incendie incendie){
         incendies_rob.put(incendie, robot);
         occupes.add(robot);
+        Chemin chemin = new Chemin();
+        chemin.creerEvenements(this.simulateur, robot);
     }
 
     public void gestionIncendies(){
