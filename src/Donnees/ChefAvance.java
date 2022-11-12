@@ -11,7 +11,7 @@ import Autre.Chemin;
 import Donnees.Robot.Robot;
 import Evenements.Simulateur;
 
-public class ChefBasique {
+public class ChefAvance {
     private Carte carte;
     private DonneesSimulation donnees;
     private Simulateur simulateur;
@@ -19,7 +19,7 @@ public class ChefBasique {
     private ArrayList<Robot> occupes;
     private CalculPCC calculateur;
 
-    public ChefBasique(Carte carte, DonneesSimulation donnees, Simulateur simulateur){
+    public ChefAvance(Carte carte, DonneesSimulation donnees, Simulateur simulateur){
         this.carte = carte;
         this.donnees = donnees;
         this.simulateur = simulateur;
@@ -31,6 +31,7 @@ public class ChefBasique {
         }
     }
 
+    //! Il faudra compléter avec donneOrdre de Basique
     public void donneOrdre(Robot robot, Incendie incendie) throws PasDeCheminException{
         try{
             incendies_rob.put(incendie, robot);
@@ -42,44 +43,14 @@ public class ChefBasique {
         } catch (IllegalCheminRobotException e){
             System.out.println(e);
         }
-        
-    }
 
-    public boolean robotsVides(){
-        for (Robot robot:donnees.getRobots()){
-            if (robot.getReservoir() != 0){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public void gestionIncendies(){
-        for (Incendie incendie : incendies_rob.keySet()){
-            
-            Robot robotIncendie = incendies_rob.get(incendie);
-
-            // Si aucun robot est attribué : 
-            if (robotIncendie == null){
-                for (Robot robot : this.donnees.getRobots()){
-
-                    // Si le robot qu'on cherche à attribué n'est pas occupé :
-                    if (!occupes.contains(robot)){
-                        try {
-                            donneOrdre(robot, incendie);
-                            break; // et on arrête de chercher un robot puisqu'on l'a déjà trouvé
-                        } catch (PasDeCheminException e){
-                            continue;
-                        }
-                    }
-                }
-            }
-        }
     }
 
     public void strategie(){
-        while (!incendies_rob.isEmpty() && !robotsVides()){
+        while (!incendies_rob.isEmpty()){
+            for (Incendie incendie : incendies_rob.keySet()){
 
+            }
         }
     }
 }
