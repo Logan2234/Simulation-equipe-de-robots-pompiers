@@ -8,6 +8,7 @@ import Donnees.DonneesSimulation;
 import Donnees.Robot.Robot;
 import Evenements.Simulateur;
 import Exceptions.CaseOutOfMapException;
+import Exceptions.PasDeCheminException;
 import Donnees.Direction;
 
 public class CalculPCC {
@@ -72,7 +73,7 @@ public class CalculPCC {
      * @param robot        - Robot effectuant le déplacement
      * @return Chemin optimal que le robot devrait prendre pour aller d'une case à l'autre.
      */
-    public Chemin dijkstra(Case caseCourante, Case caseSuiv, Robot robot) {
+    public Chemin dijkstra(Case caseCourante, Case caseSuiv, Robot robot) throws PasDeCheminException {
         long distance[][] = new long[this.donnees.getCarte().getNbLignes()][this.donnees.getCarte().getNbColonnes()];
         Chemin chemins[][] = new Chemin[this.donnees.getCarte().getNbLignes()][this.donnees.getCarte().getNbColonnes()];
         ArrayList<Coordonees> ouverts = new ArrayList<Coordonees>();
@@ -174,6 +175,8 @@ public class CalculPCC {
 
         }
 
+        if (distance[caseSuiv.getLigne()][caseSuiv.getColonne()] == Long.MAX_VALUE) throw new PasDeCheminException();
+        
         return chemins[caseSuiv.getLigne()][caseSuiv.getColonne()];
     }
 
