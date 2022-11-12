@@ -20,4 +20,6 @@ public class ChefBasique {
             incendies_rob.put(incendie, null);
         }
     }
+
+    public donneOrdre(Robot robot, Incendie incendie);
 }
