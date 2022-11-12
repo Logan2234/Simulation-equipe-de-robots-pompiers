@@ -46,6 +46,7 @@ public class Simulateur {
     public void ajouteEvenement(Evenement e) {
         evenementsActuels.add(e);
         dateDernierEvenement = e.getDate();
+        System.out.println(evenementsActuels);
     }
 
     public static void execute() throws NoFireException, CaseOutOfMapException, NoWaterException {

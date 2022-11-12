@@ -64,10 +64,26 @@ public class TestSimulation {
             chemin.creerEvenements(simulateur, robot);
             simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot));
             chemin.getChemin().clear();
-
+            
             chemin.addElement(carte.getVoisin(pos, Direction.NORD), simulateur.getDateDernierEvenement());
             chemin.creerEvenements(simulateur, robot);
+            chemin.getChemin().clear();
             
+            System.out.println("Maintenant le robot à pattes va essayer de se remplir");
+            
+            robot = donnees.getRobots()[2];
+            pos = robot.getPosition();
+            
+            for (int i = 0; i < 4; i++) {
+                nextCase = carte.getVoisin(pos, Direction.OUEST);
+                chemin.addElement(nextCase, 0);
+                pos = nextCase;    
+            }
+            
+            chemin.creerEvenements(simulateur, robot);
+            simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot));
+            
+
         } catch (IllegalCheminRobotException e) {
             System.out.println(e);
         } catch (FileNotFoundException e) {

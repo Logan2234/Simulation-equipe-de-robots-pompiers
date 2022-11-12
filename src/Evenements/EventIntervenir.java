@@ -25,9 +25,14 @@ public class EventIntervenir extends Evenement {
         if (i >= incendies.size())
             throw new NoFireException();
 
-            int qteRequise = this.incendies.get(i).getLitres();
-            int qteVersee = Math.min(qteRequise, Math.min(this.robot.getQteVersement(), this.robot.getReservoir()));
-        this.robot.deverserEau(qteVersee);
+        int qteRequise = this.incendies.get(i).getLitres();
+        int qteVersee;
+        if (robot.getCapacite() != -1) { // Si le robot n'est pas un robot à pattes
+            qteVersee = Math.min(qteRequise, Math.min(this.robot.getQteVersement(), this.robot.getReservoir()));
+            this.robot.deverserEau(qteVersee);
+        } else
+            qteVersee = Math.min(qteRequise, 10);
+        // Si la qteRequise est exactement ce qui peut être versé, on éteint le feu
         if (qteRequise == qteVersee)
             this.incendies.remove(i);
         else

@@ -7,14 +7,14 @@ public class EventRemplir extends Evenement {
     private Robot robot;
 
     public EventRemplir(long date, Robot robot) {
-        super(date);
+        super(date + 1);
         this.robot = robot;
     }
 
     @Override
     public void execute() throws NoWaterException {
         Simulateur.updateDate(
-                (long) (robot.getTmpRemplissage() * (1 - (float) robot.getReservoir() / robot.getCapacite())) + 1);
+                (long) (robot.getTmpRemplissage() * (1 - (float) robot.getReservoir() / robot.getCapacite())));
         robot.remplirReservoir();
     }
 
