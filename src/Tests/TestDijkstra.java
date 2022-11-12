@@ -3,6 +3,7 @@ package Tests;
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 import Exceptions.IllegalCheminRobotException;
+import Exceptions.PasDeCheminException;
 
 import Autre.*;
 import Donnees.*;
@@ -13,7 +14,6 @@ import java.awt.Color;
 
 import gui.GUISimulator;
 import gui.Simulable;
-import io.Dessin;
 
 public class TestDijkstra {
     public static void initialize(String fichier, GUISimulator gui) {
@@ -39,6 +39,8 @@ public class TestDijkstra {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {
             System.out.println("\n\t**format du fichier " + fichier + " invalide: " + e.getMessage());
+        } catch (PasDeCheminException e) {
+            System.out.println("Aucun chemin n'a été trouvé");
         }
     }
 
