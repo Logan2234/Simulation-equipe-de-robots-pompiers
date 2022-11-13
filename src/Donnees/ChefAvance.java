@@ -6,9 +6,11 @@ import java.util.HashMap;
 import Exceptions.IllegalCheminRobotException;
 import Exceptions.PasDeCheminException;
 import Exceptions.PasEauDansCarte;
+import Exceptions.CaseOutOfMapException;
 import Autre.CalculPCC;
 import Autre.Chemin;
-import Donnees.Robot.Robot;
+import Donnees.Robot.*;
+import Donnees.Direction;
 import Donnees.NatureTerrain;
 import Evenements.Simulateur;
 
@@ -51,23 +53,45 @@ public class ChefAvance {
         boolean ilYAUnChemin = false;
 
         for (Case caseEau : this.casesAvecEau){
-            try {
-                Chemin cheminVersEau = calculateur.dijkstra(positionRobot, caseEau, robot);
+            if (robot instanceof RobotDrone){
+                try {
+                    Chemin cheminVersEau = calculateur.dijkstra(positionRobot, caseEau, robot);
 
-                if (cheminVersEau.getTempsChemin() < tempsDeplacement) {
-                    tempsDeplacement = cheminVersEau.getTempsChemin();
-                    cheminARetourner = cheminVersEau;
-                    ilYAUnChemin = true;
+                    if (cheminVersEau.getTempsChemin() < tempsDeplacement) {
+                        tempsDeplacement = cheminVersEau.getTempsChemin();
+                        cheminARetourner = cheminVersEau;
+                        ilYAUnChemin = true;
 
+                    }
+
+                } catch (PasDeCheminException e) {
+                    continue;
                 }
+            } else {
+                for (Direction direction : Direction.values()) {
+                    try {
+                        if (positionRobot.getCarte().voisinExiste(caseEau, direction, robot)) {
 
-            } catch (PasDeCheminException e) {
-                continue;
+                            Chemin cheminVersEau = calculateur.dijkstra(positionRobot, positionRobot.getCarte().getVoisin(caseEau, direction), robot);
+
+                            if (cheminVersEau.getTempsChemin() < tempsDeplacement) {
+                                tempsDeplacement = cheminVersEau.getTempsChemin();
+                                cheminARetourner = cheminVersEau;
+                                ilYAUnChemin = true;
+        
+                            }
+                        } 
+
+                    } catch (PasDeCheminException e) {
+                        continue;
+                    } catch (CaseOutOfMapException e){
+                        continue;
+                    } 
+                }
             }
         }
 
         if (!ilYAUnChemin) throw new PasDeCheminException();
-
 
         return cheminARetourner;
 
@@ -101,7 +125,7 @@ public class ChefAvance {
                     incendies_rob.remove(incendie);
                     occupes.remove(robot);
                 }
-                if (robot.getReservoir() == 0){ // Si le réservoir du robot est vide
+                if (robot.getReservoir() == 0) { // Si le réservoir du robot est vide
                     try {
                         Chemin cheminVersEau = ouAllerRemplirReservoir(robotAMobiliser);
                         if (!occupes.contains(robot)) occupes.add(robot);
