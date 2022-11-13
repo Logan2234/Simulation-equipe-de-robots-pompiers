@@ -2,7 +2,7 @@ package Evenements;
 
 import java.util.PriorityQueue;
 
-import Exceptions.CaseOutOfMapException;
+import Exceptions.CellOutOfMapException;
 import Exceptions.NoFireException;
 import Exceptions.NoWaterException;
 
@@ -48,7 +48,7 @@ public class Simulateur {
         dateDernierEvenement = e.getDate();
     }
 
-    public static void execute() throws NoFireException, CaseOutOfMapException, NoWaterException {
+    public static void execute() throws NoFireException, CellOutOfMapException, NoWaterException {
         if (evenementsActuels.size() > 0) {
             Evenement event = evenementsActuels.element();
             while (event.getDate() == dateSimulation) {

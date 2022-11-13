@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import Donnees.Case;
 import Donnees.Robot.Robot;
-import Exceptions.CaseOutOfMapException;
+import Exceptions.CellOutOfMapException;
 import Donnees.Direction;
 import Donnees.DonneesSimulation;
 
@@ -122,7 +122,7 @@ public class CalculPCC {
                         System.out.println(chemins[I][J].toString());
                         chemins[I - 1][J].addElement(caseATraiter, chemins[I][J].getLastDate() + temps);
                     }
-                } catch (CaseOutOfMapException e){
+                } catch (CellOutOfMapException e){
                     System.out.println(e);
                 }
             }
@@ -139,7 +139,7 @@ public class CalculPCC {
                         chemins[I][J + 1] = chemins[I][J].deepCopyChemin();
                         chemins[I][J + 1].addElement(caseATraiter, chemins[I][J].getLastDate() + temps);
                     }
-                } catch (CaseOutOfMapException e){
+                } catch (CellOutOfMapException e){
                     System.out.println(e);
                 }
             }
@@ -153,7 +153,7 @@ public class CalculPCC {
                         chemins[I + 1][J] = chemins[I][J].deepCopyChemin();
                         chemins[I + 1][J].addElement(caseATraiter, chemins[I][J].getLastDate() + temps);
                     }
-                } catch (CaseOutOfMapException e){
+                } catch (CellOutOfMapException e){
                     System.out.println(e);
                 }
             }
@@ -167,7 +167,7 @@ public class CalculPCC {
                         chemins[I][J - 1] = chemins[I][J].deepCopyChemin();
                         chemins[I][J - 1].addElement(caseATraiter, chemins[I][J].getLastDate() + temps);
                     }
-                } catch (CaseOutOfMapException e) {
+                } catch (CellOutOfMapException e) {
                     System.out.println(e);
                 }
             }

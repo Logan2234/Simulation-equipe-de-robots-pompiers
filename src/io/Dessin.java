@@ -57,13 +57,15 @@ public class Dessin {
 
     private void dessinIncendies() {
         for (Incendie incendie : donnees.getIncendies()) {
-            Case pos = incendie.getPosition();
-            int i = pos.getLigne();
-            int j = pos.getColonne();
-            gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j,
-                    tailleCase / 2 + i * tailleCase, Color.GRAY, Color.RED, tailleCase / 2));
-            gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase / 2 + tailleCase * i,
-                    Color.BLACK, Integer.toString(incendie.getLitres())));
+            if (incendie.getLitres() > 0) {
+                Case pos = incendie.getPosition();
+                int i = pos.getLigne();
+                int j = pos.getColonne();
+                gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j,
+                        tailleCase / 2 + i * tailleCase, Color.GRAY, Color.RED, tailleCase / 2));
+                gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase / 2 + tailleCase * i,
+                        Color.BLACK, Integer.toString(incendie.getLitres())));
+            }
         }
     }
 
