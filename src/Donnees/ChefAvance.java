@@ -23,8 +23,8 @@ public class ChefAvance {
     private CalculPCC calculateur;
     private ArrayList<Case> casesAvecEau;
 
-    public ChefAvance(Carte carte, DonneesSimulation donnees, Simulateur simulateur){
-        this.carte = carte;
+    public ChefAvance(DonneesSimulation donnees, Simulateur simulateur){
+        this.carte = donnees.getCarte();
         this.donnees = donnees;
         this.simulateur = simulateur;
         this.occupes = new ArrayList<Robot>();
@@ -44,6 +44,15 @@ public class ChefAvance {
         this.casesAvecEau = casesAvecEau;
     }
 
+    
+    /**
+     * Renvoie le chemin idéal vers la source d'eau la plus proche pour remplir le reservoir d'un robot.
+     * 
+     * @param robot                  - Robot qui doit aller remplir son reservoir
+     * @return Chemin                - Chemin idéal vers une source d'eau
+     * @throws PasDeCheminException  - Exception s'il n'y a pas de chemins possibles du robot vers une source d'eau
+     * @throws PasEauDansCarte       - Exception s'il n'y a pas d'eau dans la carte
+     */
     public Chemin ouAllerRemplirReservoir(Robot robot) throws PasEauDansCarte, PasDeCheminException{ // TODO : Attention, un drone != robot terrestre
         if (casesAvecEau.size() == 0) throw new PasEauDansCarte();
 
@@ -97,6 +106,13 @@ public class ChefAvance {
 
     }
 
+    
+    /** 
+     * Fonction qui, pour chaque incendie, décide quel robot envoyer pour réaliser l'extinction et commande les robots pour 
+     * réaliser les extinctions ou leurs remplissages d'eau.
+     * 
+     * @param incendie    - Incendie à traiter par les robots
+     */
     public void gestionIncendies(Incendie incendie){
 
         // Cherchons le robot le plus proche de l'incendie
@@ -142,13 +158,19 @@ public class ChefAvance {
 
         // Maintenant, si on a trouvé un robot, on l'envoie travailler 
         try {
-            if (robotTrouve) cheminAParcourir.creerEvenements(this.simulateur, robotAMobiliser);
+            if (robotTrouve) {
+                incendies_rob.put(incendie, robotAMobiliser);
+                cheminAParcourir.creerEvenements(this.simulateur, robotAMobiliser);
+            }
         } catch (IllegalCheminRobotException e){
             System.out.println(e);
         }
 
     }
 
+    /**
+     * Fonction executant la stratégie d'extinction des feux du Chef des Pompiers Avancé
+     */
     public void strategie(){
         while (!incendies_rob.isEmpty()){
             for (Incendie incendie : incendies_rob.keySet()){
