@@ -40,15 +40,11 @@ public class ChefBasique {
             Chemin chemin = new Chemin();
             chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot);
             // Si on a un chemin (car on a pas attrappé d'exception) on va attribuer l'incendie au robot
-            incendies_rob.put(incendie, new RobotLitres(robot, litres_restants));
+            incendies_rob.put(incendie, new RobotLitres(robot, litres_restants - Math.min(robot.getReservoir(), litres_restants)));
             chemin.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'incendie
             long new_date = date + chemin.getTempsChemin() + Math.min(robot.getReservoir(),litres_restants)*robot.getTmpVersement()/robot.getQteVersement();
-            occupes.put(robot, new_date);
-            if (robot.getReservoir() >= litres_restants){ // Si on a réussi à éteindre l'incendie
-                incendies_rob.remove(incendie);
-            } else {
-                incendies_rob.put(incendie, new RobotLitres(null, litres_restants - robot.getReservoir()));
-            }
+            occupes.put(robot, new_date); //robot occupé jusqu'à new_date
+            robot.deverserEau(Math.min(robot.getReservoir(),litres_restants));
             simulateur.ajouteEvenement(new EventIntervenir(date + chemin.getTempsChemin(), robot, incendie));
             return new_date;
             
@@ -79,13 +75,12 @@ public class ChefBasique {
             // Si aucun robot n'est affecté à l'incendie : 
             if (robotIncendie.getRobot() == null){
                 for (Robot robot : this.donnees.getRobots()){
-                    System.out.println(robot.toString());
                     // Si le robot a fini sa tâche, il n'est plus occupé
                     if (occupes.containsKey(robot) && occupes.get(robot) < date) {
-                        if (robot.getReservoir() <= 0) { // Si il a vidé son eau, il est occupé indéfiniment
+                        if (robot.getReservoir() == 0) { // Si il a vidé son eau, il est occupé indéfiniment et n'est plus en charge de l'incendie
                             occupes.put(robot, Long.MAX_VALUE);
-                        } else { // Si il lui reste de l'eau, il n'est plus occupé et n'est plus rattaché à l'incendie
                             incendies_rob.put(incendie, new RobotLitres(null, incendies_rob.get(incendie).getLitres()));
+                        } else { // Si il lui reste de l'eau, il n'est plus occupé
                             occupes.remove(robot);
                         }
                     }
@@ -100,15 +95,25 @@ public class ChefBasique {
                         }
                     }
                 }
-            }
+            } else {
+                if (incendies_rob.get(incendie).getLitres() <= 0){
+                    occupes.remove(robotIncendie.getRobot());
+                    incendies_rob.remove(incendie);
+                    return date;
+                } else if (robotIncendie.getRobot().getReservoir() == 0) {
+                    occupes.put(robotIncendie.getRobot(), Long.MAX_VALUE);
+                }
         }
-        return date; //n'arrive que si on n'a aucun robot qui ne peut accéder à aucun incendie
+        }
+        return date; //n'arrive que si on n'a aucun robot qui ne peut accéder à aucun incendie ou si tous les incendies ont été éteints
     }
 
     public void strategie() throws EmptyRobotsException{
         long date = simulateur.getDateSimulation();
         while (!incendies_rob.isEmpty() && !robotsVides()){
-            date = gestionIncendies(date);
+            long new_date = gestionIncendies(date);
+            simulateur.incrementeDate(new_date-date);
+            date = new_date;
         }
         if (incendies_rob.isEmpty()) {
             System.out.println("Tous les incendies sont éteints\n");
@@ -119,7 +124,7 @@ public class ChefBasique {
 }
 
 /**
- * Sous-classe représentant un tuple robot, litres nécessaires (pour la hashmap incendies_rob)
+ * Sous-classe représentant un tuple (robot, litres nécessaires) (pour la hashmap incendies_rob)
  */
 class RobotLitres {
     private Robot rob;
