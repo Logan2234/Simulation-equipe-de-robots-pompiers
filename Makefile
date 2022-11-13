@@ -39,6 +39,9 @@ testScenarios:
 testDijkstra:
 	javac -d bin -classpath bin/gui.jar -sourcepath src src/Tests/TestDijkstra.java
 
+testBasique:
+	javac -d bin -classpath bin/gui.jar -sourcepath src src/Tests/TestBasique.java
+
 # Execution:
 # on peut taper directement la ligne de commande :
 #   > java -classpath bin:bin/gui.jar TestInvader
@@ -59,6 +62,9 @@ exeScenarios:
 
 exeDijkstra:
 	java -classpath bin:bin/gui.jar Tests/TestDijkstra cartes/carteSujet.map
+
+exeBasique:
+	java -classpath bin:bin/gui.jar Tests/TestBasique cartes/carteSujet.map
 
 clean:
 	rm -rf bin/Donnees bin/Evenements bin/Tests bin/io bin/Chemin
