@@ -16,13 +16,15 @@ class Simulation implements Simulable {
     private Dessin fonctionDessin;
     private Test classeAppelante;
     private String fichier;
+    private Simulateur simulateur;
 
-    public Simulation(GUISimulator gui, DonneesSimulation donnees, Test classeAppelante, String fichier) {
+    public Simulation(GUISimulator gui, DonneesSimulation donnees, Test classeAppelante, String fichier, Simulateur simulateur) {
         this.gui = gui;
         this.donnees = donnees;
         this.fonctionDessin = new Dessin(this.donnees, this.gui);
         this.classeAppelante = classeAppelante;
         this.fichier = fichier;
+        this.simulateur = simulateur;
 
         gui.setSimulable(this);
 
@@ -37,7 +39,7 @@ class Simulation implements Simulable {
     @Override
     public void next() {
         try {
-            Simulateur.execute();
+            simulateur.execute();
         } catch (NoFireException e) {
             System.out.println(e);
         } catch (CellOutOfMapException e) {
@@ -45,13 +47,13 @@ class Simulation implements Simulable {
         } catch (NoWaterException e) {
             System.out.println(e);
         }
-        Simulateur.incrementeDate();
+        simulateur.incrementeDate();
         draw();
     }
 
     @Override
     public void restart() {
-        Simulateur.restart();
+        simulateur.restart();
 
         switch (classeAppelante) {
             case TestSimulation:

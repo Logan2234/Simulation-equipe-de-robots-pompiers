@@ -27,11 +27,11 @@ public class TestScenarios {
         try {
             lecteur = new LecteurDonnees();
             donnees = lecteur.creerSimulation(fichier);
-            Simulation simulation = new Simulation(gui, donnees, Test.TestScenarios, fichier);
+            Simulateur simulateur = new Simulateur();
+            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestScenarios, fichier);
             Carte carte = donnees.getCarte();
             Robot robot2 = donnees.getRobots()[1];
             Robot robot1 = donnees.getRobots()[0];
-            Simulateur simulateur = new Simulateur();
             Chemin chemin = new Chemin();
             Case pos = robot1.getPosition();
             Case nextCase = pos;
