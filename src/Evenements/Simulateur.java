@@ -2,30 +2,45 @@ package Evenements;
 
 import java.util.PriorityQueue;
 
-import Exceptions.CaseOutOfMapException;
+import Exceptions.CellOutOfMapException;
 import Exceptions.NoFireException;
 import Exceptions.NoWaterException;
 
 public class Simulateur {
 
-    private long dateSimulation; // TODO: Changer dans tout les fichiers les int en long lorsqu'on parle de date
-    private PriorityQueue<Evenement> evenementsActuels = new PriorityQueue<Evenement>();
+    private static long dateSimulation;
+    private static long dateDernierEvenement;
+    private static PriorityQueue<Evenement> evenementsActuels;
 
     public Simulateur() {
-        this.dateSimulation = 0;
+        dateSimulation = 0;
+        dateDernierEvenement = 0;
+        evenementsActuels = new PriorityQueue<Evenement>();
     }
 
-    public long getDateSimulation() {
-        return this.dateSimulation;
+    public static long getDateSimulation() {
+        return dateSimulation;
     }
 
-    public void restart() {
-        this.dateSimulation = 0;
-        this.evenementsActuels.clear();
+    public long getDateDernierEvenement() {
+        return dateDernierEvenement;
     }
 
-    public void incrementeDate() {
-        this.dateSimulation += 1;
+    public static void restart() {
+        dateSimulation = 0;
+        evenementsActuels.clear();
+    }
+
+    public static void incrementeDate() {
+        dateSimulation += 1;
+    }
+    
+    public static void addDate(long temps) {
+        dateSimulation += temps;
+    }
+
+    public static void updateDate(long temps){
+        dateSimulation -= temps;
     }
 
     public void incrementeDate(long n) {
@@ -33,25 +48,26 @@ public class Simulateur {
     }
 
     public void ajouteEvenement(Evenement e) {
-        this.evenementsActuels.add(e);
+        evenementsActuels.add(e);
+        dateDernierEvenement = e.getDate();
     }
 
-    public void execute() throws NoFireException, CaseOutOfMapException, NoWaterException {
-        if (this.evenementsActuels.size() > 0) {
-            Evenement event = this.evenementsActuels.element();
-            while (event.getDate() == this.dateSimulation) {
-                event = this.evenementsActuels.poll();
+    public static void execute() throws NoFireException, CellOutOfMapException, NoWaterException {
+        if (evenementsActuels.size() > 0) {
+            Evenement event = evenementsActuels.element();
+            while (event.getDate() == dateSimulation) {
+                event = evenementsActuels.poll();
                 event.execute();
                 if (!simulationTerminee())
-                    event = this.evenementsActuels.element();
+                    event = evenementsActuels.element();
                 else
                     break;
             }
         }
     }
 
-    public boolean simulationTerminee() {
-        return (this.evenementsActuels.size() == 0);
+    public static boolean simulationTerminee() {
+        return (evenementsActuels.size() == 0);
     }
 
     @Override

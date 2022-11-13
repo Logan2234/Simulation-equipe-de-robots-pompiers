@@ -2,10 +2,8 @@ package Donnees;
 
 import java.util.Arrays;
 
-import Exceptions.CaseOutOfMapException;
-import Donnees.Robot.*;
-import Donnees.Direction;
-import Donnees.NatureTerrain;
+import Donnees.Robot.Robot;
+import Exceptions.CellOutOfMapException;
 
 public class Carte {
 
@@ -112,7 +110,7 @@ public class Carte {
         try {
             boolean natureCompatible = robot.getVitesse(this.getVoisin(src, dir).getNature()) != 0;
             return this.voisinExiste(src, dir) && natureCompatible;
-        } catch (CaseOutOfMapException e){
+        } catch (CellOutOfMapException e){
             return false;
         }
     }
@@ -126,7 +124,7 @@ public class Carte {
      * @throws IllegalArgumentException Le voisin demandé correspond à une case en
      *                                  dehors de la carte
      */
-    public Case getVoisin(Case src, Direction dir) throws CaseOutOfMapException {
+    public Case getVoisin(Case src, Direction dir) throws CellOutOfMapException {
         if (voisinExiste(src, dir)) {
             int ligne = src.getLigne();
             int colonne = src.getColonne();
@@ -143,7 +141,7 @@ public class Carte {
                     break;
             }
         } else
-            throw new CaseOutOfMapException();
+            throw new CellOutOfMapException();
         return src;
     }
 
