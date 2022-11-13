@@ -4,6 +4,8 @@ package Autre;
 import java.util.ArrayList;
 
 import Donnees.Case;
+import Donnees.Robot.Robot;
+import Exceptions.CellOutOfMapException;
 import Donnees.Direction;
 import Donnees.DonneesSimulation;
 import Donnees.Robot.Robot;
