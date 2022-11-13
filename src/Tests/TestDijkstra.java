@@ -1,19 +1,19 @@
 package Tests;
 
+import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
-import Exceptions.IllegalCheminRobotException;
+
+import Autre.CalculPCC;
+import Autre.Chemin;
+import Donnees.DonneesSimulation;
+import Donnees.Incendie;
+import Donnees.LecteurDonnees;
+import Donnees.Robot.Robot;
+import Evenements.Simulateur;
+import Exceptions.IllegalPathException;
 import Exceptions.PasDeCheminException;
-
-import Autre.*;
-import Donnees.*;
-import Donnees.Robot.*;
-import Evenements.*;
-
-import java.awt.Color;
-
 import gui.GUISimulator;
-import gui.Simulable;
 
 public class TestDijkstra {
     public static void initialize(String fichier, GUISimulator gui) {
@@ -22,7 +22,7 @@ public class TestDijkstra {
             DonneesSimulation donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
             Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestDijkstra, fichier);
-            CalculPCC calculateur = new CalculPCC(donnees, simulateur);
+            CalculPCC calculateur = new CalculPCC(donnees);
 
             Robot robot = donnees.getRobots()[2];
             Incendie incendie = donnees.getIncendies().getFirst();
@@ -32,15 +32,14 @@ public class TestDijkstra {
             System.out.println(chemin.toString());
             chemin.creerEvenements(simulateur, robot);
 
-
-        } catch (IllegalCheminRobotException e) {
+        } catch (IllegalPathException e) {
             System.out.println(e);
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {
             System.out.println("\n\t**format du fichier " + fichier + " invalide: " + e.getMessage());
         } catch (PasDeCheminException e) {
-            System.out.println("Aucun chemin n'a été trouvé");
+            System.out.println(e);
         }
     }
 

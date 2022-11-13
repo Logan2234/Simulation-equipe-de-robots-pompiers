@@ -2,7 +2,7 @@ package Tests;
 
 import Donnees.DonneesSimulation;
 import Evenements.Simulateur;
-import Exceptions.CaseOutOfMapException;
+import Exceptions.CellOutOfMapException;
 import Exceptions.NoFireException;
 import Exceptions.NoWaterException;
 import gui.GUISimulator;
@@ -13,19 +13,18 @@ class Simulation implements Simulable {
     /** L'interface graphique associée */
     private GUISimulator gui;
     private DonneesSimulation donnees;
-    private Simulateur simulateur;
     private Dessin fonctionDessin;
     private Test classeAppelante;
     private String fichier;
+    private Simulateur simulateur;
 
-    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test classeAppelante,
-            String fichier) {
+    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test classeAppelante, String fichier) {
         this.gui = gui;
         this.donnees = donnees;
-        this.simulateur = simulateur;
         this.fonctionDessin = new Dessin(this.donnees, this.gui);
         this.classeAppelante = classeAppelante;
         this.fichier = fichier;
+        this.simulateur = simulateur;
 
         gui.setSimulable(this);
 
@@ -43,7 +42,7 @@ class Simulation implements Simulable {
             simulateur.execute();
         } catch (NoFireException e) {
             System.out.println(e);
-        } catch (CaseOutOfMapException e) {
+        } catch (CellOutOfMapException e) {
             System.out.println(e);
         } catch (NoWaterException e) {
             System.out.println(e);

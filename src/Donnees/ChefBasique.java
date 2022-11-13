@@ -2,17 +2,14 @@ package Donnees;
 
 import java.util.HashMap;
 
-import java.lang.Math;
-
-import Exceptions.IllegalCheminRobotException;
-import Exceptions.PasDeCheminException;
-import Exceptions.EmptyRobotsException;
-
 import Autre.CalculPCC;
 import Autre.Chemin;
 import Donnees.Robot.Robot;
 import Evenements.EventIntervenir;
 import Evenements.Simulateur;
+import Exceptions.EmptyRobotsException;
+import Exceptions.IllegalPathException;
+import Exceptions.PasDeCheminException;
 
 public class ChefBasique {
     private DonneesSimulation donnees;
@@ -32,7 +29,7 @@ public class ChefBasique {
         this.simulateur = simulateur;
         this.occupes = new HashMap<Robot,Long>();
         this.incendies_rob = new HashMap<Incendie, RobotLitres>();
-        calculateur = new CalculPCC(donnees, simulateur);
+        calculateur = new CalculPCC(donnees);
         for (Incendie incendie : donnees.getIncendies()){
             incendies_rob.put(incendie, new RobotLitres(null, incendie.getLitres()));
         }
@@ -63,7 +60,7 @@ public class ChefBasique {
             robot.deverserEau(Math.min(robot.getReservoir(),litres_restants));
             simulateur.ajouteEvenement(new EventIntervenir(date + chemin.getTempsChemin(), robot, incendie));
             return new_date;
-        } catch (IllegalCheminRobotException e){
+        } catch (IllegalPathException e){
             System.out.println(e);
             return date;
         }

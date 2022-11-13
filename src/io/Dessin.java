@@ -57,18 +57,22 @@ public class Dessin {
 
     private void dessinIncendies() {
         for (Incendie incendie : donnees.getIncendies()) {
-            Case pos = incendie.getPosition();
-            int i = pos.getLigne();
-            int j = pos.getColonne();
-            gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j,
-                    tailleCase / 2 + i * tailleCase, Color.GRAY, Color.RED, tailleCase / 2));
-            gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase / 2 + tailleCase * i,
-                    Color.BLACK, Integer.toString(incendie.getLitres())));
+            if (incendie.getLitres() > 0) {
+                Case pos = incendie.getPosition();
+                int i = pos.getLigne();
+                int j = pos.getColonne();
+                gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j,
+                        tailleCase / 2 + i * tailleCase, Color.GRAY, Color.RED, tailleCase / 2));
+                gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase / 2 + tailleCase * i,
+                        Color.BLACK, Integer.toString(incendie.getLitres())));
+            }
         }
     }
 
     private void dessinRobots() {
+        int tour = 0;
         for (Robot robot : donnees.getRobots()) {
+            tour++;
             Case pos = robot.getPosition();
             int i = pos.getLigne();
             int j = pos.getColonne();
@@ -76,6 +80,8 @@ public class Dessin {
                     tailleCase / 2 + i * tailleCase, Color.GRAY, Color.magenta, tailleCase / 2));
             gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase / 2 + tailleCase * i,
                     Color.BLACK, assimilationRobotString.get(robot.getClass())));
+            gui.addGraphicalElement(new Text(650, 50 * tour + 10, Color.WHITE,
+                    assimilationRobotString.get(robot.getClass()) + " : " + Integer.toString(robot.getReservoir())));
         }
     }
 

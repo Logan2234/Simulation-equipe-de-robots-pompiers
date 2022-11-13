@@ -1,6 +1,6 @@
 package Evenements;
 
-import Exceptions.CaseOutOfMapException;
+import Exceptions.CellOutOfMapException;
 import Exceptions.NoFireException;
 import Exceptions.NoWaterException;
 
@@ -15,7 +15,7 @@ public abstract class Evenement implements Comparable<Evenement> {
         return this.date;
     }
 
-    public abstract void execute() throws NoFireException, CaseOutOfMapException, NoWaterException;
+    public abstract void execute() throws NoFireException, CellOutOfMapException, NoWaterException;
 
     @Override
     public int compareTo(Evenement e) {
@@ -33,10 +33,5 @@ public abstract class Evenement implements Comparable<Evenement> {
             return date == that.date;
         }
         return false;
-    }
-
-    @Override
-    public String toString() {
-        return "Evenement [date=" + date + "]";
     }
 }

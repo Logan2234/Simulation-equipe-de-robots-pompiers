@@ -2,21 +2,28 @@ package Evenements;
 
 import java.util.PriorityQueue;
 
-import Exceptions.CaseOutOfMapException;
+import Exceptions.CellOutOfMapException;
 import Exceptions.NoFireException;
 import Exceptions.NoWaterException;
 
 public class Simulateur {
 
-    private long dateSimulation; // TODO: Changer dans tout les fichiers les int en long lorsqu'on parle de date
-    private PriorityQueue<Evenement> evenementsActuels = new PriorityQueue<Evenement>();
+    private long dateSimulation;
+    private long dateDernierEvenement;
+    private PriorityQueue<Evenement> evenementsActuels;
 
     public Simulateur() {
         this.dateSimulation = 0;
+        this.dateDernierEvenement = 0;
+        this.evenementsActuels = new PriorityQueue<Evenement>();
     }
 
     public long getDateSimulation() {
-        return this.dateSimulation;
+        return dateSimulation;
+    }
+
+    public long getDateDernierEvenement() {
+        return dateDernierEvenement;
     }
 
     public void restart() {
@@ -27,6 +34,14 @@ public class Simulateur {
     public void incrementeDate() {
         this.dateSimulation += 1;
     }
+    
+    public void addDate(long temps) {
+        this.dateSimulation += temps;
+    }
+
+    public void updateDate(long temps){
+        this.dateSimulation -= temps;
+    }
 
     public void incrementeDate(long n) {
         this.dateSimulation += n;
@@ -34,9 +49,10 @@ public class Simulateur {
 
     public void ajouteEvenement(Evenement e) {
         this.evenementsActuels.add(e);
+        this.dateDernierEvenement = e.getDate();
     }
 
-    public void execute() throws NoFireException, CaseOutOfMapException, NoWaterException {
+    public void execute() throws NoFireException, CellOutOfMapException, NoWaterException {
         if (this.evenementsActuels.size() > 0) {
             Evenement event = this.evenementsActuels.element();
             while (event.getDate() == this.dateSimulation) {
@@ -56,6 +72,6 @@ public class Simulateur {
 
     @Override
     public String toString() {
-        return "Simulateur [dateSimulation=" + dateSimulation + ", evenementsActuels=" + evenementsActuels + "]";
+        return "Simulateur [dateSimulation=" + this.dateSimulation + ", evenementsActuels=" + this.evenementsActuels + "]";
     }
 }
