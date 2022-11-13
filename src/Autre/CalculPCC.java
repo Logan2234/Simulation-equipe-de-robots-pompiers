@@ -4,20 +4,17 @@ package Autre;
 import java.util.ArrayList;
 
 import Donnees.Case;
+import Donnees.Direction;
 import Donnees.DonneesSimulation;
 import Donnees.Robot.Robot;
-import Evenements.Simulateur;
-import Exceptions.CaseOutOfMapException;
+import Exceptions.CellOutOfMapException;
 import Exceptions.PasDeCheminException;
-import Donnees.Direction;
 
 public class CalculPCC {
     private DonneesSimulation donnees;
-    private Simulateur simulateur;
 
-    public CalculPCC(DonneesSimulation donnees, Simulateur simulateur) {
-        this.donnees = donnees;
-        this.simulateur = simulateur;
+    public CalculPCC(DonneesSimulation donnees) {
+    this.donnees = donnees;
     }
 
     /**
@@ -28,10 +25,9 @@ public class CalculPCC {
      * @param caseSuiv     - Case d'arrivée
      * @param robot        - Robot effectuant le déplacement
      * @return Temps pris (en s) par à un robot pour se déplacer du centre d'une
-     *         case à
-     *         une autre.
+     *         case à une autre.
      */
-    public long tpsDpltCaseACase(Case caseCourante, Case caseSuiv, Robot robot) {
+    public static long tpsDpltCaseACase(Case caseCourante, Case caseSuiv, Robot robot) {
         // On part du principe que le robot va jusqu'au centre de la case d'après
         int taille_cases = caseCourante.getCarte().getTailleCases();
 
@@ -123,7 +119,7 @@ public class CalculPCC {
                         chemins[I - 1][J] = chemins[I][J].deepCopyChemin();
                         chemins[I - 1][J].addElement(caseATraiter, chemins[I][J].getLastDate() + temps);
                     }
-                } catch (CaseOutOfMapException e){
+                } catch (CellOutOfMapException e){
                     System.out.println(e);
                 }
             }
@@ -140,7 +136,7 @@ public class CalculPCC {
                         chemins[I][J + 1] = chemins[I][J].deepCopyChemin();
                         chemins[I][J + 1].addElement(caseATraiter, chemins[I][J].getLastDate() + temps);
                     }
-                } catch (CaseOutOfMapException e){
+                } catch (CellOutOfMapException e){
                     System.out.println(e);
                 }
             }
@@ -154,7 +150,7 @@ public class CalculPCC {
                         chemins[I + 1][J] = chemins[I][J].deepCopyChemin();
                         chemins[I + 1][J].addElement(caseATraiter, chemins[I][J].getLastDate() + temps);
                     }
-                } catch (CaseOutOfMapException e){
+                } catch (CellOutOfMapException e){
                     System.out.println(e);
                 }
             }
@@ -168,7 +164,7 @@ public class CalculPCC {
                         chemins[I][J - 1] = chemins[I][J].deepCopyChemin();
                         chemins[I][J - 1].addElement(caseATraiter, chemins[I][J].getLastDate() + temps);
                     }
-                } catch (CaseOutOfMapException e) {
+                } catch (CellOutOfMapException e) {
                     System.out.println(e);
                 }
             }

@@ -6,7 +6,7 @@ import Donnees.Case;
 import Donnees.Robot.Robot;
 import Evenements.EventMouvement;
 import Evenements.Simulateur;
-import Exceptions.IllegalCheminRobotException;
+import Exceptions.IllegalPathException;
 
 public class Chemin {
 
@@ -81,19 +81,22 @@ public class Chemin {
      * @param simulateur : Simulateur permettant l'ajout d'évènements
      * @param robot      : Robot concerné par le déplacement sur le chemin
 * 
-     * @exception IllegalCheminRobotException Le chemin n'est pas traversable par le robot
+     * @exception IllegalPathException Le chemin n'est pas traversable par le robot
      *         
      */
-    public void creerEvenements(Simulateur simulateur, Robot robot) throws IllegalCheminRobotException {
+    public void creerEvenements(Simulateur simulateur, Robot robot) throws IllegalPathException {
+        AssociationTempsCase oldCase = this.chemin.get(0);
         for (AssociationTempsCase tc : this.chemin) {
             // Si c'est la première case ça sert à rien de s'y déplacer
-            if (tc != this.chemin.get(0)) {
-                Case _case = tc.getCase();
+            if (tc.getCase() != robot.getPosition()) {
+                Case _case = tc.getCase(); 
+                tc.setT(CalculPCC.tpsDpltCaseACase(oldCase.getCase(), _case, robot) + oldCase.getT());
                 if (robot.getVitesse(_case.getNature()) == 0) {
-                    throw new IllegalCheminRobotException();
+                    throw new IllegalPathException();
                 }
                 simulateur.ajouteEvenement(new EventMouvement(tc.getT(), robot, _case));
             }
+            oldCase = tc;
         }
     }
 
@@ -125,6 +128,10 @@ class AssociationTempsCase {
 
     public long getT() {
         return t;
+    }
+
+    public void setT(long t) {
+        this.t = t;
     }
 
     @Override

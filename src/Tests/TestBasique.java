@@ -11,7 +11,6 @@ import Evenements.Simulateur;
 import Exceptions.EmptyRobotsException;
 import gui.GUISimulator;
 
-
 public class TestBasique {
 
     public static void initialize(String fichier, GUISimulator gui) {
@@ -19,11 +18,11 @@ public class TestBasique {
             LecteurDonnees lecteur = new LecteurDonnees();
             DonneesSimulation donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestBasique, fichier);
-            
+            Simulation simulation = new Simulation(gui, donnees, Test.TestBasique, fichier);
+
             ChefBasique chef = new ChefBasique(donnees, simulateur);
             chef.strategie();
-            
+
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {
@@ -31,8 +30,8 @@ public class TestBasique {
         } catch (EmptyRobotsException e) {
             System.out.println(e);
         }
-    
-}
+
+    }
 
     public static void main(String[] args) {
         if (args.length < 1) {
@@ -44,6 +43,5 @@ public class TestBasique {
 
         initialize(args[0], gui);
     }
-
 
 }

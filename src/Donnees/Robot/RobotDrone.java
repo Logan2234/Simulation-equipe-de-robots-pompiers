@@ -3,7 +3,7 @@ package Donnees.Robot;
 import Donnees.Case;
 import Donnees.Direction;
 import Donnees.NatureTerrain;
-import Exceptions.CaseOutOfMapException;
+import Exceptions.CellOutOfMapException;
 import Exceptions.NoWaterException;
 
 public class RobotDrone extends Robot {
@@ -41,7 +41,7 @@ public class RobotDrone extends Robot {
                 }
             }
 
-            catch (CaseOutOfMapException e) {
+            catch (CellOutOfMapException e) {
                 System.out.println(e);
             }
         }

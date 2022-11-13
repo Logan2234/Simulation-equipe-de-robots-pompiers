@@ -11,7 +11,6 @@ import Evenements.Simulateur;
 import Exceptions.EmptyRobotsException;
 import gui.GUISimulator;
 
-
 public class TestAvance {
 
     public static void initialize(String fichier, GUISimulator gui) {
@@ -19,20 +18,17 @@ public class TestAvance {
             LecteurDonnees lecteur = new LecteurDonnees();
             DonneesSimulation donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestBasique, fichier);
-            
+            Simulation simulation = new Simulation(gui, donnees, Test.TestBasique, fichier);
+
             ChefAvance chef = new ChefAvance(donnees, simulateur);
             chef.strategie();
-            
+
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {
             System.out.println("\n\t**format du fichier " + fichier + " invalide: " + e.getMessage());
-        } catch (EmptyRobotsException e) {
-            System.out.println(e);
         }
-    
-}
+    }
 
     public static void main(String[] args) {
         if (args.length < 1) {
@@ -44,6 +40,5 @@ public class TestAvance {
 
         initialize(args[0], gui);
     }
-
 
 }

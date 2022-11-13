@@ -28,7 +28,10 @@ public class RobotPattes extends Robot {
         super.setPosition(new_case);
     }
 
-    
+    @Override
+    public void remplirReservoir(){
+    }
+
     /** 
      * Renvoie la vitesse (en m/s) du robot pour la nature du terrain où il se situe.
      * 
