@@ -4,20 +4,11 @@ import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 
-import Autre.CalculPCC;
-import Autre.Chemin;
-import Donnees.Carte;
-import Donnees.Case;
-import Donnees.Direction;
 import Donnees.ChefBasique;
 import Donnees.DonneesSimulation;
 import Donnees.LecteurDonnees;
-import Donnees.Robot.Robot;
-import Evenements.EventIntervenir;
-import Evenements.EventRemplir;
 import Evenements.Simulateur;
-import Exceptions.CaseOutOfMapException;
-import Exceptions.IllegalCheminRobotException;
+
 import gui.GUISimulator;
 
 
@@ -29,11 +20,9 @@ public class TestBasique {
             DonneesSimulation donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
             Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestBasique, fichier);
-            CalculPCC calculateur = new CalculPCC(donnees, simulateur);
-
-            Carte carte = donnees.getCarte();
-            ChefBasique chef = new ChefBasique(carte, donnees, simulateur);
-            chef.strategie(1);
+            
+            ChefBasique chef = new ChefBasique(donnees, simulateur);
+            chef.strategie();
             
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
