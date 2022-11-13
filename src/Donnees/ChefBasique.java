@@ -21,6 +21,12 @@ public class ChefBasique {
     private HashMap<Robot, Long> occupes;
     private CalculPCC calculateur;
 
+    /**
+     * Va implémenter la stratégie de base pour le chef pompier
+     * 
+     * @param donnees - Données utilisées pour la simulation
+     * @param simulateur - Simulateur initialisé avant
+     */
     public ChefBasique(DonneesSimulation donnees, Simulateur simulateur){
         this.donnees = donnees;
         this.simulateur = simulateur;
@@ -39,7 +45,7 @@ public class ChefBasique {
      * @param robot                      - Robot qui devra subir les ordres
      * @param incendie                   - Incendie à éteindre
      * @param date                       - Date du début de l'action
-     * @return long                      - // TODO
+     * @return long                      - Date de fin de l'ordre d'extinction
      * @throws PasDeCheminException      - Il n'existe pas de chemin possible entre le robot et l'incendie
      */
     private long donneOrdre(Robot robot, Incendie incendie, long date) throws PasDeCheminException {
@@ -57,7 +63,6 @@ public class ChefBasique {
             robot.deverserEau(Math.min(robot.getReservoir(),litres_restants));
             simulateur.ajouteEvenement(new EventIntervenir(date + chemin.getTempsChemin(), robot, incendie));
             return new_date;
-            
         } catch (IllegalCheminRobotException e){
             System.out.println(e);
             return date;
@@ -66,7 +71,7 @@ public class ChefBasique {
 
     
     /** 
-     * TODO
+     * Renvoie si il reste des robots avec de l'eau
      * 
      * @return boolean
      */
@@ -86,8 +91,8 @@ public class ChefBasique {
      * Fonction que, à chaque date introduite, décidira quel robot envoyer à quel incendie et mettra
      * en place la stratégie d'extinction à l'instant donné.
      * 
-     * @param date     - date de la réalisation des actions
-     * @return long    - // TODO : Pas compris
+     * @param date     : date de la réalisation des actions
+     * @return long    : la date à la fin de la mise en place de l'incendie
      */
     private long gestionIncendies(long date){
         for (Incendie incendie : donnees.getIncendies()){
@@ -136,7 +141,7 @@ public class ChefBasique {
     /** 
      * Fonction executant la stratégie d'extinction des feux du Chef des Pompiers Basique
      * 
-     * @throws EmptyRobotsException - La liste des robots est vide
+     * @throws EmptyRobotsException La liste des robots est vide
      */
     public void strategie() throws EmptyRobotsException{
         long date = simulateur.getDateSimulation();
