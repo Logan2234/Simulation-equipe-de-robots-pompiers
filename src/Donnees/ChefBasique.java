@@ -61,8 +61,8 @@ public class ChefBasique {
     }
 
     public void gestionIncendies(long date){
-        for (Incendie incendie : incendies_rob.keySet()){
-            
+        for (Incendie incendie : donnees.getIncendies()){
+
             Robot robotIncendie = incendies_rob.get(incendie);
 
             // Si aucun robot est attribué : 
@@ -87,6 +87,7 @@ public class ChefBasique {
     }
 
     public void strategie(int n){
+        //à chaque pas n, on va 
         long date = simulateur.getDateSimulation();
         while (!incendies_rob.isEmpty() && !robotsVides()){
             gestionIncendies(date);
