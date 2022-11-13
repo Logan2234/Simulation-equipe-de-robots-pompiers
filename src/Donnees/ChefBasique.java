@@ -28,7 +28,7 @@ public class ChefBasique {
         this.occupes = new HashMap<Robot,Long>();
         this.incendies_rob = new HashMap<Incendie, Robot>();
         calculateur = new CalculPCC(donnees, simulateur);
-        for (Incendie incendie :donnees.getIncendies()){
+        for (Incendie incendie : donnees.getIncendies()){
             incendies_rob.put(incendie, null);
         }
     }

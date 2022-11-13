@@ -31,21 +31,6 @@ public class ChefAvance {
         }
     }
 
-    //! Il faudra compléter avec donneOrdre de Basique
-    public void donneOrdre(Robot robot, Incendie incendie) throws PasDeCheminException{
-        try{
-            incendies_rob.put(incendie, robot);
-            occupes.add(robot);
-            Chemin chemin = new Chemin();
-            chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot);
-            chemin.creerEvenements(this.simulateur, robot);
-
-        } catch (IllegalCheminRobotException e){
-            System.out.println(e);
-        }
-
-    }
-
     public void gestionIncendies(Incendie incendie){
 
         // Cherchons le robot le plus proche de l'incendie
