@@ -32,6 +32,16 @@ public class ChefBasique {
         }
     }
 
+    
+    /** 
+     * Fonction donnant les ordres de mouvement et extinction de feux à un robot
+     * 
+     * @param robot                      - Robot qui devra subir les ordres
+     * @param incendie                   - Incendie à éteindre
+     * @param date                       - Date du début de l'action
+     * @return long                      - // TODO
+     * @throws PasDeCheminException      - Il n'existe pas de chemin possible entre le robot et l'incendie
+     */
     private long donneOrdre(Robot robot, Incendie incendie, long date) throws PasDeCheminException {
         try{
             int litres_restants = incendies_rob.get(incendie).getLitres();
@@ -54,6 +64,12 @@ public class ChefBasique {
         }
     }
 
+    
+    /** 
+     * TODO
+     * 
+     * @return boolean
+     */
     private boolean robotsVides(){
         for (Robot robot:donnees.getRobots()){
             if (occupes.containsKey(robot) && occupes.get(robot) < Long.MAX_VALUE){
@@ -65,6 +81,14 @@ public class ChefBasique {
         return true;
     }
 
+    
+    /** 
+     * Fonction que, à chaque date introduite, décidira quel robot envoyer à quel incendie et mettra
+     * en place la stratégie d'extinction à l'instant donné.
+     * 
+     * @param date     - date de la réalisation des actions
+     * @return long    - // TODO : Pas compris
+     */
     private long gestionIncendies(long date){
         for (Incendie incendie : donnees.getIncendies()){
             if (!incendies_rob.containsKey(incendie)){
@@ -108,6 +132,12 @@ public class ChefBasique {
         return date; //n'arrive que si on n'a aucun robot qui ne peut accéder à aucun incendie ou si tous les incendies ont été éteints
     }
 
+    
+    /** 
+     * Fonction executant la stratégie d'extinction des feux du Chef des Pompiers Basique
+     * 
+     * @throws EmptyRobotsException - La liste des robots est vide
+     */
     public void strategie() throws EmptyRobotsException{
         long date = simulateur.getDateSimulation();
         while (!incendies_rob.isEmpty() && !robotsVides()){
