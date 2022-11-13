@@ -11,7 +11,7 @@ import Donnees.Incendie;
 import Donnees.LecteurDonnees;
 import Donnees.Robot.Robot;
 import Evenements.Simulateur;
-import Exceptions.IllegalCheminRobotException;
+import Exceptions.IllegalPathException;
 import gui.GUISimulator;
 
 public class TestDijkstra {
@@ -32,7 +32,7 @@ public class TestDijkstra {
             chemin.creerEvenements(simulateur, robot);
 
 
-        } catch (IllegalCheminRobotException e) {
+        } catch (IllegalPathException e) {
             System.out.println(e);
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");

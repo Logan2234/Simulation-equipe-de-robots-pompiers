@@ -9,7 +9,7 @@ public class EventIntervenir extends Evenement {
     private Incendie incendie;
 
     public EventIntervenir(long date, Robot robot, Incendie incendie) {
-        super(date);
+        super(date + robot.getTmpVersement());
         this.robot = robot;
         this.incendie = incendie;
     }
@@ -20,11 +20,17 @@ public class EventIntervenir extends Evenement {
             throw new NoFireException();
 
         int qteRequise = this.incendie.getLitres();
-        int qteVersee = Math.min(qteRequise, this.robot.getReservoir());
-        this.robot.deverserEau(qteVersee);
-        if (qteRequise == qteVersee)
-            ;
-        else
-            this.incendie.eteindre(qteVersee);
+        int qteVersee;
+        if (robot.getCapacite() != -1) { // Si le robot n'est pas un robot à pattes
+            qteVersee = Math.min(qteRequise, Math.min(this.robot.getQteVersement(), this.robot.getReservoir()));
+            this.robot.deverserEau(qteVersee);
+        } else
+            qteVersee = Math.min(qteRequise, 10);
+        this.incendie.eteindre(qteVersee);
+    }
+
+    @Override
+    public String toString() {
+        return "EventIntervenir [date=" + this.getDate() + "]";
     }
 }

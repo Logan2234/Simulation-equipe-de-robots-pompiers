@@ -14,8 +14,8 @@ import Donnees.Robot.Robot;
 import Evenements.EventIntervenir;
 import Evenements.EventRemplir;
 import Evenements.Simulateur;
-import Exceptions.CaseOutOfMapException;
-import Exceptions.IllegalCheminRobotException;
+import Exceptions.CellOutOfMapException;
+import Exceptions.IllegalPathException;
 import gui.GUISimulator;
 
 public class TestSimulation {
@@ -41,7 +41,7 @@ public class TestSimulation {
             }
 
             chemin.creerEvenements(simulateur, robot);
-            simulateur.ajouteEvenement(new EventIntervenir(simulateur.getDateDernierEvenement(), robot, donnees.getIncendies()));
+            simulateur.ajouteEvenement(new EventIntervenir(simulateur.getDateDernierEvenement(), robot, donnees.getIncendies().get(4)));
             chemin.getChemin().clear();
             
             for (Direction dir : moves) {
@@ -51,7 +51,7 @@ public class TestSimulation {
             }
             
             chemin.creerEvenements(simulateur, robot);
-            simulateur.ajouteEvenement(new EventIntervenir(simulateur.getDateDernierEvenement(), robot, donnees.getIncendies()));
+            simulateur.ajouteEvenement(new EventIntervenir(simulateur.getDateDernierEvenement(), robot, donnees.getIncendies().get(5)));
             chemin.getChemin().clear();
 
             Direction[] moves2 = { Direction.OUEST, Direction.OUEST, Direction.OUEST, Direction.OUEST };
@@ -82,13 +82,13 @@ public class TestSimulation {
             simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot));
             
 
-        } catch (IllegalCheminRobotException e) {
+        } catch (IllegalPathException e) {
             System.out.println(e);
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {
             System.out.println("\n\t**format du fichier " + fichier + " invalide: " + e.getMessage());
-        } catch (CaseOutOfMapException e) {
+        } catch (CellOutOfMapException e) {
             System.out.println(e);
         }
     }

@@ -2,7 +2,7 @@ package Tests;
 
 import Donnees.DonneesSimulation;
 import Evenements.Simulateur;
-import Exceptions.CaseOutOfMapException;
+import Exceptions.CellOutOfMapException;
 import Exceptions.NoFireException;
 import Exceptions.NoWaterException;
 import gui.GUISimulator;
@@ -40,7 +40,7 @@ class Simulation implements Simulable {
             Simulateur.execute();
         } catch (NoFireException e) {
             System.out.println(e);
-        } catch (CaseOutOfMapException e) {
+        } catch (CellOutOfMapException e) {
             System.out.println(e);
         } catch (NoWaterException e) {
             System.out.println(e);
