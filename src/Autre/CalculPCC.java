@@ -8,8 +8,6 @@ import Donnees.Robot.Robot;
 import Exceptions.CellOutOfMapException;
 import Donnees.Direction;
 import Donnees.DonneesSimulation;
-import Donnees.Robot.Robot;
-import Exceptions.CellOutOfMapException;
 import Exceptions.PasDeCheminException;
 
 public class CalculPCC {
