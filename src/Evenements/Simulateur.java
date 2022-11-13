@@ -8,17 +8,17 @@ import Exceptions.NoWaterException;
 
 public class Simulateur {
 
-    private static long dateSimulation;
-    private static long dateDernierEvenement;
-    private static PriorityQueue<Evenement> evenementsActuels;
+    private long dateSimulation;
+    private long dateDernierEvenement;
+    private PriorityQueue<Evenement> evenementsActuels;
 
     public Simulateur() {
-        dateSimulation = 0;
-        dateDernierEvenement = 0;
-        evenementsActuels = new PriorityQueue<Evenement>();
+        this.dateSimulation = 0;
+        this.dateDernierEvenement = 0;
+        this.evenementsActuels = new PriorityQueue<Evenement>();
     }
 
-    public static long getDateSimulation() {
+    public long getDateSimulation() {
         return dateSimulation;
     }
 
@@ -26,21 +26,21 @@ public class Simulateur {
         return dateDernierEvenement;
     }
 
-    public static void restart() {
-        dateSimulation = 0;
-        evenementsActuels.clear();
+    public void restart() {
+        this.dateSimulation = 0;
+        this.evenementsActuels.clear();
     }
 
-    public static void incrementeDate() {
-        dateSimulation += 1;
+    public void incrementeDate() {
+        this.dateSimulation += 1;
     }
     
-    public static void addDate(long temps) {
-        dateSimulation += temps;
+    public void addDate(long temps) {
+        this.dateSimulation += temps;
     }
 
-    public static void updateDate(long temps){
-        dateSimulation -= temps;
+    public void updateDate(long temps){
+        this.dateSimulation -= temps;
     }
 
     public void incrementeDate(long n) {
@@ -48,30 +48,30 @@ public class Simulateur {
     }
 
     public void ajouteEvenement(Evenement e) {
-        evenementsActuels.add(e);
-        dateDernierEvenement = e.getDate();
+        this.evenementsActuels.add(e);
+        this.dateDernierEvenement = e.getDate();
     }
 
-    public static void execute() throws NoFireException, CellOutOfMapException, NoWaterException {
-        if (evenementsActuels.size() > 0) {
-            Evenement event = evenementsActuels.element();
-            while (event.getDate() == dateSimulation) {
-                event = evenementsActuels.poll();
+    public void execute() throws NoFireException, CellOutOfMapException, NoWaterException {
+        if (this.evenementsActuels.size() > 0) {
+            Evenement event = this.evenementsActuels.element();
+            while (event.getDate() == this.dateSimulation) {
+                event = this.evenementsActuels.poll();
                 event.execute();
                 if (!simulationTerminee())
-                    event = evenementsActuels.element();
+                    event = this.evenementsActuels.element();
                 else
                     break;
             }
         }
     }
 
-    public static boolean simulationTerminee() {
-        return (evenementsActuels.size() == 0);
+    public boolean simulationTerminee() {
+        return (this.evenementsActuels.size() == 0);
     }
 
     @Override
     public String toString() {
-        return "Simulateur [dateSimulation=" + dateSimulation + ", evenementsActuels=" + evenementsActuels + "]";
+        return "Simulateur [dateSimulation=" + this.dateSimulation + ", evenementsActuels=" + this.evenementsActuels + "]";
     }
 }

@@ -12,6 +12,7 @@ import Donnees.LecteurDonnees;
 import Donnees.Robot.Robot;
 import Evenements.Simulateur;
 import Exceptions.IllegalPathException;
+import Exceptions.PasDeCheminException;
 import gui.GUISimulator;
 
 public class TestDijkstra {
@@ -20,7 +21,7 @@ public class TestDijkstra {
             LecteurDonnees lecteur = new LecteurDonnees();
             DonneesSimulation donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            Simulation simulation = new Simulation(gui, donnees, Test.TestDijkstra, fichier);
+            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestDijkstra, fichier);
             CalculPCC calculateur = new CalculPCC(donnees);
 
             Robot robot = donnees.getRobots()[2];
@@ -31,7 +32,6 @@ public class TestDijkstra {
             System.out.println(chemin.toString());
             chemin.creerEvenements(simulateur, robot);
 
-
         } catch (IllegalPathException e) {
             System.out.println(e);
         } catch (FileNotFoundException e) {
@@ -39,7 +39,7 @@ public class TestDijkstra {
         } catch (DataFormatException e) {
             System.out.println("\n\t**format du fichier " + fichier + " invalide: " + e.getMessage());
         } catch (PasDeCheminException e) {
-            System.out.println("Aucun chemin n'a été trouvé");
+            System.out.println(e);
         }
     }
 
