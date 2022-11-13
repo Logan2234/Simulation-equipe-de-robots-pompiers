@@ -8,7 +8,7 @@ import Donnees.ChefBasique;
 import Donnees.DonneesSimulation;
 import Donnees.LecteurDonnees;
 import Evenements.Simulateur;
-
+import Exceptions.EmptyRobotsException;
 import gui.GUISimulator;
 
 
@@ -28,7 +28,10 @@ public class TestBasique {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {
             System.out.println("\n\t**format du fichier " + fichier + " invalide: " + e.getMessage());
-    }
+        } catch (EmptyRobotsException e) {
+            System.out.println(e);
+        }
+    
 }
 
     public static void main(String[] args) {
