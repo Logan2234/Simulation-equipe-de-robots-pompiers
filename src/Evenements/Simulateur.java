@@ -28,7 +28,7 @@ public class Simulateur {
         this.dateSimulation += 1;
     }
 
-    public void incrementeDate(int n) {
+    public void incrementeDate(long n) {
         this.dateSimulation += n;
     }
 
