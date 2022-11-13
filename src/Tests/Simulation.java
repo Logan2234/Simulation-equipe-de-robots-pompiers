@@ -18,7 +18,7 @@ class Simulation implements Simulable {
     private String fichier;
     private Simulateur simulateur;
 
-    public Simulation(GUISimulator gui, DonneesSimulation donnees, Test classeAppelante, String fichier, Simulateur simulateur) {
+    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test classeAppelante, String fichier) {
         this.gui = gui;
         this.donnees = donnees;
         this.fonctionDessin = new Dessin(this.donnees, this.gui);

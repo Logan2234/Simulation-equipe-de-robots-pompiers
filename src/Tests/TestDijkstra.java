@@ -21,7 +21,7 @@ public class TestDijkstra {
             LecteurDonnees lecteur = new LecteurDonnees();
             DonneesSimulation donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            Simulation simulation = new Simulation(gui, donnees, Test.TestDijkstra, fichier);
+            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestDijkstra, fichier);
             CalculPCC calculateur = new CalculPCC(donnees);
 
             Robot robot = donnees.getRobots()[2];

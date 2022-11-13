@@ -24,7 +24,7 @@ public class TestSimulation {
             LecteurDonnees lecteur = new LecteurDonnees();
             DonneesSimulation donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            Simulation simulation = new Simulation(gui, donnees, Test.TestSimulation, fichier);
+            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestSimulation, fichier);
 
             Carte carte = donnees.getCarte();
             Robot robot = donnees.getRobots()[0];
@@ -62,7 +62,7 @@ public class TestSimulation {
             }
             
             chemin.creerEvenements(simulateur, robot);
-            simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot));
+            simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot, simulateur));
             chemin.getChemin().clear();
             
             chemin.addElement(carte.getVoisin(pos, Direction.NORD), simulateur.getDateDernierEvenement());
@@ -79,7 +79,7 @@ public class TestSimulation {
             }
             
             chemin.creerEvenements(simulateur, robot);
-            simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot));
+            simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot, simulateur));
             
 
         } catch (IllegalPathException e) {

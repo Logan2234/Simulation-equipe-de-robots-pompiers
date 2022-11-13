@@ -18,7 +18,7 @@ public class TestBasique {
             LecteurDonnees lecteur = new LecteurDonnees();
             DonneesSimulation donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            Simulation simulation = new Simulation(gui, donnees, Test.TestBasique, fichier);
+            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestBasique, fichier);
 
             ChefBasique chef = new ChefBasique(donnees, simulateur);
             chef.strategie();
