@@ -34,14 +34,13 @@ public class TestBasique {
             Carte carte = donnees.getCarte();
             ChefBasique chef = new ChefBasique(carte, donnees, simulateur);
             chef.strategie(1);
-
-        } catch (IllegalCheminRobotException e) {
-            System.out.println(e);
+            
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {
             System.out.println("\n\t**format du fichier " + fichier + " invalide: " + e.getMessage());
     }
+}
 
     public static void main(String[] args) {
         if (args.length < 1) {
@@ -53,5 +52,6 @@ public class TestBasique {
 
         initialize(args[0], gui);
     }
-    
+
+
 }
