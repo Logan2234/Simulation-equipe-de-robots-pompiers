@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 
 import Donnees.ChefBasique;
+import Donnees.ChefBasiqueV2;
 import Donnees.DonneesSimulation;
 import Donnees.LecteurDonnees;
 import Evenements.Simulateur;
@@ -20,22 +21,25 @@ public class TestBasique {
             Simulateur simulateur = new Simulateur();
             Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestBasique, fichier);
 
-            ChefBasique chef = new ChefBasique(donnees, simulateur);
+            // ChefBasique chef = new ChefBasique(donnees, simulateur);
+            // chef.strategie();
+            ChefBasiqueV2 chef = new ChefBasiqueV2(donnees, simulateur);
             chef.strategie();
 
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {
             System.out.println("\n\t**format du fichier " + fichier + " invalide: " + e.getMessage());
-        } catch (EmptyRobotsException e) {
-            System.out.println(e);
-        }
+        } 
+        // catch (EmptyRobotsException e) {
+        //     System.out.println(e);
+        //}
 
     }
 
     public static void main(String[] args) {
         if (args.length < 1) {
-            System.out.println("Syntaxe: java TestSimulation <nomDeFichier>");
+            System.out.println("Syntaxe: java TestBasique <nomDeFichier>");
             System.exit(1);
         }
         // crée la fenêtre graphique dans laquelle dessiner
