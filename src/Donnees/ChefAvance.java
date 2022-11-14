@@ -7,6 +7,7 @@ import Autre.CalculPCC;
 import Autre.Chemin;
 import Donnees.Robot.Robot;
 import Donnees.Robot.RobotDrone;
+import Evenements.EventIntervenir;
 import Evenements.EventRemplir;
 import Evenements.Simulateur;
 import Exceptions.CellOutOfMapException;
@@ -172,6 +173,22 @@ public class ChefAvance {
             if (robotTrouve) {
                 incendies_rob.put(incendie, robotAMobiliser);
                 cheminAParcourir.creerEvenements(this.simulateur, robotAMobiliser);
+                if (incendie.getLitres() != 0){
+                    if (robotAMobiliser.getCapacite()!= -1){ // si ce n'est pas un robot à pattes
+                        for (int i = 0; i < Math.min(incendie.getLitres() / robotAMobiliser.getQteVersement(), robotAMobiliser.getReservoir() / robotAMobiliser.getQteVersement()); i++) 
+                        {
+                            simulateur.ajouteEvenement(new EventIntervenir(simulateur.getDateDernierEvenement(), robotAMobiliser, incendie));
+                        }
+                    } else { // le robot à pattes va verser son eau
+                        for (int i = 0; i < incendie.getLitres() / robotAMobiliser.getQteVersement(); i++) 
+                        {
+                            simulateur.ajouteEvenement(new EventIntervenir(simulateur.getDateDernierEvenement(), robotAMobiliser, incendie));
+                        }
+                    }
+                } else {
+                    occupes.remove(robotAMobiliser);
+                    incendies_rob.put(incendie, null);
+                }
             }
         } catch (IllegalPathException e) {
             System.out.println(e);
@@ -186,9 +203,7 @@ public class ChefAvance {
     public void strategie() {
         while (!incendies_rob.isEmpty()) {
             for (Incendie incendie : incendies_rob.keySet()) {
-                if (incendies_rob.get(incendie) == null) {
-                    gestionIncendies(incendie);
-                }
+                gestionIncendies(incendie);
             }
         }
     }
