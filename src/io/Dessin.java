@@ -1,52 +1,24 @@
 package io;
 
-import gui.Rectangle;
-import gui.GUISimulator;
-import gui.GraphicalElement;
-import gui.*;
-
 import java.awt.Color;
-import java.util.HashMap;
 
 import Donnees.Carte;
 import Donnees.Case;
 import Donnees.DonneesSimulation;
 import Donnees.Incendie;
 import Donnees.Robot.Robot;
-import Donnees.Robot.RobotChenilles;
-import Donnees.Robot.RobotDrone;
-import Donnees.Robot.RobotPattes;
-import Donnees.Robot.RobotRoues;
-import Evenements.Simulateur;;
+import Evenements.Simulateur;
+import gui.GUISimulator;
+import gui.Oval;
+import gui.Rectangle;
+import gui.Text;;
 
 // Comme on utilise ces fonctions dans plusieurs fichiers tests
 // différents, on préfère en faire un fichier à part directement
 // afin d'éviter une redondance.
 
 public class Dessin {
-    private DonneesSimulation donnees;
-    private GUISimulator gui;
-    private int tailleCase;
-    private HashMap<Object, String> assimilationRobotString;
-    private Simulateur simulateur;
-
-    public Dessin(DonneesSimulation donnees, GUISimulator gui, Simulateur simulateur) {
-        this.donnees = donnees;
-        this.gui = gui;
-        this.simulateur = simulateur;
-
-        int largeur_case = 800 / donnees.getCarte().getNbColonnes();
-        int hauteur_case = 600 / donnees.getCarte().getNbLignes();
-
-        this.tailleCase = Math.min(largeur_case, hauteur_case);
-        this.assimilationRobotString = new HashMap<Object, String>();
-        assimilationRobotString.put(RobotChenilles.class, "C");
-        assimilationRobotString.put(RobotDrone.class, "D");
-        assimilationRobotString.put(RobotPattes.class, "P");
-        assimilationRobotString.put(RobotRoues.class, "R");
-    }
-
-    private void dessinCases() {
+    private static void dessinCases(DonneesSimulation donnees, GUISimulator gui, int tailleCase) {
         Carte carte = donnees.getCarte();
 
         for (int i = 0; i < carte.getNbLignes(); i++) {
@@ -59,7 +31,7 @@ public class Dessin {
         }
     }
 
-    private void dessinIncendies() {
+    private static void dessinIncendies(DonneesSimulation donnees, GUISimulator gui, int tailleCase) {
         for (Incendie incendie : donnees.getIncendies()) {
             if (incendie.getLitres() > 0) {
                 Case pos = incendie.getPosition();
@@ -73,31 +45,32 @@ public class Dessin {
         }
     }
 
-    private void dessinRobots() {
-        int tour = 0;
+    private static void dessinRobots(DonneesSimulation donnees, GUISimulator gui, int tailleCase) {
         for (Robot robot : donnees.getRobots()) {
-            tour++;
             Case pos = robot.getPosition();
             int i = pos.getLigne();
             int j = pos.getColonne();
             gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j,
                     tailleCase / 2 + i * tailleCase, Color.GRAY, Robot.getColor(), tailleCase / 2));
             gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase / 2 + tailleCase * i,
-                    Color.WHITE, assimilationRobotString.get(robot.getClass())));
-            gui.addGraphicalElement(new Text(650, 50 * tour + 30, Color.WHITE,
-                    assimilationRobotString.get(robot.getClass()) + " : " + Integer.toString(robot.getReservoir())));
+                    Color.WHITE, Robot.getNom(robot.getClass())));
+            gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j,
+                    tailleCase / 2 + tailleCase * i + tailleCase / 3, Color.WHITE,
+                    Integer.toString(robot.getReservoir())));
         }
     }
 
-    private void dessinDateSimulation(){
-        gui.addGraphicalElement(new Text(650, 30, Color.WHITE, "Date: " + Long.toString(simulateur.getDateSimulation())));
+    private static void dessinDateSimulation(GUISimulator gui, Simulateur simulateur) {
+        gui.addGraphicalElement(
+                new Text(gui.getPanelWidth() - 150, gui.getPanelHeight() / 2, Color.WHITE,
+                        "Date: " + Long.toString(simulateur.getDateSimulation())));
     }
 
-    public void dessin() {
-        dessinCases();
-        dessinIncendies();
-        dessinRobots();
-        dessinDateSimulation();
+    public static void dessin(DonneesSimulation donnees, GUISimulator gui, Simulateur simulateur, int tailleCase) {
+        dessinCases(donnees, gui, tailleCase);
+        dessinRobots(donnees, gui, tailleCase);
+        dessinIncendies(donnees, gui, tailleCase);
+        dessinDateSimulation(gui, simulateur);
     }
 
 }

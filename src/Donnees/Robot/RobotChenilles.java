@@ -4,7 +4,6 @@ import Donnees.Case;
 import Donnees.NatureTerrain;
 
 public class RobotChenilles extends Robot {
-
     /**
      * @param position : spécifie la position actuelle du robot
      */
