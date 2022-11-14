@@ -67,7 +67,7 @@ public class ChefAvance {
         for (Case caseEau : this.casesAvecEau) {
             if (robot instanceof RobotDrone) {
                 try {
-                    Chemin cheminVersEau = calculateur.dijkstra(positionRobot, caseEau, robot);
+                    Chemin cheminVersEau = calculateur.dijkstra(positionRobot, caseEau, robot, simulateur.getDateDernierEvenement());
 
                     if (cheminVersEau.getTempsChemin() < tempsDeplacement) {
                         tempsDeplacement = cheminVersEau.getTempsChemin();
@@ -85,7 +85,8 @@ public class ChefAvance {
                         if (positionRobot.getCarte().voisinExiste(caseEau, direction, robot)) {
 
                             Chemin cheminVersEau = calculateur.dijkstra(positionRobot,
-                                    positionRobot.getCarte().getVoisin(caseEau, direction), robot);
+                                    positionRobot.getCarte().getVoisin(caseEau, direction), 
+                                    robot, simulateur.getDateDernierEvenement());
 
                             if (cheminVersEau.getTempsChemin() < tempsDeplacement) {
                                 tempsDeplacement = cheminVersEau.getTempsChemin();
@@ -130,7 +131,7 @@ public class ChefAvance {
             if (!occupes.contains(robot)) {
                 try {
                     Chemin chemin = new Chemin();
-                    chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot);
+                    chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot, simulateur.getDateDernierEvenement());
 
                     if (chemin.getTempsChemin() < tempsDeplacement) {
                         robotTrouve = true;
@@ -152,7 +153,7 @@ public class ChefAvance {
                         if (!occupes.contains(robot))
                             occupes.add(robot);
                         cheminVersEau.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'eau
-                        simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot, simulateur));
+                        simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot));
                     } catch (PasEauDansCarte e) {
                         continue;
                     } catch (PasDeCheminException e) {
