@@ -24,7 +24,7 @@ import java.util.zip.DataFormatException;
  * créent les objets adéquats et les ajoutent ds l'instance de
  * DonneesSimulation.
  */
-public class LecteurDonnees {
+public class LecteurDonneesTextuel {
 
     /**
      * Lit et affiche le contenu d'un fichier de donnees (cases,
@@ -36,7 +36,7 @@ public class LecteurDonnees {
      */
     public static void lire(String fichierDonnees) throws FileNotFoundException, DataFormatException {
         System.out.println("\n == Lecture du fichier" + fichierDonnees);
-        LecteurDonnees lecteur = new LecteurDonnees(fichierDonnees);
+        LecteurDonneesTextuel lecteur = new LecteurDonneesTextuel(fichierDonnees);
         lecteur.lireCarte();
         lecteur.lireIncendies();
         lecteur.lireRobots();
@@ -53,7 +53,7 @@ public class LecteurDonnees {
      * 
      * @param fichierDonnees nom du fichier a lire
      */
-    private LecteurDonnees(String fichierDonnees) throws FileNotFoundException {
+    private LecteurDonneesTextuel(String fichierDonnees) throws FileNotFoundException {
         scanner = new Scanner(new File(fichierDonnees));
         scanner.useLocale(Locale.US);
     }
