@@ -7,6 +7,7 @@ import Autre.CalculPCC;
 import Autre.Chemin;
 import Donnees.Robot.Robot;
 import Donnees.Robot.RobotDrone;
+import Evenements.EventRemplir;
 import Evenements.Simulateur;
 import Exceptions.CellOutOfMapException;
 import Exceptions.IllegalPathException;
@@ -54,10 +55,7 @@ public class ChefAvance {
      *                              du robot vers une source d'eau
      * @throws PasEauDansCarte      - Exception s'il n'y a pas d'eau dans la carte
      */
-    public Chemin ouAllerRemplirReservoir(Robot robot) throws PasEauDansCarte, PasDeCheminException { // TODO :
-                                                                                                      // Attention, un
-                                                                                                      // drone != robot
-                                                                                                      // terrestre
+    public Chemin ouAllerRemplirReservoir(Robot robot) throws PasEauDansCarte, PasDeCheminException { 
         if (casesAvecEau.size() == 0)
             throw new PasEauDansCarte();
 
@@ -153,10 +151,14 @@ public class ChefAvance {
                         Chemin cheminVersEau = ouAllerRemplirReservoir(robotAMobiliser);
                         if (!occupes.contains(robot))
                             occupes.add(robot);
-                        // TODO : executer ordre de aller remplir réservoir
+                        cheminVersEau.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'eau
+                        simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot, simulateur));
                     } catch (PasEauDansCarte e) {
                         continue;
                     } catch (PasDeCheminException e) {
+                        continue;
+                    } catch (IllegalPathException e) {
+                        System.out.println(e);
                         continue;
                     }
                 }
