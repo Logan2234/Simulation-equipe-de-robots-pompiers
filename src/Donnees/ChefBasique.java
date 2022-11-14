@@ -1,5 +1,6 @@
 package Donnees;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import Autre.CalculPCC;
@@ -11,174 +12,158 @@ import Exceptions.EmptyRobotsException;
 import Exceptions.IllegalPathException;
 import Exceptions.PasDeCheminException;
 
+/**
+ * @param donnees : Données utilisées pour la simulation
+ * @param simulateur : Simulateur à initialiser avant
+ * @param incendies_rob : Table de hachage qui a pour clé les incendies non-éteints et en valeur le robot qui s'en occupe.
+ * @param calculateur : Calculateur de chemin qui dépendra des données et du simulateur
+ * @param morts : Table dynamique qui comporte l'ensemble des robots morts (i.e qui n'ont plus d'eau dans le réservoir)
+ */
 public class ChefBasique {
+    
     private DonneesSimulation donnees;
     private Simulateur simulateur;
-    private HashMap<Incendie, RobotLitres> incendies_rob;
-    private HashMap<Robot, Long> occupes;
+    private HashMap<Incendie, Robot> incendies_rob;
+    private ArrayList<Robot> occupes;
     private CalculPCC calculateur;
+    private ArrayList<Robot> morts;
+
 
     /**
-     * Va implémenter la stratégie de base pour le chef pompier
+     * Va implémenter la stratégie de base pour le chef pompier.
      * 
-     * @param donnees - Données utilisées pour la simulation
-     * @param simulateur - Simulateur initialisé avant
+     * @param donnees : Données utilisées pour la simulation
+     * @param simulateur : Simulateur à initialiser avant
      */
     public ChefBasique(DonneesSimulation donnees, Simulateur simulateur){
         this.donnees = donnees;
         this.simulateur = simulateur;
-        this.occupes = new HashMap<Robot,Long>();
-        this.incendies_rob = new HashMap<Incendie, RobotLitres>();
+        this.occupes = new ArrayList<Robot>();
+        this.morts = new ArrayList<Robot>();
+        this.incendies_rob = new HashMap<Incendie, Robot>();
         calculateur = new CalculPCC(donnees);
         for (Incendie incendie : donnees.getIncendies()){
-            incendies_rob.put(incendie, new RobotLitres(null, incendie.getLitres()));
+            incendies_rob.put(incendie, null);
         }
     }
 
     
+
+    
     /** 
-     * Fonction donnant les ordres de mouvement et extinction de feux à un robot
+     * Va donner l'ordre à {@code robot} d'éteindre {@code incendie} et programmer en conséquence les événements dans le simulateur.
      * 
-     * @param robot                      - Robot qui devra subir les ordres
-     * @param incendie                   - Incendie à éteindre
-     * @param date                       - Date du début de l'action
-     * @return long                      - Date de fin de l'ordre d'extinction
-     * @throws PasDeCheminException      - Il n'existe pas de chemin possible entre le robot et l'incendie
+     * @param robot : Il n'est ni occupé, ni mort
+     * @param incendie : Il n'est affecté à aucun robot
+     * 
+     * @throws PasDeCheminException Le robot choisi ne peut pas atteindre l'incendie choisi
      */
-    private long donneOrdre(Robot robot, Incendie incendie, long date) throws PasDeCheminException {
+    private void donneOrdre(Robot robot, Incendie incendie) throws PasDeCheminException{
         try{
-            int litres_restants = incendies_rob.get(incendie).getLitres();
-            System.out.println(litres_restants);
-            // Calcul du plus court chemin entre le robot et l'incendie
             Chemin chemin = new Chemin();
-            chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot);
-            // Si on a un chemin (car on a pas attrappé d'exception) on va attribuer l'incendie au robot
-            incendies_rob.put(incendie, new RobotLitres(robot, litres_restants - Math.min(robot.getReservoir(), litres_restants)));
+            chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot, simulateur.getDateDernierEvenement());
             chemin.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'incendie
-            long new_date = date + chemin.getTempsChemin() + Math.min(robot.getReservoir(),litres_restants)*robot.getTmpVersement()/robot.getQteVersement();
-            occupes.put(robot, new_date); //robot occupé jusqu'à new_date
-            robot.deverserEau(Math.min(robot.getReservoir(),litres_restants));
-            simulateur.ajouteEvenement(new EventIntervenir(date + chemin.getTempsChemin(), robot, incendie));
-            return new_date;
+            if (robot.getCapacite()!= -1){ // si ce n'est pas un robot à pattes
+                for (int i = 0; i < Math.min(incendie.getLitres() / robot.getQteVersement(),
+                    robot.getReservoir() / robot.getQteVersement()); i++) 
+                {
+                    simulateur.ajouteEvenement(new EventIntervenir(simulateur.getDateDernierEvenement(), robot, incendie));
+                }
+            } else { // le robot à pattes va verser son eau
+                for (int i = 0; i < incendie.getLitres() / robot.getQteVersement(); i++) 
+                {
+                    simulateur.ajouteEvenement(new EventIntervenir(simulateur.getDateDernierEvenement(), robot, incendie));
+                }
+            }
         } catch (IllegalPathException e){
             System.out.println(e);
-            return date;
         }
     }
 
     
     /** 
-     * Renvoie si il reste des robots avec de l'eau
+     * Va essayer d'éteindre {@code incendie} en appelant un robot à la fois et en mettant à jour les tables
+     * {@code occupes} et {@code morts}.
      * 
-     * @return boolean
+     * @param incendie : Il ne doit avoir aucun robot affecté (dans {@code incendies_rob})
      */
-    private boolean robotsVides(){
-        for (Robot robot:donnees.getRobots()){
-            if (occupes.containsKey(robot) && occupes.get(robot) < Long.MAX_VALUE){
-                return false;
-            } else if (!occupes.containsKey(robot)){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    
-    /** 
-     * Fonction que, à chaque date introduite, décidira quel robot envoyer à quel incendie et mettra
-     * en place la stratégie d'extinction à l'instant donné.
-     * 
-     * @param date     : date de la réalisation des actions
-     * @return long    : la date à la fin de la mise en place de l'incendie
-     */
-    private long gestionIncendies(long date){
-        for (Incendie incendie : donnees.getIncendies()){
-            if (!incendies_rob.containsKey(incendie)){
-                continue; // Si l'incendie est déjà éteint, on ne va pas envoyer de robot dessus
-            }
-            RobotLitres robotIncendie = incendies_rob.get(incendie);
-            System.out.println(incendie.toString());
-            // Si aucun robot n'est affecté à l'incendie : 
-            if (robotIncendie.getRobot() == null){
-                for (Robot robot : this.donnees.getRobots()){
-                    // Si le robot a fini sa tâche, il n'est plus occupé
-                    if (occupes.containsKey(robot) && occupes.get(robot) < date) {
-                        if (robot.getReservoir() == 0) { // Si il a vidé son eau, il est occupé indéfiniment et n'est plus en charge de l'incendie
-                            occupes.put(robot, Long.MAX_VALUE);
-                            incendies_rob.put(incendie, new RobotLitres(null, incendies_rob.get(incendie).getLitres()));
-                        } else { // Si il lui reste de l'eau, il n'est plus occupé
-                            occupes.remove(robot);
-                        }
+    private void gestionIncendies(Incendie incendie){
+        for (Robot robot : donnees.getRobots()){
+            // Si le robot choisi est disponible
+            if (!occupes.contains(robot)) {
+                // Si son réservoir est vide, il est mort et on en cherche un autre
+                if (robot.getReservoir() == 0) {
+                    if (!morts.contains(robot)){ // nécessaire pour ne pas avoir de doublons
+                        this.morts.add(robot);
                     }
-                    // Si le robot n'est pas occupé, on va l'envoyé éteindre l'incendie
-                    if (!occupes.containsKey(robot)){
-                        try {
-                            date = donneOrdre(robot, incendie, date);
-                            return date; // et on arrête de chercher un robot puisqu'on l'a déjà trouvé
-                        } catch (PasDeCheminException e){
-                            // S'il n'y a pas de chemin disponible entre le robot et l'incendie, on va appeler un autre robot
-                            continue;
-                        }
-                    }
+                    continue;
                 }
+                // Sinon on essaie de l'envoyer sur l'incendie, si cela échoue on va prendre un autre robot
+                try {
+                    System.out.println(robot);
+                    System.out.println(incendie);
+                    occupes.add(robot);
+                    incendies_rob.put(incendie, robot);
+                    donneOrdre(robot, incendie);
+                    break; // Si on a réussi, on ne va pas envoyer de second robot sur l'incendie
+                } catch (PasDeCheminException e){
+                    continue;
+                }
+            // Si il est occupé
             } else {
-                if (incendies_rob.get(incendie).getLitres() <= 0){
-                    occupes.remove(robotIncendie.getRobot());
-                    incendies_rob.remove(incendie);
-                    return date;
-                } else if (robotIncendie.getRobot().getReservoir() == 0) {
-                    occupes.put(robotIncendie.getRobot(), Long.MAX_VALUE);
+                // Si il est mort
+                if (robot.getReservoir() == 0  && !morts.contains(robot)) {
+                    occupes.remove(robot);
+                    morts.add(robot);
+                // Si il lui reste de l'eau, il est de nouveau disponible
+                } else if (!incendies_rob.containsValue(robot)){
+                    occupes.remove(robot); // Si le robot peut continuer, on l'efface
                 }
+            }
         }
-        }
-        return date; //n'arrive que si on n'a aucun robot qui ne peut accéder à aucun incendie ou si tous les incendies ont été éteints
     }
 
     
+    
     /** 
-     * Fonction executant la stratégie d'extinction des feux du Chef des Pompiers Basique
+     * Implémente la stratégie basique (pas de parallélisme, pas de remplissage d'eau).
+     * On va traiter un incendie à la fois, tant qu'on en a qui ne sont pas éteints.
      * 
-     * @throws EmptyRobotsException La liste des robots est vide
+     * @throws EmptyRobotsException Si tous nos robots sont vidés avant d'avoir pu éteindre les incendies
      */
     public void strategie() throws EmptyRobotsException{
-        long date = simulateur.getDateSimulation();
-        while (!incendies_rob.isEmpty() && !robotsVides()){
-            long new_date = gestionIncendies(date);
-            simulateur.incrementeDate(new_date-date);
-            date = new_date;
-        }
-        if (incendies_rob.isEmpty()) {
-            System.out.println("Tous les incendies sont éteints\n");
-        } else if (robotsVides()) {
-            throw new EmptyRobotsException();
-        }
+        // Tant qu'il y a des incendies à éteidnre et des robots avec de l'eau
+        while (!incendies_rob.isEmpty() && donnees.getRobots().length != morts.size()) {
+            for (Incendie incendie : donnees.getIncendies()) {
+                // Si il est déjà éteint, on ne va pas traiter son cas
+                if (!incendies_rob.containsKey(incendie)) {
+                    continue;
+                }
+                // Si on n'a pas d'affectation pour cet incendie, on va lui envoyer un robot
+                if (incendies_rob.get(incendie) == null) {
+                    gestionIncendies(incendie);
+                // Si il est en cours de traitement, on regarde son état
+                } else {
+                    Robot robot = incendies_rob.get(incendie);
+                    // Si le robot s'est vidé, on met à jour les tables
+                    if (robot.getReservoir() == 0) {
+                        occupes.remove(robot);
+                        incendies_rob.put(incendie, null);
+                        if (!morts.contains(robot)){ // nécessaire pour ne pas avoir de doublons
+                            morts.add(robot);
+                        }
+                    }
+                    // Si l'incendie est éteint, on met à jour incendies_rob
+                    if (incendie.getLitres() <= 0) {
+                        // Si il reste de l'eau dans le réservoir
+                        if (robot.getReservoir() > 0 || robot.getReservoir() == -1){
+                            occupes.remove(robot); 
+                        }
+                        incendies_rob.remove(incendie);
+                    } 
+                }
+            }
+        } if (incendies_rob.isEmpty()) {System.out.println("Tous les incendies sont éteints\n");}
+        else {throw new EmptyRobotsException();}
     }
 }
-
-/**
- * Sous-classe représentant un tuple (robot, litres nécessaires) (pour la hashmap incendies_rob)
- */
-class RobotLitres {
-    private Robot rob;
-    private int litres;
-
-    public RobotLitres(Robot i, int l) {
-        rob = i;
-        litres = l;
-    }
-
-    public Robot getRobot() {
-        return rob;
-    }
-
-    public int getLitres() {
-        return litres;
-    }
-
-
-    @Override
-    public String toString(){
-        return "[Robot " + rob.toString() + " : a besoin de " + litres + " L pour cet incendie]";
-    }
-}
-
