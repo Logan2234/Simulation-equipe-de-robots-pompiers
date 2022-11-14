@@ -4,10 +4,11 @@ import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 
-import Donnees.ChefBasiqueV2;
+import Donnees.ChefBasique;
 import Donnees.DonneesSimulation;
 import Donnees.LecteurDonnees;
 import Evenements.Simulateur;
+import Exceptions.EmptyRobotsException;
 import gui.GUISimulator;
 
 public class TestBasique {
@@ -21,8 +22,13 @@ public class TestBasique {
 
             // ChefBasique chef = new ChefBasique(donnees, simulateur);
             // chef.strategie();
-            ChefBasiqueV2 chef = new ChefBasiqueV2(donnees, simulateur);
-            chef.strategie();
+            ChefBasique chef = new ChefBasique(donnees, simulateur);
+            try {
+                chef.strategie();
+            } catch (EmptyRobotsException e) {
+                System.out.println(e);
+            }
+            
 
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
