@@ -68,6 +68,9 @@ class Simulation implements Simulable {
             case TestBasique:
                 TestBasique.initialize(fichier, gui);
                 break;
+            case TestAvance:
+                TestAvance.initialize(fichier, gui);
+                break;
             default:
                 break;
         }

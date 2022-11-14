@@ -78,7 +78,7 @@ public class ChefBasiqueV2 {
     }
 
     public void strategie() {
-        while (!incendies_rob.isEmpty() && donnees.getRobots().length == morts.size()) { //gérer cas où les robots sont vidés
+        while (!incendies_rob.isEmpty() && donnees.getRobots().length != morts.size()) { //gérer cas où les robots sont vidés
             for (Incendie incendie : incendies_rob.keySet()) {
                 if (incendies_rob.get(incendie) == null) {
                     gestionIncendies(incendie);

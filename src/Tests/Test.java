@@ -4,5 +4,6 @@ public enum Test {
     TestSimulation,
     TestScenarios,
     TestDijkstra,
-    TestBasique
+    TestBasique, 
+    TestAvance
 }
