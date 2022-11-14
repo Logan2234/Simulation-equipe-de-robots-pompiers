@@ -38,12 +38,12 @@ public class ChefBasiqueV2 {
 
     
 
-    public void donneOrdre(Robot robot, Incendie incendie){
+    public void donneOrdre(Robot robot, Incendie incendie) throws PasDeCheminException{
         try{
             Chemin chemin = new Chemin();
             chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot);
             chemin.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'incendie
-            this.simulateur.ajouteEvenement(new EventIntervenir(simulateur.getDateSimulation(), robot, incendie)); // TODO voir si la date est la bonne
+            this.simulateur.ajouteEvenement(new EventIntervenir(simulateur.getDateDernierEvenement(), robot, incendie)); // TODO voir si la date est la bonne
         } catch (IllegalPathException e){
             System.out.println(e);
         }
@@ -52,23 +52,31 @@ public class ChefBasiqueV2 {
     public void gestionIncendies(Incendie incendie){
         for (Robot robot : donnees.getRobots()){
             if (!occupes.contains(robot)) {
-                occupes.add(robot);
-                incendies_rob.put(incendie, robot);
-                donneOrdre(robot, incendie);
+                try {
+                    occupes.add(robot);
+                    incendies_rob.put(incendie, robot);
+                    donneOrdre(robot, incendie);
+                } catch (PasDeCheminException e){
+                    continue; //on va prendre un autre robot
+                }
             } else {
-                if (robot.getReservoir() != 0 && !incendies_rob.containsValue(robot)) occupes.remove(robot); // Si le robot peut continuer, on l'efface
+                if (robot.getReservoir() != 0 && !incendies_rob.containsValue(robot)){
+                    occupes.remove(robot); // Si le robot peut continuer, on l'efface
+                }
             }
         }
     }
 
     public void strategie() {
-        while (!incendies_rob.isEmpty()) {
+        while (!incendies_rob.isEmpty()) { //gérer cas où les robots sont vidés
             for (Incendie incendie : incendies_rob.keySet()) {
                 if (incendies_rob.get(incendie) == null) {
                     gestionIncendies(incendie);
                 } else {
-                    if (incendie.getLitres() <= 0) {
-                        if (incendies_rob.get(incendie).getReservoir() > 0) occupes.remove(incendies_rob.get(incendie));
+                    if (incendie.getLitres() <= 0) { // si l'incendie est éteint
+                        if (incendies_rob.get(incendie).getReservoir() > 0 || incendies_rob.get(incendie).getReservoir() == -1){
+                            occupes.remove(incendies_rob.get(incendie)); //si il reste de l'eau dans le réservoir
+                        }
                         incendies_rob.remove(incendie);
                     } 
                 }
@@ -76,3 +84,4 @@ public class ChefBasiqueV2 {
         }
         System.out.println("Tous les incendies sont éteints\n");
     }
+}
