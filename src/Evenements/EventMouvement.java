@@ -16,6 +16,7 @@ public class EventMouvement extends Evenement {
         this.robot = robot;
         this.dir = dir;
         this.nextCase = null;
+        robot.setLastDate(date);
     }
 
     public EventMouvement(long date, Robot robot, Case _case) {
@@ -23,6 +24,7 @@ public class EventMouvement extends Evenement {
         this.robot = robot;
         this.dir = null;
         this.nextCase = _case;
+        robot.setLastDate(date);
     }
 
     @Override

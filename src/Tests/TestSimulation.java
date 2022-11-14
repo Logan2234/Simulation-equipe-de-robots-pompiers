@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 
+import Autre.CalculPCC;
 import Autre.Chemin;
 import Donnees.Carte;
 import Donnees.Case;
@@ -30,58 +31,63 @@ public class TestSimulation {
             Robot robot = donnees.getRobots()[0];
             Chemin chemin = new Chemin();
             Case pos = robot.getPosition();
+            chemin.addElement(pos, robot.getLastDate());
             Case nextCase;
 
             Direction[] moves = { Direction.SUD, Direction.SUD, Direction.EST, Direction.EST };
 
             for (Direction dir : moves) {
                 nextCase = carte.getVoisin(pos, dir);
-                chemin.addElement(nextCase, simulateur.getDateDernierEvenement());
+                chemin.addElement(nextCase, chemin.getLastDate() + CalculPCC.tpsDpltCaseACase(pos, nextCase, robot));
                 pos = nextCase;
             }
 
             chemin.creerEvenements(simulateur, robot);
             simulateur.ajouteEvenement(
-                    new EventIntervenir(simulateur.getDateDernierEvenement(), robot, donnees.getIncendies().get(4)));
+                    new EventIntervenir(robot.getLastDate(), robot, donnees.getIncendies().get(4)));
             chemin.getChemin().clear();
+            chemin.addElement(pos, robot.getLastDate());
 
             for (Direction dir : moves) {
                 nextCase = carte.getVoisin(pos, dir);
-                chemin.addElement(nextCase, simulateur.getDateDernierEvenement());
+                chemin.addElement(nextCase, chemin.getLastDate() + CalculPCC.tpsDpltCaseACase(pos, nextCase, robot));
                 pos = nextCase;
             }
 
             chemin.creerEvenements(simulateur, robot);
             simulateur.ajouteEvenement(
-                    new EventIntervenir(simulateur.getDateDernierEvenement(), robot, donnees.getIncendies().get(5)));
+                new EventIntervenir(robot.getLastDate(), robot, donnees.getIncendies().get(5)));
             chemin.getChemin().clear();
+            chemin.addElement(pos, robot.getLastDate());
 
             Direction[] moves2 = { Direction.OUEST, Direction.OUEST, Direction.OUEST, Direction.OUEST };
             for (Direction dir : moves2) {
                 nextCase = carte.getVoisin(pos, dir);
-                chemin.addElement(nextCase, simulateur.getDateDernierEvenement());
+                chemin.addElement(nextCase, chemin.getLastDate() + CalculPCC.tpsDpltCaseACase(pos, nextCase, robot));
                 pos = nextCase;
             }
 
             chemin.creerEvenements(simulateur, robot);
-            simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot));
+            simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
             chemin.getChemin().clear();
 
-            chemin.addElement(carte.getVoisin(pos, Direction.NORD), simulateur.getDateDernierEvenement());
+            nextCase = carte.getVoisin(pos, Direction.NORD);
+            chemin.addElement(nextCase, robot.getLastDate() + CalculPCC.tpsDpltCaseACase(pos, nextCase, robot));
             chemin.creerEvenements(simulateur, robot);
             chemin.getChemin().clear();
 
             robot = donnees.getRobots()[2];
             pos = robot.getPosition();
+            chemin.addElement(pos, robot.getLastDate());
 
             for (int i = 0; i < 4; i++) {
                 nextCase = carte.getVoisin(pos, Direction.OUEST);
-                chemin.addElement(nextCase, 0);
+                chemin.addElement(nextCase, chemin.getLastDate() + CalculPCC.tpsDpltCaseACase(pos, nextCase, robot));
                 pos = nextCase;
             }
 
             chemin.creerEvenements(simulateur, robot);
-            simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot));
+            simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
 
         } catch (IllegalPathException e) {
             System.out.println(e);

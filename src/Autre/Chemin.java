@@ -85,18 +85,12 @@ public class Chemin {
      *         
      */
     public void creerEvenements(Simulateur simulateur, Robot robot) throws IllegalPathException {
-        AssociationTempsCase oldCase = this.chemin.get(0);
         for (AssociationTempsCase tc : this.chemin) {
             // Si c'est la première case ça sert à rien de s'y déplacer
             if (tc.getCase() != robot.getPosition()) {
                 Case _case = tc.getCase(); 
-                tc.setT(CalculPCC.tpsDpltCaseACase(oldCase.getCase(), _case, robot) + oldCase.getT());
-                if (robot.getVitesse(_case.getNature()) == 0) {
-                    throw new IllegalPathException();
-                }
                 simulateur.ajouteEvenement(new EventMouvement(tc.getT(), robot, _case));
             }
-            oldCase = tc;
         }
     }
 
