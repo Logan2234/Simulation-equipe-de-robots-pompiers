@@ -101,8 +101,6 @@ public class ChefBasique {
                 // Sinon on essaie de l'envoyer sur l'incendie, si cela échoue on va prendre un
                 // autre robot
                 try {
-                    System.out.println(robot);
-                    System.out.println(incendie);
                     occupes.add(robot);
                     incendies_rob.put(incendie, robot);
                     donneOrdre(robot, incendie);
