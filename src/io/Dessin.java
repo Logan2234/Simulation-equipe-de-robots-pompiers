@@ -15,6 +15,7 @@ import Donnees.Incendie;
 import Donnees.Robot.Robot;
 import Donnees.Robot.RobotChenilles;
 import Donnees.Robot.RobotDrone;
+import Donnees.Robot.RobotEnum;
 import Donnees.Robot.RobotPattes;
 import Donnees.Robot.RobotRoues;
 import Evenements.Simulateur;;
@@ -24,29 +25,7 @@ import Evenements.Simulateur;;
 // afin d'éviter une redondance.
 
 public class Dessin {
-    private DonneesSimulation donnees;
-    private GUISimulator gui;
-    private int tailleCase;
-    private HashMap<Object, String> assimilationRobotString;
-    private Simulateur simulateur;
-
-    public Dessin(DonneesSimulation donnees, GUISimulator gui, Simulateur simulateur) {
-        this.donnees = donnees;
-        this.gui = gui;
-        this.simulateur = simulateur;
-
-        int largeur_case = 800 / donnees.getCarte().getNbColonnes();
-        int hauteur_case = 600 / donnees.getCarte().getNbLignes();
-
-        this.tailleCase = Math.min(largeur_case, hauteur_case);
-        this.assimilationRobotString = new HashMap<Object, String>();
-        assimilationRobotString.put(RobotChenilles.class, "C");
-        assimilationRobotString.put(RobotDrone.class, "D");
-        assimilationRobotString.put(RobotPattes.class, "P");
-        assimilationRobotString.put(RobotRoues.class, "R");
-    }
-
-    private void dessinCases() {
+    private static void dessinCases(DonneesSimulation donnees, GUISimulator gui, int tailleCase) {
         Carte carte = donnees.getCarte();
 
         for (int i = 0; i < carte.getNbLignes(); i++) {
@@ -59,7 +38,7 @@ public class Dessin {
         }
     }
 
-    private void dessinIncendies() {
+    private static void dessinIncendies(DonneesSimulation donnees, GUISimulator gui, int tailleCase) {
         for (Incendie incendie : donnees.getIncendies()) {
             if (incendie.getLitres() > 0) {
                 Case pos = incendie.getPosition();
@@ -73,7 +52,7 @@ public class Dessin {
         }
     }
 
-    private void dessinRobots() {
+    private static void dessinRobots(DonneesSimulation donnees, GUISimulator gui, int tailleCase) {
         int tour = 0;
         for (Robot robot : donnees.getRobots()) {
             tour++;
@@ -83,21 +62,21 @@ public class Dessin {
             gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j,
                     tailleCase / 2 + i * tailleCase, Color.GRAY, Robot.getColor(), tailleCase / 2));
             gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase / 2 + tailleCase * i,
-                    Color.WHITE, assimilationRobotString.get(robot.getClass())));
+                    Color.WHITE, RobotEnum.getNom(robot.getClass())));
             gui.addGraphicalElement(new Text(650, 50 * tour + 30, Color.WHITE,
-                    assimilationRobotString.get(robot.getClass()) + " : " + Integer.toString(robot.getReservoir())));
+                    RobotEnum.getNom(robot.getClass()) + " : " + Integer.toString(robot.getReservoir())));
         }
     }
 
-    private void dessinDateSimulation(){
+    private static void dessinDateSimulation(GUISimulator gui, Simulateur simulateur){
         gui.addGraphicalElement(new Text(650, 30, Color.WHITE, "Date: " + Long.toString(simulateur.getDateSimulation())));
     }
 
-    public void dessin() {
-        dessinCases();
-        dessinIncendies();
-        dessinRobots();
-        dessinDateSimulation();
+    public static void dessin(DonneesSimulation donnees, GUISimulator gui, Simulateur simulateur, int tailleCase) {
+        dessinCases(donnees, gui, tailleCase);
+        dessinIncendies(donnees, gui, tailleCase);
+        dessinRobots(donnees, gui, tailleCase);
+        dessinDateSimulation(gui, simulateur);
     }
 
 }

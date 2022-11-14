@@ -9,7 +9,6 @@ import Exceptions.CellOutOfMapException;
 import Exceptions.NoWaterException;
 
 public abstract class Robot {
-
     private Case position;
     private int capacite; // en L.
     private int reservoir; // en L.

@@ -13,10 +13,10 @@ class Simulation implements Simulable {
     /** L'interface graphique associée */
     private GUISimulator gui;
     private DonneesSimulation donnees;
-    private Dessin fonctionDessin;
     private Test classeAppelante;
     private String fichier;
     private Simulateur simulateur;
+    private int tailleCase;
 
     public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test classeAppelante, String fichier) {
         this.gui = gui;
@@ -24,16 +24,20 @@ class Simulation implements Simulable {
         this.classeAppelante = classeAppelante;
         this.fichier = fichier;
         this.simulateur = simulateur;
-        this.fonctionDessin = new Dessin(this.donnees, this.gui, this.simulateur);
+        this.tailleCase = Math.min(gui.getWidth() / donnees.getCarte().getNbColonnes(), gui.getHeight() / donnees.getCarte().getNbLignes());
 
         gui.setSimulable(this);
 
         draw();
     }
 
+    public int getTailleCase(){
+        return this.tailleCase;
+    }
+
     private void draw() {
         gui.reset();
-        fonctionDessin.dessin();
+        Dessin.dessin(this.donnees, this.gui, this.simulateur, this.tailleCase);
     }
 
     @Override
