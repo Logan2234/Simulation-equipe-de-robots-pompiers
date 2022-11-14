@@ -67,6 +67,7 @@ public class ChefBasiqueV2 {
         }
     }
 
+    
     public void strategie() {
         while (!incendies_rob.isEmpty()) { //gérer cas où les robots sont vidés
             for (Incendie incendie : incendies_rob.keySet()) {
@@ -78,7 +79,9 @@ public class ChefBasiqueV2 {
                             occupes.remove(incendies_rob.get(incendie)); //si il reste de l'eau dans le réservoir
                         }
                         incendies_rob.remove(incendie);
-                    } 
+                    // } else {
+                    //     incendies_rob.put(incendie, null);
+                    }
                 }
             }
         }
