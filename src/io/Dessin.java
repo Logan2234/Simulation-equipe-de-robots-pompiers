@@ -86,7 +86,6 @@ public class Dessin {
             gui.addGraphicalElement(new Text(650, 50 * tour + 30, Color.WHITE,
                     assimilationRobotString.get(robot.getClass()) + " : " + Integer.toString(robot.getReservoir())));
         }
-        gui.addGraphicalElement(new Text(650, 0, Color.WHITE, simulateur.getDateSimulation())
     }
 
     private void dessinDateSimulation(){
