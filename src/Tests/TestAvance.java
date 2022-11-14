@@ -6,9 +6,9 @@ import java.util.zip.DataFormatException;
 
 import Donnees.ChefAvance;
 import Donnees.DonneesSimulation;
-import Donnees.LecteurDonnees;
 import Evenements.Simulateur;
 import gui.GUISimulator;
+import io.LecteurDonnees;
 
 public class TestAvance {
 

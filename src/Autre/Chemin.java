@@ -96,9 +96,7 @@ public class Chemin {
 
     
     /** 
-     * Fonction renvoyant la transcription du chemin à String
-     * 
-     * @return String renvoyé
+     * @return String : Affiche la chaîne de caractères de la transcription du chemin à String
      */
     @Override
     public String toString() {

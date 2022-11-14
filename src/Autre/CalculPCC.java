@@ -110,7 +110,7 @@ public class CalculPCC {
             // On cherche le chemin
 
             long distanceCaseMinimale = distance[minCoordonees.getI()][minCoordonees.getJ()];
-
+            // TODO: Factoriser le code.
             if (caseCourante.getCarte().voisinExiste(caseMinimale, Direction.NORD, robot)) {
                 try {
                     caseATraiter = caseCourante.getCarte().getVoisin(caseMinimale, Direction.NORD);

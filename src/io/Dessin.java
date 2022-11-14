@@ -1,6 +1,7 @@
 package io;
 
 import java.awt.Color;
+import java.util.LinkedList;
 
 import Donnees.Carte;
 import Donnees.Case;
@@ -13,14 +14,17 @@ import gui.Oval;
 import gui.Rectangle;
 import gui.Text;;
 
-// Comme on utilise ces fonctions dans plusieurs fichiers tests
-// différents, on préfère en faire un fichier à part directement
-// afin d'éviter une redondance.
-
 public class Dessin {
-    private static void dessinCases(DonneesSimulation donnees, GUISimulator gui, int tailleCase) {
-        Carte carte = donnees.getCarte();
 
+    /**
+     * Fonction permettant de dessiner toutes les cases de la carte
+     * 
+     * @param carte      : Carte utilisée pour dessiner les cases
+     * @param gui        : Interface graphique sur laquelle dessiner les cases
+     * @param tailleCase : Taille des cases telles qu'elles doivent apparaître sur
+     *                   le dessin (non pas la taille fictive des cases)
+     */
+    private static void dessinCases(Carte carte, GUISimulator gui, int tailleCase) {
         for (int i = 0; i < carte.getNbLignes(); i++) {
             for (int j = 0; j < carte.getNbColonnes(); j++) {
                 Case current_case = carte.getCase(i, j);
@@ -31,8 +35,16 @@ public class Dessin {
         }
     }
 
-    private static void dessinIncendies(DonneesSimulation donnees, GUISimulator gui, int tailleCase) {
-        for (Incendie incendie : donnees.getIncendies()) {
+    /**
+     * Fonction permettant de dessiner l'ensemble des incendies
+     * 
+     * @param incendies  : Liste chaînée des incendies à dessiner
+     * @param gui        : Interface graphique sur laquelle dessiner les cases
+     * @param tailleCase : Taille des cases telles qu'elles doivent apparaître sur
+     *                   le dessin (non pas la taille fictive des cases)
+     */
+    private static void dessinIncendies(LinkedList<Incendie> incendies, GUISimulator gui, int tailleCase) {
+        for (Incendie incendie : incendies) {
             if (incendie.getLitres() > 0) {
                 Case pos = incendie.getPosition();
                 int i = pos.getLigne();
@@ -45,8 +57,16 @@ public class Dessin {
         }
     }
 
-    private static void dessinRobots(DonneesSimulation donnees, GUISimulator gui, int tailleCase) {
-        for (Robot robot : donnees.getRobots()) {
+    /**
+     * Fonction permettant de dessiner l'ensemble des robots
+     * 
+     * @param robots     : Liste des robots à dessiner
+     * @param gui        : Interface graphique sur laquelle dessiner les cases
+     * @param tailleCase : Taille des cases telles qu'elles doivent apparaître sur
+     *                   le dessin (non pas la taille fictive des cases)
+     */
+    private static void dessinRobots(Robot[] robots, GUISimulator gui, int tailleCase) {
+        for (Robot robot : robots) {
             Case pos = robot.getPosition();
             int i = pos.getLigne();
             int j = pos.getColonne();
@@ -60,16 +80,35 @@ public class Dessin {
         }
     }
 
+    /**
+     * Fonction permettant d'afficher la date en tout moment de la simulation
+     * 
+     * @param gui        : Interface graphique sur laquelle dessiner les cases
+     * @param simulateur : Simulateur utilisé pour la simulation. Permet de
+     *                   récupérer {@code dateSimulation}.
+     */
     private static void dessinDateSimulation(GUISimulator gui, Simulateur simulateur) {
         gui.addGraphicalElement(
                 new Text(gui.getPanelWidth() - 150, gui.getPanelHeight() / 2, Color.WHITE,
                         "Date: " + Long.toString(simulateur.getDateSimulation())));
     }
 
+    /**
+     * Unique fonction publique de la classe Dessin. Elle permet de dessiner
+     * l'ensemble des données sur l'interface
+     * 
+     * @param donnees    : Données de la simulation à dessiner
+     * @param gui        : Interface graphique sur laquelle dessiner les cases
+     * @param simulateur : Simulateur utilisé pour la simulation. Utilisé par la
+     *                   fonction {@code dessinDateSimulation} pour dessiner
+     *                   {@code dateSimulation} sur l'interface graphique associée
+     * @param tailleCase : Taille des cases telles qu'elles doivent apparaître sur
+     *                   le dessin (non pas la taille fictive des cases)
+     */
     public static void dessin(DonneesSimulation donnees, GUISimulator gui, Simulateur simulateur, int tailleCase) {
-        dessinCases(donnees, gui, tailleCase);
-        dessinRobots(donnees, gui, tailleCase);
-        dessinIncendies(donnees, gui, tailleCase);
+        dessinCases(donnees.getCarte(), gui, tailleCase);
+        dessinRobots(donnees.getRobots(), gui, tailleCase);
+        dessinIncendies(donnees.getIncendies(), gui, tailleCase);
         dessinDateSimulation(gui, simulateur);
     }
 

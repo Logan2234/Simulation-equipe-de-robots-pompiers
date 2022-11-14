@@ -1,9 +1,9 @@
 package Tests;
 
-import io.LecteurDonnees;
-
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
+
+import io.LecteurDonneesTextuel;
 
 public class TestLecteurDonnees {
 
@@ -14,7 +14,7 @@ public class TestLecteurDonnees {
         }
 
         try {
-            LecteurDonnees.lire(args[0]);
+            LecteurDonneesTextuel.lire(args[0]);
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + args[0] + " inconnu ou illisible");
         } catch (DataFormatException e) {

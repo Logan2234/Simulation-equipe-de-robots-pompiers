@@ -10,7 +10,6 @@ import Donnees.Carte;
 import Donnees.Case;
 import Donnees.Direction;
 import Donnees.DonneesSimulation;
-import Donnees.LecteurDonnees;
 import Donnees.Robot.Robot;
 import Evenements.EventIntervenir;
 import Evenements.EventMouvement;
@@ -19,6 +18,7 @@ import Evenements.Simulateur;
 import Exceptions.CellOutOfMapException;
 import Exceptions.IllegalPathException;
 import gui.GUISimulator;
+import io.LecteurDonnees;
 
 public class TestScenarios {
     public static void initialize(String fichier, GUISimulator gui) {

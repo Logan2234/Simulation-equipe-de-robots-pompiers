@@ -10,43 +10,52 @@ import gui.Simulable;
 import io.Dessin;
 
 class Simulation implements Simulable {
-    /** L'interface graphique associée */
     private GUISimulator gui;
     private DonneesSimulation donnees;
-    private Test classeAppelante;
+    private Test testAppelant;
     private String fichier;
     private Simulateur simulateur;
     private int tailleCase;
 
-    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test classeAppelante, String fichier) {
+    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test test, String fichier) {
         this.gui = gui;
         this.donnees = donnees;
-        this.classeAppelante = classeAppelante;
+        this.testAppelant = test;
         this.fichier = fichier;
         this.simulateur = simulateur;
-        this.tailleCase = Math.min((gui.getPanelWidth() - 10) / donnees.getCarte().getNbColonnes(), (gui.getPanelHeight() - 10) / donnees.getCarte().getNbLignes());
+        this.tailleCase = Math.min((gui.getPanelWidth() - 10) / donnees.getCarte().getNbColonnes(),
+                (gui.getPanelHeight() - 10) / donnees.getCarte().getNbLignes());
 
         gui.setSimulable(this);
 
         draw();
     }
 
-    public int getTailleCase(){
-        return this.tailleCase;
-    }
-
+    /**
+     * Fonction de dessin exécuté à chaque execution de {@code next}
+     */
     private void draw() {
         gui.reset();
         Dessin.dessin(this.donnees, this.gui, this.simulateur, this.tailleCase);
     }
 
+    /**
+     * Fonction de gui.jar overridée permettant d'exécuter les évènements
+     * correspondant à {@code dateSimulation} avant de l'incrémenter puis de
+     * redessiner le résultat
+     */
     @Override
     public void next() {
         try {
+            if (simulateur.simulationTerminee())
+            {
+                System.out.println("Simulation terminée");
+                // System.exit(0);
+            }
             simulateur.execute();
-        } catch (NoFireException e) {
-            System.out.println(e);
         } catch (CellOutOfMapException e) {
+            System.out.println(e);
+        } catch (NoFireException e) {
             System.out.println(e);
         } catch (NoWaterException e) {
             System.out.println(e);
@@ -55,11 +64,16 @@ class Simulation implements Simulable {
         draw();
     }
 
+    /**
+     * Fonction de gui.jar overridée permettant de réinitialiser la simulation
+     */
     @Override
     public void restart() {
+        // On remet à zéro le simulateur
         simulateur.restart();
 
-        switch (classeAppelante) {
+        // On réinitialise les données en fonction du test appelant
+        switch (testAppelant) {
             case TestSimulation:
                 TestSimulation.initialize(fichier, gui);
                 break;
@@ -78,6 +92,5 @@ class Simulation implements Simulable {
             default:
                 break;
         }
-
     }
 }
