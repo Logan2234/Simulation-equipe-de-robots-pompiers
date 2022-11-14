@@ -6,10 +6,10 @@ import java.util.zip.DataFormatException;
 
 import Donnees.ChefBasique;
 import Donnees.DonneesSimulation;
-import Donnees.LecteurDonnees;
 import Evenements.Simulateur;
 import Exceptions.EmptyRobotsException;
 import gui.GUISimulator;
+import io.LecteurDonnees;
 
 public class TestBasique {
 
