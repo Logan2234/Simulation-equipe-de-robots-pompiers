@@ -12,6 +12,7 @@ public class EventIntervenir extends Evenement {
         super(date + robot.getTmpVersement());
         this.robot = robot;
         this.incendie = incendie;
+        robot.setLastDate(date + robot.getTmpVersement());
     }
 
     @Override

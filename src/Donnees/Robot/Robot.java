@@ -17,6 +17,7 @@ public abstract class Robot {
     private int qteVersement; // en L.
     private int tmpRemplissage; // en s.
     private double vitesseDefaut; // en m/s.
+    private long lastDate;
     private static Color colRobot;
     private static HashMap<Object, String> noms;
 
@@ -39,6 +40,7 @@ public abstract class Robot {
         this.tmpVersement = tmpVersement;
         this.qteVersement = qteVersement;
         this.tmpRemplissage = tmpReplissage;
+        this.lastDate = 0;
         colRobot = new Color(105, 105, 105);
     }
 
@@ -108,6 +110,17 @@ public abstract class Robot {
      */
     public int getTmpRemplissage() {
         return tmpRemplissage;
+    }
+    
+    /**
+     * @return long lastDate : Dernière date utilisée pour le robot
+     */
+    public long getLastDate(){
+        return lastDate;
+    }
+
+    public void setLastDate(long temps){
+        lastDate = temps;
     }
 
     /**
