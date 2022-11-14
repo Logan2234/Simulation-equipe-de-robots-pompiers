@@ -83,16 +83,21 @@ public class Dessin {
                     tailleCase / 2 + i * tailleCase, Color.GRAY, Color.magenta, tailleCase / 2));
             gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase / 2 + tailleCase * i,
                     Color.BLACK, assimilationRobotString.get(robot.getClass())));
-            gui.addGraphicalElement(new Text(650, 50 * tour + 10, Color.WHITE,
+            gui.addGraphicalElement(new Text(650, 50 * tour + 30, Color.WHITE,
                     assimilationRobotString.get(robot.getClass()) + " : " + Integer.toString(robot.getReservoir())));
         }
         gui.addGraphicalElement(new Text(650, 0, Color.WHITE, simulateur.getDateSimulation())
+    }
+
+    private void dessinDateSimulation(){
+        gui.addGraphicalElement(new Text(650, 30, Color.WHITE, "Date: " + Long.toString(simulateur.getDateSimulation())));
     }
 
     public void dessin() {
         dessinCases();
         dessinIncendies();
         dessinRobots();
+        dessinDateSimulation();
     }
 
 }
