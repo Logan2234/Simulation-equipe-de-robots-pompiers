@@ -24,7 +24,7 @@ class Simulation implements Simulable {
         this.classeAppelante = classeAppelante;
         this.fichier = fichier;
         this.simulateur = simulateur;
-        this.tailleCase = Math.min(gui.getWidth() / donnees.getCarte().getNbColonnes(), gui.getHeight() / donnees.getCarte().getNbLignes());
+        this.tailleCase = Math.min((gui.getPanelWidth() - 10) / donnees.getCarte().getNbColonnes(), (gui.getPanelHeight() - 10) / donnees.getCarte().getNbLignes());
 
         gui.setSimulable(this);
 

@@ -1,6 +1,7 @@
 package Donnees.Robot;
 
 import java.awt.Color;
+import java.util.HashMap;
 
 import Donnees.Case;
 import Donnees.Direction;
@@ -17,6 +18,7 @@ public abstract class Robot {
     private int tmpRemplissage; // en s.
     private double vitesseDefaut; // en m/s.
     private static Color colRobot;
+    private static HashMap<Object, String> noms;
 
     /**
      * @param position      : spécifie la position actuelle du robot
@@ -38,6 +40,17 @@ public abstract class Robot {
         this.qteVersement = qteVersement;
         this.tmpRemplissage = tmpReplissage;
         colRobot = new Color(105, 105, 105);
+    }
+
+    public static String getNom(Object classe){
+        if (noms == null){
+            noms = new HashMap<Object, String>();
+            noms.put(RobotChenilles.class, "C");
+            noms.put(RobotDrone.class, "D");
+            noms.put(RobotPattes.class, "P");
+            noms.put(RobotRoues.class, "R");        
+        }
+        return noms.get(classe);
     }
 
     /**

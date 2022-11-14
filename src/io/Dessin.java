@@ -1,24 +1,17 @@
 package io;
 
-import gui.Rectangle;
-import gui.GUISimulator;
-import gui.GraphicalElement;
-import gui.*;
-
 import java.awt.Color;
-import java.util.HashMap;
 
 import Donnees.Carte;
 import Donnees.Case;
 import Donnees.DonneesSimulation;
 import Donnees.Incendie;
 import Donnees.Robot.Robot;
-import Donnees.Robot.RobotChenilles;
-import Donnees.Robot.RobotDrone;
-import Donnees.Robot.RobotEnum;
-import Donnees.Robot.RobotPattes;
-import Donnees.Robot.RobotRoues;
-import Evenements.Simulateur;;
+import Evenements.Simulateur;
+import gui.GUISimulator;
+import gui.Oval;
+import gui.Rectangle;
+import gui.Text;;
 
 // Comme on utilise ces fonctions dans plusieurs fichiers tests
 // différents, on préfère en faire un fichier à part directement
@@ -62,9 +55,9 @@ public class Dessin {
             gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j,
                     tailleCase / 2 + i * tailleCase, Color.GRAY, Robot.getColor(), tailleCase / 2));
             gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase / 2 + tailleCase * i,
-                    Color.WHITE, RobotEnum.getNom(robot.getClass())));
+                    Color.WHITE, Robot.getNom(robot.getClass())));
             gui.addGraphicalElement(new Text(650, 50 * tour + 30, Color.WHITE,
-                    RobotEnum.getNom(robot.getClass()) + " : " + Integer.toString(robot.getReservoir())));
+                    Robot.getNom(robot.getClass()) + " : " + Integer.toString(robot.getReservoir())));
         }
     }
 
