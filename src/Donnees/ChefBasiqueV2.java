@@ -18,6 +18,8 @@ public class ChefBasiqueV2 {
     private HashMap<Incendie, Robot> incendies_rob;
     private ArrayList<Robot> occupes;
     private CalculPCC calculateur;
+    private ArrayList<Robot> morts;
+
 
     /**
      * Va implémenter la stratégie de base pour le chef pompier
@@ -29,6 +31,7 @@ public class ChefBasiqueV2 {
         this.donnees = donnees;
         this.simulateur = simulateur;
         this.occupes = new ArrayList<Robot>();
+        this.morts = new ArrayList<Robot>();
         this.incendies_rob = new HashMap<Incendie, Robot>();
         calculateur = new CalculPCC(donnees);
         for (Incendie incendie : donnees.getIncendies()){
@@ -52,6 +55,10 @@ public class ChefBasiqueV2 {
     public void gestionIncendies(Incendie incendie){
         for (Robot robot : donnees.getRobots()){
             if (!occupes.contains(robot)) {
+                if (robot.getReservoir() == 0) {
+                    this.morts.add(robot);
+                    continue;
+                }
                 try {
                     occupes.add(robot);
                     incendies_rob.put(incendie, robot);
@@ -60,15 +67,18 @@ public class ChefBasiqueV2 {
                     continue; //on va prendre un autre robot
                 }
             } else {
-                if (robot.getReservoir() != 0 && !incendies_rob.containsValue(robot)){
+                if (robot.getReservoir() == 0) {
+                    occupes.remove(robot);
+                    this.morts.add(robot);
+                } else if (!incendies_rob.containsValue(robot)){
                     occupes.remove(robot); // Si le robot peut continuer, on l'efface
-                }
+                } 
             }
         }
     }
 
     public void strategie() {
-        while (!incendies_rob.isEmpty()) { //gérer cas où les robots sont vidés
+        while (!incendies_rob.isEmpty() && donnees.getRobots().length == morts.size()) { //gérer cas où les robots sont vidés
             for (Incendie incendie : incendies_rob.keySet()) {
                 if (incendies_rob.get(incendie) == null) {
                     gestionIncendies(incendie);
@@ -81,7 +91,7 @@ public class ChefBasiqueV2 {
                     } 
                 }
             }
-        }
-        System.out.println("Tous les incendies sont éteints\n");
+        } if (incendies_rob.isEmpty()) {System.out.println("Tous les incendies sont éteints\n");}
+        else {System.out.println("Tous les robots sont vides\n");}
     }
 }
