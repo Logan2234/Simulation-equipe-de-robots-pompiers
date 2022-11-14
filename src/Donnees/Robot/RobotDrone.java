@@ -7,7 +7,6 @@ import Exceptions.CellOutOfMapException;
 import Exceptions.NoWaterException;
 
 public class RobotDrone extends Robot {
-
     /**
      * @param position : spécifie la position actuelle du robot
      */

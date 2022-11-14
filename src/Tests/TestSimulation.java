@@ -31,7 +31,7 @@ public class TestSimulation {
             Chemin chemin = new Chemin();
             Case pos = robot.getPosition();
             Case nextCase;
-            
+
             Direction[] moves = { Direction.SUD, Direction.SUD, Direction.EST, Direction.EST };
 
             for (Direction dir : moves) {
@@ -41,17 +41,19 @@ public class TestSimulation {
             }
 
             chemin.creerEvenements(simulateur, robot);
-            simulateur.ajouteEvenement(new EventIntervenir(simulateur.getDateDernierEvenement(), robot, donnees.getIncendies().get(4)));
+            simulateur.ajouteEvenement(
+                    new EventIntervenir(simulateur.getDateDernierEvenement(), robot, donnees.getIncendies().get(4)));
             chemin.getChemin().clear();
-            
+
             for (Direction dir : moves) {
                 nextCase = carte.getVoisin(pos, dir);
                 chemin.addElement(nextCase, simulateur.getDateDernierEvenement());
                 pos = nextCase;
             }
-            
+
             chemin.creerEvenements(simulateur, robot);
-            simulateur.ajouteEvenement(new EventIntervenir(simulateur.getDateDernierEvenement(), robot, donnees.getIncendies().get(5)));
+            simulateur.ajouteEvenement(
+                    new EventIntervenir(simulateur.getDateDernierEvenement(), robot, donnees.getIncendies().get(5)));
             chemin.getChemin().clear();
 
             Direction[] moves2 = { Direction.OUEST, Direction.OUEST, Direction.OUEST, Direction.OUEST };
@@ -60,27 +62,26 @@ public class TestSimulation {
                 chemin.addElement(nextCase, simulateur.getDateDernierEvenement());
                 pos = nextCase;
             }
-            
+
             chemin.creerEvenements(simulateur, robot);
-            simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot, simulateur));
+            simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot));
             chemin.getChemin().clear();
-            
+
             chemin.addElement(carte.getVoisin(pos, Direction.NORD), simulateur.getDateDernierEvenement());
             chemin.creerEvenements(simulateur, robot);
             chemin.getChemin().clear();
-                        
+
             robot = donnees.getRobots()[2];
             pos = robot.getPosition();
-            
+
             for (int i = 0; i < 4; i++) {
                 nextCase = carte.getVoisin(pos, Direction.OUEST);
                 chemin.addElement(nextCase, 0);
-                pos = nextCase;    
+                pos = nextCase;
             }
-            
+
             chemin.creerEvenements(simulateur, robot);
-            simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot, simulateur));
-            
+            simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot));
 
         } catch (IllegalPathException e) {
             System.out.println(e);

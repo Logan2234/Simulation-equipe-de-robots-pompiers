@@ -4,9 +4,6 @@ import Donnees.Case;
 import Donnees.NatureTerrain;
 
 public class RobotRoues extends Robot {
-    // private int tempsRemplissage = 10;
-    // Intervention unitaire : 100 litres / 5secs
-
     /**
      * @param position : spécifie la position actuelle du robot
      */
