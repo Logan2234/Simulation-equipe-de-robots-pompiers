@@ -70,7 +70,7 @@ public class CalculPCC {
      * @return Chemin optimal que le robot devrait prendre pour aller d'une case à
      *         l'autre.
      */
-    public Chemin dijkstra(Case caseCourante, Case caseSuiv, Robot robot) throws PasDeCheminException {
+    public Chemin dijkstra(Case caseCourante, Case caseSuiv, Robot robot, long date) throws PasDeCheminException {
         long distance[][] = new long[this.donnees.getCarte().getNbLignes()][this.donnees.getCarte().getNbColonnes()];
         Chemin chemins[][] = new Chemin[this.donnees.getCarte().getNbLignes()][this.donnees.getCarte().getNbColonnes()];
         ArrayList<Coordonees> ouverts = new ArrayList<Coordonees>();
@@ -82,7 +82,7 @@ public class CalculPCC {
             }
         }
         distance[caseCourante.getLigne()][caseCourante.getColonne()] = 0;
-        chemins[caseCourante.getLigne()][caseCourante.getColonne()].addElement(caseCourante, 0);
+        chemins[caseCourante.getLigne()][caseCourante.getColonne()].addElement(caseCourante, date);
 
         Case caseATraiter;
         Case caseMinimale;
