@@ -3,11 +3,11 @@ package Donnees;
 import java.awt.Color;
 
 public enum NatureTerrain {
-    EAU(Color.BLUE),
-    FORET(Color.GREEN),
-    ROCHE(Color.GRAY),
+    EAU(new Color(135, 206, 235)),
+    FORET(new Color(34, 139, 34)),
+    ROCHE(new Color(128, 132, 135)),
     TERRAIN_LIBRE(Color.WHITE),
-    HABITAT(Color.ORANGE);
+    HABITAT(new Color(220, 85, 57));
 
     private Color color;
 

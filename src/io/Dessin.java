@@ -2,7 +2,8 @@ package io;
 
 import gui.Rectangle;
 import gui.GUISimulator;
-import gui.Text;
+import gui.GraphicalElement;
+import gui.*;
 
 import java.awt.Color;
 import java.util.HashMap;
@@ -64,8 +65,8 @@ public class Dessin {
                 Case pos = incendie.getPosition();
                 int i = pos.getLigne();
                 int j = pos.getColonne();
-                gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j,
-                        tailleCase / 2 + i * tailleCase, Color.GRAY, Color.RED, tailleCase / 2));
+                gui.addGraphicalElement(new Oval(tailleCase / 2 + tailleCase * j,
+                        tailleCase / 2 + i * tailleCase, Color.GRAY, Incendie.getColor(), tailleCase / 2));
                 gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase / 2 + tailleCase * i,
                         Color.BLACK, Integer.toString(incendie.getLitres())));
             }
@@ -80,9 +81,9 @@ public class Dessin {
             int i = pos.getLigne();
             int j = pos.getColonne();
             gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j,
-                    tailleCase / 2 + i * tailleCase, Color.GRAY, Color.magenta, tailleCase / 2));
+                    tailleCase / 2 + i * tailleCase, Color.GRAY, Robot.getColor(), tailleCase / 2));
             gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase / 2 + tailleCase * i,
-                    Color.BLACK, assimilationRobotString.get(robot.getClass())));
+                    Color.WHITE, assimilationRobotString.get(robot.getClass())));
             gui.addGraphicalElement(new Text(650, 50 * tour + 30, Color.WHITE,
                     assimilationRobotString.get(robot.getClass()) + " : " + Integer.toString(robot.getReservoir())));
         }
