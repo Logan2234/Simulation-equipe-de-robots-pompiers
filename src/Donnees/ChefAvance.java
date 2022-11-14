@@ -184,11 +184,16 @@ public class ChefAvance {
      * Avancé
      */
     public void strategie() {
+        // On supposera qu'il existe toujours une source d'eau accessible par tous les robopts sur la carte
         while (!incendies_rob.isEmpty()) {
-            for (Incendie incendie : incendies_rob.keySet()) {
+            for (Incendie incendie : donnees.getIncendies()) {
+                // Si il est déjà éteint, on ne va pas traiter son cas
+                if (!incendies_rob.containsKey(incendie)) {
+                    continue;
+                }
                 if (incendies_rob.get(incendie) == null) {
                     gestionIncendies(incendie);
-                }
+                } // TODO else avec libération des robots
             }
         }
     }
