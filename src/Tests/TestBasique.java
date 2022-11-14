@@ -4,12 +4,10 @@ import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 
-import Donnees.ChefBasique;
 import Donnees.ChefBasiqueV2;
 import Donnees.DonneesSimulation;
 import Donnees.LecteurDonnees;
 import Evenements.Simulateur;
-import Exceptions.EmptyRobotsException;
 import gui.GUISimulator;
 
 public class TestBasique {

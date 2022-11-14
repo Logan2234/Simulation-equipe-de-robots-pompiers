@@ -1,5 +1,7 @@
 package Donnees.Robot;
 
+import java.awt.Color;
+
 import Donnees.Case;
 import Donnees.Direction;
 import Donnees.NatureTerrain;
@@ -14,8 +16,8 @@ public abstract class Robot {
     private int tmpVersement; // en s.
     private int qteVersement; // en L.
     private int tmpRemplissage; // en s.
-
     private double vitesseDefaut; // en m/s.
+    private static Color colRobot;
 
     /**
      * @param position      : spécifie la position actuelle du robot
@@ -36,6 +38,7 @@ public abstract class Robot {
         this.tmpVersement = tmpVersement;
         this.qteVersement = qteVersement;
         this.tmpRemplissage = tmpReplissage;
+        colRobot = new Color(105, 105, 105);
     }
 
     /**
@@ -93,6 +96,13 @@ public abstract class Robot {
      */
     public int getTmpRemplissage() {
         return tmpRemplissage;
+    }
+
+    /**
+     * @return Color : Couleur des robots
+     */
+    public static Color getColor() {
+        return colRobot;
     }
 
     /**
@@ -164,5 +174,4 @@ public abstract class Robot {
         return "[position=" + position + ", capacite=" + capacite + ", reservoir=" + reservoir
                 + ", vitesse_defaut=" + vitesseDefaut + "]";
     }
-
 }
