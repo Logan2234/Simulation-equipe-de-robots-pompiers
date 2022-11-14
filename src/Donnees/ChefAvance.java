@@ -19,7 +19,7 @@ public class ChefAvance {
     private Carte carte;
     private DonneesSimulation donnees;
     private Simulateur simulateur;
-    private HashMap<Incendie, Robot> incendies_rob;
+    private HashMap<Incendie, ArrayList<Robot>> incendies_rob;
     private ArrayList<Robot> occupes;
     private CalculPCC calculateur;
     private ArrayList<Case> casesAvecEau;
@@ -29,10 +29,10 @@ public class ChefAvance {
         this.donnees = donnees;
         this.simulateur = simulateur;
         this.occupes = new ArrayList<Robot>();
-        this.incendies_rob = new HashMap<Incendie, Robot>();
+        this.incendies_rob = new HashMap<Incendie, ArrayList<Robot>>();
         calculateur = new CalculPCC(donnees);
         for (Incendie incendie : donnees.getIncendies()) {
-            incendies_rob.put(incendie, null);
+            incendies_rob.put(incendie, new ArrayList<Robot>());
         }
 
         // On va déclarer les cases qui contiennent de l'eau
@@ -154,6 +154,11 @@ public class ChefAvance {
                             occupes.add(robot);
                         cheminVersEau.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'eau
                         simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
+                        if (incendies_rob.containsKey(incendie) && incendies_rob.get(incendie).contains(robotAMobiliser)){
+                            ArrayList<Robot> nouvelleListe = incendies_rob.get(incendie);
+                            nouvelleListe.remove(robotAMobiliser);
+                            incendies_rob.put(incendie, nouvelleListe);
+                        }
                     } catch (PasEauDansCarte e) {
                         continue;
                     } catch (PasDeCheminException e) {
@@ -170,23 +175,25 @@ public class ChefAvance {
         // Maintenant, si on a trouvé un robot, on l'envoie travailler
         try {
             if (robotTrouve) {
-                incendies_rob.put(incendie, robotAMobiliser);
+                ArrayList<Robot> nouvelleListe = incendies_rob.get(incendie);
+                nouvelleListe.add(robotAMobiliser);
+                incendies_rob.put(incendie, nouvelleListe);
                 cheminAParcourir.creerEvenements(this.simulateur, robotAMobiliser);
                 if (incendie.getLitres() != 0){
                     if (robotAMobiliser.getCapacite()!= -1){ // si ce n'est pas un robot à pattes
                         for (int i = 0; i < Math.min(incendie.getLitres() / robotAMobiliser.getQteVersement(), robotAMobiliser.getReservoir() / robotAMobiliser.getQteVersement()); i++) 
                         {
-                            simulateur.ajouteEvenement(new EventIntervenir(simulateur.getDateDernierEvenement(), robotAMobiliser, incendie));
+                            simulateur.ajouteEvenement(new EventIntervenir(robotAMobiliser.getLastDate(), robotAMobiliser, incendie));
                         }
                     } else { // le robot à pattes va verser son eau
                         for (int i = 0; i < incendie.getLitres() / robotAMobiliser.getQteVersement(); i++) 
                         {
-                            simulateur.ajouteEvenement(new EventIntervenir(simulateur.getDateDernierEvenement(), robotAMobiliser, incendie));
+                            simulateur.ajouteEvenement(new EventIntervenir(robotAMobiliser.getLastDate(), robotAMobiliser, incendie));
                         }
                     }
                 } else {
                     occupes.remove(robotAMobiliser);
-                    incendies_rob.put(incendie, null);
+                    incendies_rob.remove(incendie);
                 }
             }
         } catch (IllegalPathException e) {
@@ -201,7 +208,11 @@ public class ChefAvance {
      */
     public void strategie() {
         while (!incendies_rob.isEmpty()) {
-            for (Incendie incendie : incendies_rob.keySet()) {
+            for (Incendie incendie : donnees.getIncendies()) {
+                // Si il est déjà éteint, on ne va pas traiter son cas
+                if (!incendies_rob.containsKey(incendie)) {
+                    continue;
+                }
                 gestionIncendies(incendie);
             }
         }
