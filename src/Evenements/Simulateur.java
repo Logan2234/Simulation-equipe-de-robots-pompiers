@@ -9,21 +9,15 @@ import Exceptions.NoWaterException;
 public class Simulateur {
 
     private long dateSimulation;
-    private long dateDernierEvenement;
     private PriorityQueue<Evenement> evenementsActuels;
 
     public Simulateur() {
         this.dateSimulation = 0;
-        this.dateDernierEvenement = 0;
         this.evenementsActuels = new PriorityQueue<Evenement>();
     }
 
     public long getDateSimulation() {
         return dateSimulation;
-    }
-
-    public long getDateDernierEvenement() {
-        return dateDernierEvenement;
     }
 
     public void restart() {
@@ -41,7 +35,6 @@ public class Simulateur {
 
     public void ajouteEvenement(Evenement e) {
         this.evenementsActuels.add(e);
-        this.dateDernierEvenement = e.getDate();
     }
 
     public void execute() throws NoFireException, CellOutOfMapException, NoWaterException {
@@ -64,6 +57,7 @@ public class Simulateur {
 
     @Override
     public String toString() {
-        return "Simulateur [dateSimulation=" + this.dateSimulation + ", evenementsActuels=" + this.evenementsActuels + "]";
+        return "Simulateur [dateSimulation=" + this.dateSimulation + ", evenementsActuels=" + this.evenementsActuels
+                + "]";
     }
 }

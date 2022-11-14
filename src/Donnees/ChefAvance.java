@@ -152,7 +152,7 @@ public class ChefAvance {
                         if (!occupes.contains(robot))
                             occupes.add(robot);
                         cheminVersEau.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'eau
-                        simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot));
+                        simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
                     } catch (PasEauDansCarte e) {
                         continue;
                     } catch (PasDeCheminException e) {
