@@ -34,14 +34,6 @@ public class Simulateur {
     public void incrementeDate() {
         this.dateSimulation += 1;
     }
-    
-    public void addDate(long temps) {
-        this.dateSimulation += temps;
-    }
-
-    public void updateDate(long temps){
-        this.dateSimulation -= temps;
-    }
 
     public void incrementeDate(long n) {
         this.dateSimulation += n;

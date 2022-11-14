@@ -9,6 +9,7 @@ public class EventRemplir extends Evenement {
     public EventRemplir(long date, Robot robot) {
         super(date + robot.getTmpRemplissage());
         this.robot = robot;
+        robot.setLastDate(date + robot.getTmpRemplissage());
     }
 
     @Override

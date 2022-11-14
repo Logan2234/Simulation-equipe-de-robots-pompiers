@@ -29,7 +29,6 @@ public class TestDijkstra {
             Chemin chemin = new Chemin();
 
             chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot);
-            System.out.println(chemin.toString());
             chemin.creerEvenements(simulateur, robot);
 
         } catch (IllegalPathException e) {
