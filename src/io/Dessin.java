@@ -15,7 +15,8 @@ import Donnees.Robot.Robot;
 import Donnees.Robot.RobotChenilles;
 import Donnees.Robot.RobotDrone;
 import Donnees.Robot.RobotPattes;
-import Donnees.Robot.RobotRoues;;
+import Donnees.Robot.RobotRoues;
+import Evenements.Simulateur;;
 
 // Comme on utilise ces fonctions dans plusieurs fichiers tests
 // différents, on préfère en faire un fichier à part directement
@@ -26,10 +27,12 @@ public class Dessin {
     private GUISimulator gui;
     private int tailleCase;
     private HashMap<Object, String> assimilationRobotString;
+    private Simulateur simulateur;
 
-    public Dessin(DonneesSimulation donnees, GUISimulator gui) {
+    public Dessin(DonneesSimulation donnees, GUISimulator gui, Simulateur simulateur) {
         this.donnees = donnees;
         this.gui = gui;
+        this.simulateur = simulateur;
 
         int largeur_case = 800 / donnees.getCarte().getNbColonnes();
         int hauteur_case = 600 / donnees.getCarte().getNbLignes();
@@ -83,6 +86,7 @@ public class Dessin {
             gui.addGraphicalElement(new Text(650, 50 * tour + 10, Color.WHITE,
                     assimilationRobotString.get(robot.getClass()) + " : " + Integer.toString(robot.getReservoir())));
         }
+        gui.addGraphicalElement(new Text(650, 0, Color.WHITE, simulateur.getDateSimulation())
     }
 
     public void dessin() {

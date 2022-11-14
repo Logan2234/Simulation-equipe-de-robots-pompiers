@@ -43,7 +43,7 @@ public class ChefBasiqueV2 {
             Chemin chemin = new Chemin();
             chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot);
             chemin.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'incendie
-            this.simulateur.ajouteEvenement(new EventIntervenir(date + chemin.getTempsChemin(), robot, incendie)); // TODO
+            this.simulateur.ajouteEvenement(new EventIntervenir(simulateur.getDateSimulation(), robot, incendie)); // TODO voir si la date est la bonne
         } catch (IllegalPathException e){
             System.out.println(e);
         }
