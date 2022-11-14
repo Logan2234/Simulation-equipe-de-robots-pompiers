@@ -77,7 +77,7 @@ public class TestScenarios {
                     chemin.creerEvenements(simulateur, robot2);
                     chemin.getChemin().clear();
 
-                    simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot2, simulateur));
+                    simulateur.ajouteEvenement(new EventRemplir(simulateur.getDateDernierEvenement(), robot2));
 
                     Direction[] dirs2 = { Direction.EST, Direction.EST };
 

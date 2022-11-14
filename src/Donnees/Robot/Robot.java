@@ -42,13 +42,13 @@ public abstract class Robot {
         colRobot = new Color(105, 105, 105);
     }
 
-    public static String getNom(Object classe){
-        if (noms == null){
+    public static String getNom(Object classe) {
+        if (noms == null) {
             noms = new HashMap<Object, String>();
             noms.put(RobotChenilles.class, "C");
             noms.put(RobotDrone.class, "D");
             noms.put(RobotPattes.class, "P");
-            noms.put(RobotRoues.class, "R");        
+            noms.put(RobotRoues.class, "R");
         }
         return noms.get(classe);
     }

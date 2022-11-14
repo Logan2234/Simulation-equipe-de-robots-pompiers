@@ -46,9 +46,7 @@ public class Dessin {
     }
 
     private static void dessinRobots(DonneesSimulation donnees, GUISimulator gui, int tailleCase) {
-        int tour = 0;
         for (Robot robot : donnees.getRobots()) {
-            tour++;
             Case pos = robot.getPosition();
             int i = pos.getLigne();
             int j = pos.getColonne();
@@ -56,19 +54,22 @@ public class Dessin {
                     tailleCase / 2 + i * tailleCase, Color.GRAY, Robot.getColor(), tailleCase / 2));
             gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase / 2 + tailleCase * i,
                     Color.WHITE, Robot.getNom(robot.getClass())));
-            gui.addGraphicalElement(new Text(650, 50 * tour + 30, Color.WHITE,
-                    Robot.getNom(robot.getClass()) + " : " + Integer.toString(robot.getReservoir())));
+            gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j,
+                    tailleCase / 2 + tailleCase * i + tailleCase / 3, Color.WHITE,
+                    Integer.toString(robot.getReservoir())));
         }
     }
 
-    private static void dessinDateSimulation(GUISimulator gui, Simulateur simulateur){
-        gui.addGraphicalElement(new Text(650, 30, Color.WHITE, "Date: " + Long.toString(simulateur.getDateSimulation())));
+    private static void dessinDateSimulation(GUISimulator gui, Simulateur simulateur) {
+        gui.addGraphicalElement(
+                new Text(gui.getPanelWidth() - 150, gui.getPanelHeight() / 2, Color.WHITE,
+                        "Date: " + Long.toString(simulateur.getDateSimulation())));
     }
 
     public static void dessin(DonneesSimulation donnees, GUISimulator gui, Simulateur simulateur, int tailleCase) {
         dessinCases(donnees, gui, tailleCase);
-        dessinIncendies(donnees, gui, tailleCase);
         dessinRobots(donnees, gui, tailleCase);
+        dessinIncendies(donnees, gui, tailleCase);
         dessinDateSimulation(gui, simulateur);
     }
 
