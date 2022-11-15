@@ -106,6 +106,13 @@ public class Carte {
         return true;
     }
 
+    
+    /** 
+     * @param src : la case regardée
+     * @param dir : direction regardée par rapport à la case
+     * @param robot : robot concerné par la recherche d'une case voisine
+     * @return boolean : true si le robot peut se déplacer sur la case voisine
+     */
     public boolean voisinExiste(Case src, Direction dir, Robot robot) {
         try {
             boolean natureCompatible = robot.getVitesse(this.getVoisin(src, dir).getNature()) != 0;
