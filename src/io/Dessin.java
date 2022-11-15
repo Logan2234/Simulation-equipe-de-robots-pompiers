@@ -7,7 +7,6 @@ import Donnees.Carte;
 import Donnees.Case;
 import Donnees.DonneesSimulation;
 import Donnees.Incendie;
-import Donnees.NatureTerrain;
 import Donnees.Robot.Robot;
 import Evenements.Simulateur;
 import gui.GUISimulator;

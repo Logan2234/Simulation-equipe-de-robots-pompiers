@@ -26,6 +26,10 @@ public class Chemin {
         return chemin;
     }
 
+    
+    /** 
+     * @return Chemin : Copie du chemin
+     */
     public Chemin deepCopyChemin(){
         Chemin cheminCopy = new Chemin();
         for(AssociationTempsCase temp : this.chemin){
