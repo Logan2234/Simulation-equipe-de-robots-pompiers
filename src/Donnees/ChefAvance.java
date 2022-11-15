@@ -113,7 +113,9 @@ public class ChefAvance {
      * 
      * @param incendie - Incendie à traiter par les robots
      */
-    public void gestionIncendies(Incendie incendie) {
+    public void gestionIncendies(Incendie incendie) throws PasEauDansCarte{
+
+        // Cherchons le robot le plus proche de l'incendie
         boolean robotTrouve = false;
         Robot robotAMobiliser = donnees.getRobots()[0]; // On initialise avec un robot random
         Chemin cheminAParcourir = new Chemin(); // On initialise avec un chemin random
@@ -125,6 +127,7 @@ public class ChefAvance {
                 try {
                     Chemin chemin = new Chemin();
                     chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot, robot.getLastDate());
+
                     if (chemin.getTempsChemin() < tempsDeplacement) {
                         robotTrouve = true;
                         robotAMobiliser = robot;
@@ -145,11 +148,11 @@ public class ChefAvance {
                         occupes.remove(robot);
                         if (incendies_rob.containsKey(incendie) && incendies_rob.get(incendie).contains(robot)){
                             ArrayList<Robot> nouvelleListe = incendies_rob.get(incendie);
-                            nouvelleListe.remove(robotAMobiliser);
+                            nouvelleListe.remove(robot);
                             incendies_rob.put(incendie, nouvelleListe);
                         }
                     } catch (PasEauDansCarte e) {
-                        continue; // TODO: throw exception pour signaler que ce n'est pas normal (fichier défectueux),
+                        throw e;
                                     // ou alors ajouter l'exception  EmptyRobots
                     } catch (PasDeCheminException e) { 
                         continue;
@@ -207,7 +210,11 @@ public class ChefAvance {
                 if (!incendies_rob.containsKey(incendie)) {
                     continue;
                 }
-                gestionIncendies(incendie);
+                try{
+                    gestionIncendies(incendie);
+                } catch (PasEauDansCarte e){
+
+                }
             }
         }
     }
