@@ -114,8 +114,6 @@ public class ChefAvance {
      * @param incendie - Incendie à traiter par les robots
      */
     public void gestionIncendies(Incendie incendie) {
-
-        
         boolean robotTrouve = false;
         Robot robotAMobiliser = donnees.getRobots()[0]; // On initialise avec un robot random
         Chemin cheminAParcourir = new Chemin(); // On initialise avec un chemin random
@@ -172,12 +170,16 @@ public class ChefAvance {
         // Maintenant, si on a trouvé un robot, on l'envoie travailler
         try {
             if (robotTrouve) {
+                // Mobilisation du robot
                 ArrayList<Robot> nouvelleListe = incendies_rob.get(incendie);
                 nouvelleListe.add(robotAMobiliser);
                 incendies_rob.put(incendie, nouvelleListe);
                 cheminAParcourir.creerEvenements(this.simulateur, robotAMobiliser);
+                occupes.add(robotAMobiliser);
+
+                // On regarde si le feu n'a pas été éteint avant
                 if (incendie.getLitres() != 0){
-                    if (robotAMobiliser.getCapacite()!= -1){ // si ce n'est pas un robot à pattes
+                    if (robotAMobiliser.getCapacite() != -1){ // si ce n'est pas un robot à pattes
                         for (int i = 0; i < Math.min(incendie.getLitres() / robotAMobiliser.getQteVersement(), robotAMobiliser.getReservoir() / robotAMobiliser.getQteVersement()); i++) 
                         {
                             simulateur.ajouteEvenement(new EventIntervenir(robotAMobiliser.getLastDate(), robotAMobiliser, incendie));
