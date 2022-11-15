@@ -8,9 +8,9 @@ import java.awt.Color;
  */
 public enum NatureTerrain {
     EAU(new Color(135, 206, 235)),
-    FORET(new Color(4, 106, 56), "assets/Forest.png"),
+    FORET(new Color(4, 106, 56), "assets/Forest2.png"),
     ROCHE(new Color(128, 132, 135)),
-    TERRAIN_LIBRE(new Color(48, 183, 0)),
+    TERRAIN_LIBRE(new Color(48, 183, 0), "assets/Grass.png"),
     HABITAT(new Color(220, 85, 57));
 
     private Color color;

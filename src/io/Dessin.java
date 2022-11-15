@@ -31,17 +31,25 @@ public class Dessin {
         for (int i = 0; i < carte.getNbLignes(); i++) {
             for (int j = 0; j < carte.getNbColonnes(); j++) {
                 Case current_case = carte.getCase(i, j);
-                if (current_case.getNature() != NatureTerrain.FORET)
-                    gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j,
-                            tailleCase / 2 + i * tailleCase, Color.BLACK, current_case.getNature().getColor(),
-                            tailleCase));
-                else {
-                    gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j,
-                            tailleCase / 2 + i * tailleCase, Color.BLACK, NatureTerrain.TERRAIN_LIBRE.getColor(),
-                            tailleCase));
+                if (current_case.getNature() == NatureTerrain.FORET) {
+                    // if (carte.getCase(i, j + 1).getNature() == NatureTerrain.FORET) {
+                    //     gui.addGraphicalElement(new ImageElement(tailleCase * j + tailleCase / 2,
+                    //             i * tailleCase, current_case.getNature().getImagePath(), tailleCase, tailleCase, gui));
+                    // }
+                    // if (carte.getCase(i + 1, j).getNature() == NatureTerrain.FORET) {
+                    //     gui.addGraphicalElement(new ImageElement(tailleCase * j,
+                    //             i * tailleCase + tailleCase / 2, current_case.getNature().getImagePath(), tailleCase,
+                    //             tailleCase, gui));
+                    // }
                     gui.addGraphicalElement(new ImageElement(tailleCase * j,
                             i * tailleCase, current_case.getNature().getImagePath(), tailleCase, tailleCase, gui));
-                }
+                } else if (current_case.getNature() == NatureTerrain.TERRAIN_LIBRE) {
+                    gui.addGraphicalElement(new ImageElement(tailleCase * j,
+                            i * tailleCase, current_case.getNature().getImagePath(), tailleCase, tailleCase, gui));
+                } else
+                    gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j,
+                            tailleCase / 2 + i * tailleCase, current_case.getNature().getColor(),
+                            current_case.getNature().getColor(), tailleCase));
             }
         }
     }
@@ -87,11 +95,12 @@ public class Dessin {
             gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase / 2 + tailleCase * i,
                     Color.WHITE, Robot.getNom(robot.getClass())));
             // Dessin de la jauge
-            gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j + 3 * tailleCase / 10,
-                    tailleCase * i + tailleCase / 2
-                            + (int) ((tailleCase / 4) * (1 - (float) robot.getReservoir() / robot.getCapacite())),
-                    Color.BLUE, Color.BLUE, 3,
-                    (int) (tailleCase / 2 * ((float) robot.getReservoir() / robot.getCapacite()))));
+            if (robot.getReservoir() != 0)
+                gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j + 3 * tailleCase / 10,
+                        tailleCase * i + tailleCase / 2
+                                + (int) ((tailleCase / 4) * (1 - (float) robot.getReservoir() / robot.getCapacite())),
+                        Color.BLUE, Color.BLUE, 3,
+                        (int) (tailleCase / 2 * ((float) robot.getReservoir() / robot.getCapacite()))));
         }
     }
 
