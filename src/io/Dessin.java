@@ -1,18 +1,21 @@
 package io;
 
 import java.awt.Color;
+import java.awt.image.ImageObserver;
 import java.util.LinkedList;
 
 import Donnees.Carte;
 import Donnees.Case;
 import Donnees.DonneesSimulation;
 import Donnees.Incendie;
+import Donnees.NatureTerrain;
 import Donnees.Robot.Robot;
 import Evenements.Simulateur;
 import gui.GUISimulator;
 import gui.Oval;
 import gui.Rectangle;
 import gui.Text;
+import gui.ImageElement;
 
 public class Dessin {
 
@@ -28,9 +31,17 @@ public class Dessin {
         for (int i = 0; i < carte.getNbLignes(); i++) {
             for (int j = 0; j < carte.getNbColonnes(); j++) {
                 Case current_case = carte.getCase(i, j);
-                gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j,
-                        tailleCase / 2 + i * tailleCase, Color.BLACK, current_case.getNature().getColor(),
-                        tailleCase));
+                if (current_case.getNature() != NatureTerrain.FORET)
+                    gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j,
+                            tailleCase / 2 + i * tailleCase, Color.BLACK, current_case.getNature().getColor(),
+                            tailleCase));
+                else {
+                    gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j,
+                            tailleCase / 2 + i * tailleCase, Color.BLACK, NatureTerrain.TERRAIN_LIBRE.getColor(),
+                            tailleCase));
+                    gui.addGraphicalElement(new ImageElement(tailleCase * j,
+                            i * tailleCase, current_case.getNature().getImagePath(), tailleCase, tailleCase, gui));
+                }
             }
         }
     }
@@ -72,9 +83,15 @@ public class Dessin {
             int j = pos.getColonne();
             gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j,
                     tailleCase / 2 + i * tailleCase, Color.GRAY, Robot.getColor(), tailleCase / 2));
+            // Dessin du texte représentant le type de robot
             gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase / 2 + tailleCase * i,
                     Color.WHITE, Robot.getNom(robot.getClass())));
-            gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j + tailleCase / 3, tailleCase / 2 + tailleCase * i, Color.CYAN, Color.CYAN, 3, (int)(tailleCase / 2 * ((float)robot.getReservoir() / robot.getCapacite()))));
+            // Dessin de la jauge
+            gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j + 3 * tailleCase / 10,
+                    tailleCase * i + tailleCase / 2
+                            + (int) ((tailleCase / 4) * (1 - (float) robot.getReservoir() / robot.getCapacite())),
+                    Color.BLUE, Color.BLUE, 3,
+                    (int) (tailleCase / 2 * ((float) robot.getReservoir() / robot.getCapacite()))));
         }
     }
 
