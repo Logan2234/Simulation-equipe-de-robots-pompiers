@@ -113,7 +113,7 @@ public class ChefAvance {
      * 
      * @param incendie - Incendie à traiter par les robots
      */
-    public void gestionIncendies(Incendie incendie) {
+    public void gestionIncendies(Incendie incendie) throws PasEauDansCarte{
 
         // Cherchons le robot le plus proche de l'incendie
         boolean robotTrouve = false;
@@ -147,18 +147,18 @@ public class ChefAvance {
                 // Si le réservoir du robot est vide, on va essayer de le remplir
                 if (robot.getReservoir() == 0) {
                     try {
-                        Chemin cheminVersEau = ouAllerRemplirReservoir(robotAMobiliser);
+                        Chemin cheminVersEau = ouAllerRemplirReservoir(robot);
                         if (!occupes.contains(robot)) // TODO : ne passera jamais dedans cf TODO précédent
                             occupes.add(robot);
                         cheminVersEau.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'eau
                         simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
-                        if (incendies_rob.containsKey(incendie) && incendies_rob.get(incendie).contains(robotAMobiliser)){
+                        if (incendies_rob.containsKey(incendie) && incendies_rob.get(incendie).contains(robot))){
                             ArrayList<Robot> nouvelleListe = incendies_rob.get(incendie);
-                            nouvelleListe.remove(robotAMobiliser);
+                            nouvelleListe.remove(robot);
                             incendies_rob.put(incendie, nouvelleListe);
                         }
                     } catch (PasEauDansCarte e) {
-                        continue; // TODO: throw exception pour signaler que ce n'est pas normal (fichier défectueux),
+                        throw e;
                                     // ou alors ajouter l'exception  EmptyRobots
                     } catch (PasDeCheminException e) {
                         continue;
@@ -212,7 +212,11 @@ public class ChefAvance {
                 if (!incendies_rob.containsKey(incendie)) {
                     continue;
                 }
-                gestionIncendies(incendie);
+                try{
+                    gestionIncendies(incendie);
+                } catch (PasEauDansCarte e){
+
+                }
             }
         }
     }
