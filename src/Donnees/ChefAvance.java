@@ -147,6 +147,7 @@ public class ChefAvance {
                 if (robot.getReservoir() == 0) {
                     try {
                         Chemin cheminVersEau = ouAllerRemplirReservoir(robot);
+                        System.out.println(robot.toString() + " se remplit");
                         cheminVersEau.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'eau et se remplit
                         simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
                         occupes.remove(robot);
@@ -165,22 +166,29 @@ public class ChefAvance {
                         System.out.println(e);
                         continue;
                     }
-                }
+                } 
             }
         }
         // Maintenant, si on a trouvé un robot, on l'envoie travailler
         if (robotTrouve) {
+            System.out.println(incendie);
+            System.out.println(robotAMobiliser);
+            System.out.println(occupes);
             try {
                 // Mobilisation du robot en l'ajoutant à la liste
                 ArrayList<Robot> nouvelleListe = incendies_rob.get(incendie);
                 nouvelleListe.add(robotAMobiliser);
                 incendies_rob.put(incendie, nouvelleListe);
-                cheminAParcourir.creerEvenements(this.simulateur, robotAMobiliser);
+                //System.out.println(cheminAParcourir);
                 occupes.add(robotAMobiliser);
+                cheminAParcourir.creerEvenements(simulateur, robotAMobiliser);
                 // On regarde si le feu n'a pas été éteint avant
                 if (incendie.getLitres() != 0){
+                    System.out.println("On va éteindre ");
+                    System.out.println(cheminAParcourir);
                     if (robotAMobiliser.getCapacite() != -1){ // si ce n'est pas un robot à pattes
-                        for (int i = 0; i < Math.min(incendie.getLitres() / robotAMobiliser.getQteVersement(), robotAMobiliser.getReservoir() / robotAMobiliser.getQteVersement()); i++) 
+                        for (int i = 0; i < Math.min(incendie.getLitres() / robotAMobiliser.getQteVersement(),
+                                        robotAMobiliser.getReservoir() / robotAMobiliser.getQteVersement()); i++) 
                         {
                             simulateur.ajouteEvenement(new EventIntervenir(robotAMobiliser.getLastDate(), robotAMobiliser, incendie));
                         }
@@ -190,15 +198,29 @@ public class ChefAvance {
                             simulateur.ajouteEvenement(new EventIntervenir(robotAMobiliser.getLastDate(), robotAMobiliser, incendie));
                         }
                     }
+                    // On démobilise le robot
                     if (incendies_rob.containsKey(incendie) && incendies_rob.get(incendie).contains(robotAMobiliser)){
                         nouvelleListe.remove(robotAMobiliser);
                         incendies_rob.put(incendie, nouvelleListe);
                     }
-                } else {
-                    if (robotAMobiliser.getReservoir() > 0)
-                        occupes.remove(robotAMobiliser);
-                    else if (robotAMobiliser.getReservoir() == 0 && !occupes.contains(robotAMobiliser))
+                    System.out.println("On a essayé d'éteindre");
+                    // On regarde l'état de l'incendie
+                    if (incendie.getLitres() == 0){
+                        incendies_rob.remove(incendie);
+                        System.out.println("On l'a éteint");
+                    }
+                    if (robotAMobiliser.getReservoir() == 0 && !occupes.contains(robotAMobiliser)){
                         occupes.add(robotAMobiliser);
+                    }
+                // Sinon on annule l'opération
+                } else {
+                    System.out.println("On l'a éteint avant nous\n");
+                    if (robotAMobiliser.getReservoir() > 0){
+                        occupes.remove(robotAMobiliser);
+                    }
+                    else if (robotAMobiliser.getReservoir() == 0 && !occupes.contains(robotAMobiliser)){
+                        occupes.add(robotAMobiliser);
+                    }
                     incendies_rob.remove(incendie);
                 }
             } catch (IllegalPathException e) {
@@ -206,6 +228,7 @@ public class ChefAvance {
             }
         }
     }
+
 
     /**
      * Fonction executant la stratégie d'extinction des feux du Chef des Pompiers
