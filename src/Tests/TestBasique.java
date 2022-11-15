@@ -6,10 +6,10 @@ import java.util.zip.DataFormatException;
 
 import Donnees.ChefBasique;
 import Donnees.DonneesSimulation;
-import Donnees.LecteurDonnees;
 import Evenements.Simulateur;
 import Exceptions.EmptyRobotsException;
 import gui.GUISimulator;
+import io.LecteurDonnees;
 
 public class TestBasique {
 
@@ -20,8 +20,6 @@ public class TestBasique {
             Simulateur simulateur = new Simulateur();
             Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestBasique, fichier);
 
-            // ChefBasique chef = new ChefBasique(donnees, simulateur);
-            // chef.strategie();
             ChefBasique chef = new ChefBasique(donnees, simulateur);
             try {
                 chef.strategie();
@@ -34,11 +32,7 @@ public class TestBasique {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {
             System.out.println("\n\t**format du fichier " + fichier + " invalide: " + e.getMessage());
-        } 
-        // catch (EmptyRobotsException e) {
-        //     System.out.println(e);
-        //}
-
+        }
     }
 
     public static void main(String[] args) {

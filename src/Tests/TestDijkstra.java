@@ -8,12 +8,12 @@ import Autre.CalculPCC;
 import Autre.Chemin;
 import Donnees.DonneesSimulation;
 import Donnees.Incendie;
-import Donnees.LecteurDonnees;
 import Donnees.Robot.Robot;
 import Evenements.Simulateur;
 import Exceptions.IllegalPathException;
 import Exceptions.PasDeCheminException;
 import gui.GUISimulator;
+import io.LecteurDonnees;
 
 public class TestDijkstra {
     public static void initialize(String fichier, GUISimulator gui) {

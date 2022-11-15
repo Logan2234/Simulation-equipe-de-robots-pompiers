@@ -11,6 +11,9 @@ public abstract class Evenement implements Comparable<Evenement> {
         this.date = date;
     }
 
+    /**
+     * @return long : Renvoie la date à laquelle l'évènement s'exécute
+     */
     public long getDate() {
         return this.date;
     }
@@ -24,14 +27,5 @@ public abstract class Evenement implements Comparable<Evenement> {
         if (this.date < e.getDate())
             return -1;
         return 0;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof Evenement) {
-            Evenement that = (Evenement) o;
-            return date == that.date;
-        }
-        return false;
     }
 }

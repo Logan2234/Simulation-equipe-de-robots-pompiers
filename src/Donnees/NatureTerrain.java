@@ -2,6 +2,10 @@ package Donnees;
 
 import java.awt.Color;
 
+/**
+ * Enum des différents terrains.
+ * Chaque terrain est associé à une couleur utilisée par la fonction {@code Dessin.dessin}
+ */
 public enum NatureTerrain {
     EAU(new Color(135, 206, 235)),
     FORET(new Color(4, 106, 56)),
