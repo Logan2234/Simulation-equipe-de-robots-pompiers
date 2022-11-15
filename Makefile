@@ -70,7 +70,7 @@ exeBasique:
 	java -classpath bin:bin/gui.jar Tests/TestBasique cartes/carteSujet.map
 
 exeAvance:
-java -classpath bin:bin/gui.jar Tests/TestAvance cartes/carteSujet.map
+	java -classpath bin:bin/gui.jar Tests/TestAvance cartes/carteSujet.map
 
 clean:
 	rm -rf bin/Donnees bin/Evenements bin/Tests bin/io bin/Chemin

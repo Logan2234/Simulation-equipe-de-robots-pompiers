@@ -44,6 +44,11 @@ public abstract class Robot {
         colRobot = new Color(105, 105, 105);
     }
 
+    
+    /** 
+     * @param classe : Classe précise du robot 
+     * @return String : Nom donné au robot en question
+     */
     public static String getNom(Object classe) {
         if (noms == null) {
             noms = new HashMap<Object, String>();
@@ -119,6 +124,10 @@ public abstract class Robot {
         return lastDate;
     }
 
+    
+    /** 
+     * @param temps : Temps correspondant à la dernière action du robot
+     */
     public void setLastDate(long temps){
         lastDate = temps;
     }

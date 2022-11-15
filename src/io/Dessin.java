@@ -12,7 +12,7 @@ import Evenements.Simulateur;
 import gui.GUISimulator;
 import gui.Oval;
 import gui.Rectangle;
-import gui.Text;;
+import gui.Text;
 
 public class Dessin {
 
@@ -50,7 +50,7 @@ public class Dessin {
                 int i = pos.getLigne();
                 int j = pos.getColonne();
                 gui.addGraphicalElement(new Oval(tailleCase / 2 + tailleCase * j,
-                        tailleCase / 2 + i * tailleCase, Color.GRAY, Incendie.getColor(), tailleCase / 2));
+                        tailleCase / 2 + i * tailleCase, Color.GRAY, Incendie.getColor(), tailleCase / 2 + 10));
                 gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase / 2 + tailleCase * i,
                         Color.BLACK, Integer.toString(incendie.getLitres())));
             }
@@ -74,9 +74,7 @@ public class Dessin {
                     tailleCase / 2 + i * tailleCase, Color.GRAY, Robot.getColor(), tailleCase / 2));
             gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase / 2 + tailleCase * i,
                     Color.WHITE, Robot.getNom(robot.getClass())));
-            gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j,
-                    tailleCase / 2 + tailleCase * i + tailleCase / 3, Color.WHITE,
-                    Integer.toString(robot.getReservoir())));
+            gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j + tailleCase / 3, tailleCase / 2 + tailleCase * i, Color.CYAN, Color.CYAN, 3, (int)(tailleCase / 2 * ((float)robot.getReservoir() / robot.getCapacite()))));
         }
     }
 
