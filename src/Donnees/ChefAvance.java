@@ -62,13 +62,14 @@ public class ChefAvance {
     public Chemin ouAllerRemplirReservoir(Robot robot) throws PasEauDansCarte, PasDeCheminException { 
         if (casesAvecEau.size() == 0)
             throw new PasEauDansCarte();
-
+        // Initialisation du chemin
         Chemin cheminARetourner = new Chemin();
         long tempsDeplacement = Long.MAX_VALUE;
         Case positionRobot = robot.getPosition();
         boolean ilYAUnChemin = false;
-        for (Case caseEau : this.casesAvecEau) {
-            if (robot instanceof RobotDrone) { // Car on remplit le réservoir dessus
+
+        for (Case caseEau : casesAvecEau) {
+            if (robot instanceof RobotDrone) { // Car on remplit le réservoir au-dessus
                 try {
                     Chemin cheminVersEau = calculateur.dijkstra(positionRobot, caseEau, robot, robot.getLastDate());
                     // Actualisation du chemin vers eau si on en trouve un plus court
@@ -86,12 +87,13 @@ public class ChefAvance {
                         if (positionRobot.getCarte().voisinExiste(caseEau, direction, robot)) {
                             Chemin cheminVersEau = calculateur.dijkstra(positionRobot,
                                     positionRobot.getCarte().getVoisin(caseEau, direction), robot, robot.getLastDate());
-
                             if (cheminVersEau.getTempsChemin() < tempsDeplacement) {
                                 tempsDeplacement = cheminVersEau.getTempsChemin();
                                 cheminARetourner = cheminVersEau;
                                 ilYAUnChemin = true;
                             }
+                        } else {
+                            continue;
                         }
                     } catch (PasDeCheminException e) {
                         continue;
@@ -114,7 +116,6 @@ public class ChefAvance {
      * @param incendie - Incendie à traiter par les robots
      */
     public void gestionIncendies(Incendie incendie) throws PasEauDansCarte{
-
         // Cherchons le robot le plus proche de l'incendie
         boolean robotTrouve = false;
         Robot robotAMobiliser = donnees.getRobots()[0]; // On initialise avec un robot random
@@ -124,10 +125,14 @@ public class ChefAvance {
         for (Robot robot : donnees.getRobots()) {
             // Si le robot est disponible, on l'envoie sur l'incendie
             if (!occupes.contains(robot)) {
+                // Si il est vide, on le considère comme occupé
+                if (robot.getReservoir() == 0){
+                    occupes.add(robot);
+                    continue;
+                }
                 try {
                     Chemin chemin = new Chemin();
                     chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot, robot.getLastDate());
-
                     if (chemin.getTempsChemin() < tempsDeplacement) {
                         robotTrouve = true;
                         robotAMobiliser = robot;
@@ -137,15 +142,15 @@ public class ChefAvance {
                 } catch (PasDeCheminException e) {
                     continue;
                 }
-            } else {
-                
+            } else { 
                 // Si le réservoir du robot est vide, on va essayer de le remplir
                 if (robot.getReservoir() == 0) {
                     try {
                         Chemin cheminVersEau = ouAllerRemplirReservoir(robot);
-                        cheminVersEau.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'eau
+                        cheminVersEau.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'eau et se remplit
                         simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
                         occupes.remove(robot);
+                        // On enlève le robot de la liste de l'intervention sur l'incendie
                         if (incendies_rob.containsKey(incendie) && incendies_rob.get(incendie).contains(robot)){
                             ArrayList<Robot> nouvelleListe = incendies_rob.get(incendie);
                             nouvelleListe.remove(robot);
@@ -161,19 +166,17 @@ public class ChefAvance {
                         continue;
                     }
                 }
-
             }
         }
         // Maintenant, si on a trouvé un robot, on l'envoie travailler
-        try {
-            if (robotTrouve) {
-                // Mobilisation du robot
+        if (robotTrouve) {
+            try {
+                // Mobilisation du robot en l'ajoutant à la liste
                 ArrayList<Robot> nouvelleListe = incendies_rob.get(incendie);
                 nouvelleListe.add(robotAMobiliser);
                 incendies_rob.put(incendie, nouvelleListe);
                 cheminAParcourir.creerEvenements(this.simulateur, robotAMobiliser);
                 occupes.add(robotAMobiliser);
-
                 // On regarde si le feu n'a pas été éteint avant
                 if (incendie.getLitres() != 0){
                     if (robotAMobiliser.getCapacite() != -1){ // si ce n'est pas un robot à pattes
@@ -187,15 +190,21 @@ public class ChefAvance {
                             simulateur.ajouteEvenement(new EventIntervenir(robotAMobiliser.getLastDate(), robotAMobiliser, incendie));
                         }
                     }
+                    if (incendies_rob.containsKey(incendie) && incendies_rob.get(incendie).contains(robotAMobiliser)){
+                        nouvelleListe.remove(robotAMobiliser);
+                        incendies_rob.put(incendie, nouvelleListe);
+                    }
                 } else {
-                    occupes.remove(robotAMobiliser);
+                    if (robotAMobiliser.getReservoir() > 0)
+                        occupes.remove(robotAMobiliser);
+                    else if (robotAMobiliser.getReservoir() == 0 && !occupes.contains(robotAMobiliser))
+                        occupes.add(robotAMobiliser);
                     incendies_rob.remove(incendie);
                 }
+            } catch (IllegalPathException e) {
+                System.out.println(e);
             }
-        } catch (IllegalPathException e) {
-            System.out.println(e);
         }
-
     }
 
     /**
