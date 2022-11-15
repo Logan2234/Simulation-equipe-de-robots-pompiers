@@ -135,17 +135,11 @@ public class ChefAvance {
                     continue;
                 }
             } else {
-                // Si l'incendie est éteint, on met à jour les tables
-                if (incendie.getLitres() == 0) {
-                    incendies_rob.remove(incendie);
-                    occupes.remove(robot);
-                }
+                
                 // Si le réservoir du robot est vide, on va essayer de le remplir
                 if (robot.getReservoir() == 0) {
                     try {
                         Chemin cheminVersEau = ouAllerRemplirReservoir(robot);
-                        if (!occupes.contains(robot))
-                            occupes.add(robot);
                         cheminVersEau.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'eau
                         simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
                         occupes.remove(robot);
