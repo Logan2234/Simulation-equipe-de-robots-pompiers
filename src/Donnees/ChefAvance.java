@@ -115,12 +115,12 @@ public class ChefAvance {
      */
     public void gestionIncendies(Incendie incendie) {
 
-        // Cherchons le robot le plus proche de l'incendie
+        
         boolean robotTrouve = false;
         Robot robotAMobiliser = donnees.getRobots()[0]; // On initialise avec un robot random
         Chemin cheminAParcourir = new Chemin(); // On initialise avec un chemin random
         long tempsDeplacement = Long.MAX_VALUE;
-
+        // Cherchons le robot le plus proche de l'incendie et le chemin à parcourir
         for (Robot robot : donnees.getRobots()) {
             // Si le robot est disponible, on l'envoie sur l'incendie
             if (!occupes.contains(robot)) {
@@ -138,20 +138,20 @@ public class ChefAvance {
                 }
             } else {
                 // Si l'incendie est éteint, on met à jour les tables
-                if (incendie.getLitres() == 0) { //! TODO: pouvoir annuler le chemin OU vérifier uniquement en arrivant sur le feu
-                        //! TODO : faire cette vérification avant de le mettre dans occupes (i.e. faire la vérif dans le if (!occupes.contains(robot)) ) 
+                if (incendie.getLitres() == 0) {
                     incendies_rob.remove(incendie);
                     occupes.remove(robot);
                 }
                 // Si le réservoir du robot est vide, on va essayer de le remplir
                 if (robot.getReservoir() == 0) {
                     try {
-                        Chemin cheminVersEau = ouAllerRemplirReservoir(robotAMobiliser);
-                        if (!occupes.contains(robot)) // TODO : ne passera jamais dedans cf TODO précédent
+                        Chemin cheminVersEau = ouAllerRemplirReservoir(robot);
+                        if (!occupes.contains(robot))
                             occupes.add(robot);
                         cheminVersEau.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'eau
                         simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
-                        if (incendies_rob.containsKey(incendie) && incendies_rob.get(incendie).contains(robotAMobiliser)){
+                        occupes.remove(robot);
+                        if (incendies_rob.containsKey(incendie) && incendies_rob.get(incendie).contains(robot)){
                             ArrayList<Robot> nouvelleListe = incendies_rob.get(incendie);
                             nouvelleListe.remove(robotAMobiliser);
                             incendies_rob.put(incendie, nouvelleListe);
@@ -159,7 +159,7 @@ public class ChefAvance {
                     } catch (PasEauDansCarte e) {
                         continue; // TODO: throw exception pour signaler que ce n'est pas normal (fichier défectueux),
                                     // ou alors ajouter l'exception  EmptyRobots
-                    } catch (PasDeCheminException e) {
+                    } catch (PasDeCheminException e) { 
                         continue;
                     } catch (IllegalPathException e) {
                         System.out.println(e);
@@ -204,7 +204,7 @@ public class ChefAvance {
      * Avancé
      */
     public void strategie() {
-        // On supposera qu'il existe toujours une source d'eau accessible par tous les robopts sur la carte
+        // On supposera qu'il existe toujours une source d'eau accessible par tous les robots sur la carte
         while (!incendies_rob.isEmpty()) {
             for (Incendie incendie : donnees.getIncendies()) {
                 // Si il est déjà éteint, on ne va pas traiter son cas
