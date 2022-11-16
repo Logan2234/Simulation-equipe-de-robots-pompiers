@@ -243,7 +243,6 @@ public class ChefAvance {
                 try{
                     gestionIncendies(incendie);
                 } catch (PasEauDansCarte e){
-
                 }
             }
         }
