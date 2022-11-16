@@ -5,10 +5,9 @@ import java.awt.Toolkit;
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 
-import Donnees.ChefBasique;
+import Chefs.ChefBasique;
 import Donnees.DonneesSimulation;
 import Evenements.Simulateur;
-import Exceptions.EmptyRobotsException;
 import gui.GUISimulator;
 import io.LecteurDonnees;
 
@@ -21,11 +20,9 @@ public class TestBasique {
             Simulateur simulateur = new Simulateur();
             Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestBasique, fichier);
             ChefBasique chef = new ChefBasique(donnees, simulateur);
-            try {
-                chef.strategie();
-            } catch (EmptyRobotsException e) {
-                System.out.println(e);
-            }
+
+            chef.strategie();
+
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {

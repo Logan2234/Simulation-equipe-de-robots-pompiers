@@ -1,14 +1,14 @@
-package Donnees;
+package Chefs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import Autre.CalculPCC;
 import Autre.Chemin;
+import Donnees.DonneesSimulation;
+import Donnees.Incendie;
 import Donnees.Robot.Robot;
 import Evenements.EventIntervenir;
 import Evenements.Simulateur;
-import Exceptions.EmptyRobotsException;
 import Exceptions.IllegalPathException;
 import Exceptions.PasDeCheminException;
 
@@ -22,13 +22,9 @@ import Exceptions.PasDeCheminException;
  * @param morts         : Table dynamique qui comporte l'ensemble des robots
  *                      morts (i.e qui n'ont plus d'eau dans le réservoir)
  */
-public class ChefBasique {
+public class ChefBasique extends Chef{
 
-    private DonneesSimulation donnees;
-    private Simulateur simulateur;
     private HashMap<Incendie, Robot> incendies_rob;
-    private ArrayList<Robot> occupes;
-    private CalculPCC calculateur;
     private ArrayList<Robot> morts;
 
     /**
@@ -38,12 +34,9 @@ public class ChefBasique {
      * @param simulateur : Simulateur à initialiser avant
      */
     public ChefBasique(DonneesSimulation donnees, Simulateur simulateur) {
-        this.donnees = donnees;
-        this.simulateur = simulateur;
-        this.occupes = new ArrayList<Robot>();
+        super(donnees, simulateur);
         this.morts = new ArrayList<Robot>();
         this.incendies_rob = new HashMap<Incendie, Robot>();
-        calculateur = new CalculPCC(donnees);
         for (Incendie incendie : donnees.getIncendies()) {
             incendies_rob.put(incendie, null);
         }
@@ -87,7 +80,8 @@ public class ChefBasique {
      * @param incendie : Il ne doit avoir aucun robot affecté (dans
      *                 {@code incendies_rob})
      */
-    private void gestionIncendies(Incendie incendie) {
+    @Override
+    protected void gestionIncendies(Incendie incendie) {
         for (Robot robot : donnees.getRobots()) {
             // Si le robot choisi est disponible
             if (!occupes.contains(robot)) {
@@ -126,11 +120,9 @@ public class ChefBasique {
      * Implémente la stratégie basique (pas de parallélisme, pas de remplissage
      * d'eau).
      * On va traiter un incendie à la fois, tant qu'on en a qui ne sont pas éteints.
-     * 
-     * @throws EmptyRobotsException Si tous nos robots sont vidés avant d'avoir pu
-     *                              éteindre les incendies
      */
-    public void strategie() throws EmptyRobotsException {
+    @Override
+    public void strategie() {
         // Tant qu'il y a des incendies à éteidnre et des robots avec de l'eau
         while (!incendies_rob.isEmpty() && donnees.getRobots().length != morts.size()) {
             for (Incendie incendie : donnees.getIncendies()) {
@@ -166,7 +158,7 @@ public class ChefBasique {
         if (incendies_rob.isEmpty()) {
             System.out.println("Tous les incendies sont éteints\n");
         } else {
-            throw new EmptyRobotsException();
+            System.out.println("Tous les robots ont vidé leur réservoir");;
         }
     }
 }
