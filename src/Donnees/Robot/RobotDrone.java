@@ -1,9 +1,7 @@
 package Donnees.Robot;
 
 import Donnees.Case;
-import Donnees.Direction;
 import Donnees.NatureTerrain;
-import Exceptions.CellOutOfMapException;
 import Exceptions.NoWaterException;
 
 public class RobotDrone extends Robot {
@@ -11,7 +9,7 @@ public class RobotDrone extends Robot {
      * @param position : spécifie la position actuelle du robot
      */
     public RobotDrone(Case position) {
-        super(position, 10000, 100 / 3.6, 30, 10000, 1800);
+        super(position, 10000, 100 / 3.6, 30, 10000, 1800, "assets/Drone.png");
     }
 
     /**
@@ -19,7 +17,7 @@ public class RobotDrone extends Robot {
      * @param vitesse  : indique la vitesse (en km/h) par défaut du robot
      */
     public RobotDrone(Case position, int vitesse) {
-        super(position, 10000, Math.min(vitesse, 150) / 3.6, 30, 10000, 1800);
+        super(position, 10000, Math.min(vitesse, 150) / 3.6, 30, 10000, 1800, "assets/Drone.png");
     }
 
     /**

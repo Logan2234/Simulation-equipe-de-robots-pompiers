@@ -1,8 +1,5 @@
 package Donnees.Robot;
 
-import java.awt.Color;
-import java.util.HashMap;
-
 import Donnees.Case;
 import Donnees.Direction;
 import Donnees.NatureTerrain;
@@ -18,9 +15,7 @@ public abstract class Robot {
     private int tmpRemplissage; // en s.
     private double vitesseDefaut; // en m/s.
     private long lastDate;
-    private static Color colRobot;
-    private static HashMap<Object, String> noms;
-
+    private String imagePath;
     /**
      * @param position      : spécifie la position actuelle du robot
      * @param capacite      : donne la capacité maximale du réservoir du robot
@@ -32,7 +27,7 @@ public abstract class Robot {
      * @param tmpReplissage : indique le temps nécessaire (en s) pour un remplissage
      *                      complet
      */
-    public Robot(Case position, int capacite, double vitesse, int tmpVersement, int qteVersement, int tmpReplissage) {
+    public Robot(Case position, int capacite, double vitesse, int tmpVersement, int qteVersement, int tmpReplissage, String imagePath) {
         this.position = position;
         this.capacite = capacite;
         this.reservoir = capacite;
@@ -41,22 +36,7 @@ public abstract class Robot {
         this.qteVersement = qteVersement;
         this.tmpRemplissage = tmpReplissage;
         this.lastDate = 0;
-        colRobot = new Color(105, 105, 105);
-    }
-
-    /**
-     * @param classe : Classe précise du robot
-     * @return String : Nom donné au robot en question
-     */
-    public static String getNom(Object classe) {
-        if (noms == null) {
-            noms = new HashMap<Object, String>();
-            noms.put(RobotChenilles.class, "C");
-            noms.put(RobotDrone.class, "D");
-            noms.put(RobotPattes.class, "P");
-            noms.put(RobotRoues.class, "R");
-        }
-        return noms.get(classe);
+        this.imagePath = imagePath;
     }
 
     /**
@@ -123,18 +103,15 @@ public abstract class Robot {
         return lastDate;
     }
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
     /**
      * @param temps : Temps correspondant à la dernière action du robot
      */
     public void setLastDate(long temps) {
         lastDate = temps;
-    }
-
-    /**
-     * @return Color : Couleur des robots
-     */
-    public static Color getColor() {
-        return colRobot;
     }
 
     /**
