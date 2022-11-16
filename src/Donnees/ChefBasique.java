@@ -63,7 +63,7 @@ public class ChefBasique {
         try {
             Chemin chemin = new Chemin();
             chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot, robot.getLastDate());
-            chemin.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'incendie
+            chemin.creerEvenements(simulateur, robot); // le robot va jusqu'à l'incendie
             if (robot.getCapacite() != -1) { // si ce n'est pas un robot à pattes
                 for (int i = 0; i < Math.min(incendie.getLitres() / robot.getQteVersement(),
                         robot.getReservoir() / robot.getQteVersement()); i++) {
