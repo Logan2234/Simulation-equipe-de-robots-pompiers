@@ -66,7 +66,7 @@ public class ChefAvanceV2 {
     
     public void gestionIncendies(Incendie incendie) throws PasEauDansCarte{
         boolean robotTrouve = false;
-        Robot robotAMobiliser = new Robot(incendie.getPosition(), 0, 0, 0, 0, 0);
+        Robot robotAMobiliser = donnees.getRobots()[0];
         long tempsDuRobot = Long.MAX_VALUE;
         Chemin cheminDuRobot = new Chemin();
         for (Robot robot : donnees.getRobots()){
@@ -88,8 +88,8 @@ public class ChefAvanceV2 {
                 if (!occupes.contains(robot)) occupes.add(robot);
                 vaRemplirEau(robot);
                 continue;
+            }
             if (!occupes.contains(robot)){
-                }
                 try {
                     Chemin chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot, robot.getLastDate());
                     if (chemin.getTempsChemin() < tempsDuRobot){
@@ -107,6 +107,7 @@ public class ChefAvanceV2 {
                     occupes.remove(robot);
                 }
             }
+
             
         }
 
@@ -123,7 +124,7 @@ public class ChefAvanceV2 {
         }
     }
 
-    public void donneOrdre(Robot robot, Incendie incendie, Chemin chemin){
+    public void donneOrdre(Robot robot, Incendie incendie, Chemin chemin) throws IllegalPathException{
         try{
             chemin.creerEvenements(simulateur, robot);
             if (robot.getCapacite() != -1) { // si ce n'est pas un robot à pattes
@@ -138,6 +139,7 @@ public class ChefAvanceV2 {
             }
         } catch (IllegalPathException e) {
             System.out.println(e);
+            throw e;
         }
     }
 
