@@ -11,12 +11,6 @@ import Donnees.DonneesSimulation;
 import Exceptions.PasDeCheminException;
 
 public class CalculPCC {
-    private DonneesSimulation donnees;
-
-    public CalculPCC(DonneesSimulation donnees) {
-        this.donnees = donnees;
-    }
-
     /**
      * Calcul le temps nécessaire à un robot donné pour se déplacer
      * d'une case à une autre case adjacente.
@@ -44,38 +38,23 @@ public class CalculPCC {
     }
 
     /**
-     * Calcul le temps nécessaire à un robot donné pour se déplacer
-     * d'une case à une autre case dans un chemin.
-     * 
-     * @param chemin - Chemin à parcourir
-     * @param robot  - Robot effectuant le déplacement
-     * @return Temps pris (en s) par à un robot pour se déplacer du centre d'une
-     *         case à
-     *         une autre.
-     */
-    public int tpsDpltChemin(Chemin chemin, Robot robot) {
-        int tempsTotal = 0;
-        for (int i = 0; i < (chemin.getChemin()).size() - 1; i++)
-            tempsTotal += tpsDpltCaseACase(chemin.getElem(i).getCase(), chemin.getElem(i++).getCase(), robot);
-        return tempsTotal;
-    }
-
-    /**
      * Calcul du chemin optimal entre deux cases. La fonction suit l'algorithme de
      * Dijkstra.
      * 
-     * @param caseCourante - Case de départ
-     * @param caseSuiv     - Case d'arrivée
-     * @param robot        - Robot effectuant le déplacement
-     * @return Chemin optimal que le robot devrait prendre pour aller d'une case à
-     *         l'autre.
+     * @param caseCourante : Case de départ
+     * @param caseSuiv     : Case d'arrivée
+     * @param robot        : Robot effectuant le déplacement
+     * @param date         : Date d'origine de la construction du chemin
+     * @param donnees      : Données de la simulation
+     * @return Chemin optimal que le robot prendra pour aller d'une case à l'autre
      */
-    public Chemin dijkstra(Case caseCourante, Case caseSuiv, Robot robot, long date) throws PasDeCheminException {
-        long distance[][] = new long[this.donnees.getCarte().getNbLignes()][this.donnees.getCarte().getNbColonnes()];
-        Chemin chemins[][] = new Chemin[this.donnees.getCarte().getNbLignes()][this.donnees.getCarte().getNbColonnes()];
+    public static Chemin dijkstra(DonneesSimulation donnees, Case caseCourante, Case caseSuiv, Robot robot, long date)
+            throws PasDeCheminException {
+        long distance[][] = new long[donnees.getCarte().getNbLignes()][donnees.getCarte().getNbColonnes()];
+        Chemin chemins[][] = new Chemin[donnees.getCarte().getNbLignes()][donnees.getCarte().getNbColonnes()];
         ArrayList<Coordonees> ouverts = new ArrayList<Coordonees>();
-        for (int i = 0; i < this.donnees.getCarte().getNbLignes(); i++) {
-            for (int j = 0; j < this.donnees.getCarte().getNbColonnes(); j++) {
+        for (int i = 0; i < donnees.getCarte().getNbLignes(); i++) {
+            for (int j = 0; j < donnees.getCarte().getNbColonnes(); j++) {
                 distance[i][j] = Long.MAX_VALUE;
                 ouverts.add(new Coordonees(i, j));
                 chemins[i][j] = new Chemin();
@@ -129,9 +108,6 @@ public class CalculPCC {
                 try {
                     caseATraiter = caseCourante.getCarte().getVoisin(caseMinimale, Direction.EST);
                     long temps = tpsDpltCaseACase(caseMinimale, caseATraiter, robot);
-                    // System.out.println(caseMinimale.toString());
-                    // System.out.println(caseCourante.toString());
-                    // System.out.println(caseATraiter.toString());
                     long tempsTotal = temps + distanceCaseMinimale;
                     if (tempsTotal < distance[I][J + 1]) {
                         distance[I][J + 1] = tempsTotal;

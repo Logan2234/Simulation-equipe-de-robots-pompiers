@@ -1,4 +1,4 @@
-# Ensimag 2A POO - TP 2018/19
+# Ensimag 2A POO - TP 2022/23
 # ============================
 #
 # Ce Makefile permet de compiler le test de l'ihm en ligne de commande.

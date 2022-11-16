@@ -23,13 +23,12 @@ public class TestDijkstra {
             DonneesSimulation donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
             Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestDijkstra, fichier);
-            CalculPCC calculateur = new CalculPCC(donnees);
 
             Robot robot = donnees.getRobots()[2];
             Incendie incendie = donnees.getIncendies().getFirst();
             Chemin chemin = new Chemin();
 
-            chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot, robot.getLastDate());
+            chemin = CalculPCC.dijkstra(donnees, robot.getPosition(), incendie.getPosition(), robot, robot.getLastDate());
             chemin.creerEvenements(simulateur, robot);
 
         } catch (IllegalPathException e) {

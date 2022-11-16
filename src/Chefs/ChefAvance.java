@@ -3,6 +3,7 @@ package Chefs;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import Autre.CalculPCC;
 import Autre.Chemin;
 import Donnees.Case;
 import Donnees.Direction;
@@ -64,7 +65,8 @@ public class ChefAvance extends Chef {
         for (Case caseEau : casesAvecEau) {
             if (robot.getCapacite() == 10000) { // Car on remplit le réservoir au-dessus dans le cas du drone
                 try {
-                    Chemin cheminVersEau = calculateur.dijkstra(positionRobot, caseEau, robot, robot.getLastDate());
+                    Chemin cheminVersEau = CalculPCC.dijkstra(donnees, positionRobot, caseEau, robot,
+                            robot.getLastDate());
                     // Actualisation du chemin vers eau si on en trouve un plus court
                     if (cheminVersEau.getTempsChemin() < tempsDeplacement) {
                         tempsDeplacement = cheminVersEau.getTempsChemin();
@@ -78,16 +80,15 @@ public class ChefAvance extends Chef {
                 for (Direction direction : Direction.values()) {
                     try {
                         if (positionRobot.getCarte().voisinExiste(caseEau, direction, robot)) {
-                            Chemin cheminVersEau = calculateur.dijkstra(positionRobot,
+                            Chemin cheminVersEau = CalculPCC.dijkstra(donnees, positionRobot,
                                     positionRobot.getCarte().getVoisin(caseEau, direction), robot, robot.getLastDate());
                             if (cheminVersEau.getTempsChemin() < tempsDeplacement) {
                                 tempsDeplacement = cheminVersEau.getTempsChemin();
                                 cheminARetourner = cheminVersEau;
                                 ilYAUnChemin = true;
                             }
-                        } else {
+                        } else
                             continue;
-                        }
                     } catch (PasDeCheminException e) {
                         continue;
                     } catch (CellOutOfMapException e) {
@@ -109,15 +110,19 @@ public class ChefAvance extends Chef {
      * @param incendie - Incendie à traiter par les robots
      */
     public void gestionIncendies(Incendie incendie) {
-        if (incendie.getLitres() == 0){ // si l'incendie n'a pas besoin d'être éteint, du coup zuc
+        if (incendie.getLitres() == 0) { // si l'incendie n'a pas besoin d'être éteint, du coup zuc
             System.out.println("MAAAARC"); // MAAARC
-            for (Robot robotDeIcendie : incendies_rob.get(incendie)){ // pour tous les robots qui étaient censés l'éteindre...
+            for (Robot robotDeIcendie : incendies_rob.get(incendie)) { // pour tous les robots qui étaient censés
+                                                                       // l'éteindre...
                 if (robotDeIcendie.getReservoir() == 0) { // si le robot n'a pas d'eau dans le réservoir
-                    try{
-                        Chemin cheminVersEau = ouAllerRemplirReservoir(robotDeIcendie); 
-                        cheminVersEau.creerEvenements(this.simulateur, robotDeIcendie); // le robot va jusqu'à l'eau et se remplit
-                        simulateur.ajouteEvenement(new EventRemplir(robotDeIcendie.getLastDate(), robotDeIcendie)); // remplit toi wesh
-                    } catch (PasDeCheminException e) { 
+                    try {
+                        Chemin cheminVersEau = ouAllerRemplirReservoir(robotDeIcendie);
+                        cheminVersEau.creerEvenements(this.simulateur, robotDeIcendie); // le robot va jusqu'à l'eau et
+                                                                                        // se remplit
+                        simulateur.ajouteEvenement(new EventRemplir(robotDeIcendie.getLastDate(), robotDeIcendie)); // remplit
+                                                                                                                    // toi
+                                                                                                                    // wesh
+                    } catch (PasDeCheminException e) {
                         continue;
                     } catch (IllegalPathException e) {
                         System.out.println(e);
@@ -128,7 +133,7 @@ public class ChefAvance extends Chef {
             }
             incendies_rob.remove(incendie); // on élimine l'incendie
             System.out.println("On l'a éteint");
-            return; 
+            return;
         }
         // Cherchons le robot le plus proche de l'incendie
         boolean robotTrouve = false;
@@ -146,7 +151,8 @@ public class ChefAvance extends Chef {
                 }
                 try {
                     Chemin chemin = new Chemin();
-                    chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot, robot.getLastDate());
+                    chemin = CalculPCC.dijkstra(donnees, robot.getPosition(), incendie.getPosition(), robot,
+                            robot.getLastDate());
                     if (chemin.getTempsChemin() < tempsDeplacement) { // on trouve le robot avec le chemin le plus court
                         robotTrouve = true; // on a trouvé au moins un chemin
                         robotAMobiliser = robot;
@@ -160,7 +166,7 @@ public class ChefAvance extends Chef {
                 // Si le réservoir du robot est vide, on va essayer de le remplir
                 if (robot.getReservoir() == 0) {
                     try { // le robot ne s'occupe plus de l'incendie, du coup on le sort
-                        if (incendies_rob.containsKey(incendie) && incendies_rob.get(incendie).contains(robot)){
+                        if (incendies_rob.containsKey(incendie) && incendies_rob.get(incendie).contains(robot)) {
                             ArrayList<Robot> nouvelleListe = incendies_rob.get(incendie);
                             nouvelleListe.remove(robot);
                             incendies_rob.put(incendie, nouvelleListe);
@@ -168,17 +174,19 @@ public class ChefAvance extends Chef {
                         Chemin cheminVersEau = ouAllerRemplirReservoir(robot);
                         if (cheminVersEau == null)
                             continue; // ! S'il n'y a aucun robot à pattes on risque d'avoir un stack overflow ?
-                        cheminVersEau.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'eau et se remplit
+                        cheminVersEau.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'eau et se
+                                                                               // remplit
                         simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
-                        occupes.remove(robot); // le robot n'est plus occupé. 
+                        occupes.remove(robot); // le robot n'est plus occupé.
                         // On enlève le robot de la liste de l'intervention sur l'incendie
-                    } catch (PasDeCheminException e) { 
+                    } catch (PasDeCheminException e) {
                         continue;
                     } catch (IllegalPathException e) {
                         System.out.println(e);
                         continue;
                     }
-                } else continue;
+                } else
+                    continue;
             }
         }
         // Maintenant, si on a trouvé un robot, on l'envoie travailler
@@ -216,17 +224,20 @@ public class ChefAvance extends Chef {
                     }
                     System.out.println("On a essayé d'éteindre");
                     // On regarde l'état de l'incendie
-                    if (incendie.getLitres() == 0){
+                    if (incendie.getLitres() == 0) {
                         System.out.println("MAAAARC");
-                        for (Robot robotDeIcendie : incendies_rob.get(incendie)){
+                        for (Robot robotDeIcendie : incendies_rob.get(incendie)) {
                             if (robotDeIcendie.getReservoir() == 0) {
-                                try{
+                                try {
                                     Chemin cheminVersEau = ouAllerRemplirReservoir(robotDeIcendie);
                                     if (cheminVersEau == null)
-                                        continue; // ! On rpeut avoir un stack overflow s'il n'y a pas de robot à pattes
-                                    cheminVersEau.creerEvenements(this.simulateur, robotDeIcendie); // le robot va jusqu'à l'eau et se remplit
-                                    simulateur.ajouteEvenement(new EventRemplir(robotDeIcendie.getLastDate(), robotDeIcendie));
-                                } catch (PasDeCheminException e) { 
+                                        continue; // ! On peut avoir un stack overflow s'il n'y a pas de robot à pattes
+                                    cheminVersEau.creerEvenements(this.simulateur, robotDeIcendie); // le robot va
+                                                                                                    // jusqu'à l'eau et
+                                                                                                    // se remplit
+                                    simulateur.ajouteEvenement(
+                                            new EventRemplir(robotDeIcendie.getLastDate(), robotDeIcendie));
+                                } catch (PasDeCheminException e) {
                                     continue;
                                 } catch (IllegalPathException e) {
                                     System.out.println(e);
@@ -238,7 +249,7 @@ public class ChefAvance extends Chef {
                         incendies_rob.remove(incendie);
                         System.out.println("On l'a éteint");
                     }
-                // Sinon on annule l'opération
+                    // Sinon on annule l'opération
                 } else { // On garde ça au cas où, mais on ne devrait pas rentrer là dedans.
                     System.out.println("On l'a éteint avant nous\n");
                     if (robotAMobiliser.getReservoir() > 0) {
