@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.awt.Toolkit;
 
 import gui.GUISimulator;
 import gui.Rectangle;
@@ -14,6 +15,7 @@ public class TestInvader {
     public static void main(String[] args) {
         // crée la fenêtre graphique dans laquelle dessiner
         GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
+        gui.setSize((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 100, (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 50);
         // crée l'invader, en l'associant à la fenêtre graphique précédente
         Invader invader = new Invader(gui, Color.decode("#f2ff28"));
     }

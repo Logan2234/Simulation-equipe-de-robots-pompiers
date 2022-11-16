@@ -3,6 +3,7 @@ package Tests;
 import java.awt.Color;
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
+import java.awt.Toolkit;
 
 import Autre.CalculPCC;
 import Autre.Chemin;
@@ -132,6 +133,7 @@ public class TestScenarios {
         }
         // crée la fenêtre graphique dans laquelle dessiner
         GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
+        gui.setSize((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 100, (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 50);
 
         initialize(args[0], gui);
     }

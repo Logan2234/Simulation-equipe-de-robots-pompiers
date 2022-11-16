@@ -44,9 +44,8 @@ public abstract class Robot {
         colRobot = new Color(105, 105, 105);
     }
 
-    
-    /** 
-     * @param classe : Classe précise du robot 
+    /**
+     * @param classe : Classe précise du robot
      * @return String : Nom donné au robot en question
      */
     public static String getNom(Object classe) {
@@ -116,19 +115,18 @@ public abstract class Robot {
     public int getTmpRemplissage() {
         return tmpRemplissage;
     }
-    
+
     /**
      * @return long lastDate : Dernière date utilisée pour le robot
      */
-    public long getLastDate(){
+    public long getLastDate() {
         return lastDate;
     }
 
-    
-    /** 
+    /**
      * @param temps : Temps correspondant à la dernière action du robot
      */
-    public void setLastDate(long temps){
+    public void setLastDate(long temps) {
         lastDate = temps;
     }
 

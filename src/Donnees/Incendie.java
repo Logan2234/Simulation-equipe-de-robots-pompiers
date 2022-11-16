@@ -5,6 +5,7 @@ import java.awt.Color;
 public class Incendie {
 
     private Case position;
+    private int litres_requis_init;
     private int litres_requis;
     private static Color colIncendie;
 
@@ -14,15 +15,27 @@ public class Incendie {
      */
     public Incendie(Case position, int litres_requis) {
         this.position = position;
+        this.litres_requis_init = litres_requis;
         this.litres_requis = litres_requis;
         colIncendie = new Color(240, 78, 31);
     }
 
     /**
-     * @return int : litres nécessaires pour l'éteindre
+     * @return int : quantité d'eau nécessaire pour éteindre le feu à un moment
+     *         donné
      */
     public int getLitres() {
         return this.litres_requis;
+    }
+
+    /**
+     * Fonction seulement utilisée pour calculer le % d'extinction d'un feu
+     * Ce % n'est calculé uniquement que pour le dessin proportionnel d'un feu
+     * 
+     * @return int : quantité d'eau nécessaire pour éteindre le feu au départ
+     */
+    public int getLitresInit() {
+        return this.litres_requis_init;
     }
 
     /**
@@ -35,7 +48,7 @@ public class Incendie {
     /**
      * @return Color : Couleur des incendies
      */
-    public static Color getColor(){
+    public static Color getColor() {
         return colIncendie;
     }
 

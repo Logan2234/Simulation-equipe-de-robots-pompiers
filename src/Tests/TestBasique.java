@@ -1,6 +1,7 @@
 package Tests;
 
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 
@@ -19,36 +20,28 @@ public class TestBasique {
             DonneesSimulation donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
             Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestBasique, fichier);
-
-            // ChefBasique chef = new ChefBasique(donnees, simulateur);
-            // chef.strategie();
             ChefBasique chef = new ChefBasique(donnees, simulateur);
             try {
                 chef.strategie();
             } catch (EmptyRobotsException e) {
                 System.out.println(e);
             }
-            
-
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {
             System.out.println("\n\t**format du fichier " + fichier + " invalide: " + e.getMessage());
         } 
-        // catch (EmptyRobotsException e) {
-        //     System.out.println(e);
-        //}
-
     }
 
     public static void main(String[] args) {
-        if (args.length < 1) {
+        if (args.length < 0) {
             System.out.println("Syntaxe: java TestBasique <nomDeFichier>");
             System.exit(1);
         }
         // crée la fenêtre graphique dans laquelle dessiner
         GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
-
+        gui.setSize((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 100, (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 50);
+        gui.validate();
         initialize(args[0], gui);
     }
 
