@@ -86,7 +86,7 @@ public class ChefAvanceV2 {
                     }
                 }
                 if (!occupes.contains(robot)) occupes.add(robot);
-                vaRemplirEau(robot); // TODO
+                vaRemplirEau(robot);
                 continue;
             if (!occupes.contains(robot)){
                 }
@@ -122,6 +122,98 @@ public class ChefAvanceV2 {
             }
         }
     }
+
+    public void donneOrdre(Robot robot, Incendie incendie, Chemin chemin){
+        try{
+            chemin.creerEvenements(simulateur, robot);
+            if (robot.getCapacite() != -1) { // si ce n'est pas un robot à pattes
+                for (int i = 0; i < Math.min(incendie.getLitres() / robot.getQteVersement(),
+                        robot.getReservoir() / robot.getQteVersement()); i++) {
+                    simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
+                }
+            } else { // le robot à pattes va verser son eau
+                for (int i = 0; i < incendie.getLitres() / robot.getQteVersement(); i++) {
+                    simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
+                }
+            }
+        } catch (IllegalPathException e) {
+            System.out.println(e);
+        }
+    }
+
+    /**
+     * Renvoie le chemin idéal vers la source d'eau la plus proche pour remplir le
+     * reservoir d'un robot.
+     * 
+     * @param robot - Robot qui doit aller remplir son reservoir
+     * @return Chemin - Chemin idéal vers une source d'eau
+     * @throws PasDeCheminException - Exception s'il n'y a pas de chemins possibles
+     *                              du robot vers une source d'eau
+     * @throws PasEauDansCarte      - Exception s'il n'y a pas d'eau dans la carte
+     */
+    public Chemin ouAllerRemplirReservoir(Robot robot) throws PasEauDansCarte, PasDeCheminException { 
+        if (casesAvecEau.size() == 0)
+            throw new PasEauDansCarte();
+        // Initialisation du chemin
+        Chemin cheminARetourner = new Chemin();
+        long tempsDeplacement = Long.MAX_VALUE;
+        Case positionRobot = robot.getPosition();
+        boolean ilYAUnChemin = false;
+
+        for (Case caseEau : casesAvecEau) {
+            if (robot.getCapacite() == 10000) { // Car on remplit le réservoir au-dessus
+                try {
+                    Chemin cheminVersEau = calculateur.dijkstra(positionRobot, caseEau, robot, robot.getLastDate());
+                    // Actualisation du chemin vers eau si on en trouve un plus court
+                    if (cheminVersEau.getTempsChemin() < tempsDeplacement) {
+                        tempsDeplacement = cheminVersEau.getTempsChemin();
+                        cheminARetourner = cheminVersEau;
+                        ilYAUnChemin = true;
+                    }
+                } catch (PasDeCheminException e) {
+                    continue;
+                }
+            } else {
+                for (Direction direction : Direction.values()) {
+                    try {
+                        if (positionRobot.getCarte().voisinExiste(caseEau, direction, robot)) {
+                            Chemin cheminVersEau = calculateur.dijkstra(positionRobot,
+                                    positionRobot.getCarte().getVoisin(caseEau, direction), robot, robot.getLastDate());
+                            if (cheminVersEau.getTempsChemin() < tempsDeplacement) {
+                                tempsDeplacement = cheminVersEau.getTempsChemin();
+                                cheminARetourner = cheminVersEau;
+                                ilYAUnChemin = true;
+                            }
+                        } else {
+                            continue;
+                        }
+                    } catch (PasDeCheminException e) {
+                        continue;
+                    } catch (CellOutOfMapException e) {
+                        continue;
+                    }
+                }
+            }
+        }
+        if (!ilYAUnChemin)
+            throw new PasDeCheminException();
+        return cheminARetourner;
+    }
     
+    public void vaRemplirEau(Robot robot) throws PasEauDansCarte{
+        try {
+            Chemin chemin = ouAllerRemplirReservoir(robot);
+            chemin.creerEvenements(simulateur, robot);
+            simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
+        } catch (PasEauDansCarte e){
+            throw e;
+        } catch (PasDeCheminException e){
+            System.out.println("Pas possible de remplir reservoir.");
+            return;
+        } catch (IllegalPathException e) {
+            System.out.println(e);
+            return;
+        }
+    }
 }
    
