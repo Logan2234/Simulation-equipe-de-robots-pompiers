@@ -30,21 +30,21 @@ public class RobotDrone extends Robot {
      */
     @Override
     public void remplirReservoir() throws NoWaterException {
-        boolean aboveWater = false;
+        //boolean aboveWater = false;
         Case pos = this.getPosition();
-        for (Direction dir : Direction.values()) {
-            try {
-                if (pos.getCarte().getVoisin(pos, dir).getNature() == NatureTerrain.EAU) {
-                    aboveWater = true;
-                    break;
-                }
-            }
+        // for (Direction dir : Direction.values()) {
+        //     try {
+        //         if (pos.getCarte().getVoisin(pos, dir).getNature() == NatureTerrain.EAU) {
+        //             aboveWater = true;
+        //             break;
+        //         }
+        //     }
 
-            catch (CellOutOfMapException e) {
-                System.out.println(e);
-            }
-        }
-        if (aboveWater)
+        //     catch (CellOutOfMapException e) {
+        //         System.out.println(e);
+        //     }
+        // }
+        if (pos.getNature() == NatureTerrain.EAU)
             this.fillReservoir();
         else{
             throw new NoWaterException();

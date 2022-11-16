@@ -147,7 +147,6 @@ public class ChefAvance {
                 if (robot.getReservoir() == 0) {
                     try {
                         Chemin cheminVersEau = ouAllerRemplirReservoir(robot);
-                        System.out.println(robot.toString() + " se remplit");
                         cheminVersEau.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'eau et se remplit
                         simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
                         occupes.remove(robot);
@@ -185,7 +184,6 @@ public class ChefAvance {
                 // On regarde si le feu n'a pas été éteint avant
                 if (incendie.getLitres() != 0){
                     System.out.println("On va éteindre ");
-                    System.out.println(cheminAParcourir);
                     if (robotAMobiliser.getCapacite() != -1){ // si ce n'est pas un robot à pattes
                         for (int i = 0; i < Math.min(incendie.getLitres() / robotAMobiliser.getQteVersement(),
                                         robotAMobiliser.getReservoir() / robotAMobiliser.getQteVersement()); i++) 

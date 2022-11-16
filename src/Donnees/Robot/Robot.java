@@ -191,7 +191,7 @@ public abstract class Robot {
             }
         }
         if (waterNear)
-            this.reservoir = this.capacite;
+            this.fillReservoir();
         else
             throw new NoWaterException();
     }
