@@ -1,7 +1,6 @@
 package io;
 
 import java.awt.Color;
-import java.awt.image.ImageObserver;
 import java.util.LinkedList;
 
 import Donnees.Carte;
@@ -12,10 +11,10 @@ import Donnees.NatureTerrain;
 import Donnees.Robot.Robot;
 import Evenements.Simulateur;
 import gui.GUISimulator;
+import gui.ImageElement;
 import gui.Oval;
 import gui.Rectangle;
 import gui.Text;
-import gui.ImageElement;
 
 public class Dessin {
 
@@ -28,28 +27,34 @@ public class Dessin {
      *                   le dessin (non pas la taille fictive des cases)
      */
     private static void dessinCases(Carte carte, GUISimulator gui, int tailleCase) {
+        // Il faut mettre un fond dans le cas où on dessine des arbres
         for (int i = 0; i < carte.getNbLignes(); i++) {
             for (int j = 0; j < carte.getNbColonnes(); j++) {
-                Case current_case = carte.getCase(i, j);
-                if (current_case.getNature() == NatureTerrain.FORET) {
-                    // if (carte.getCase(i, j + 1).getNature() == NatureTerrain.FORET) {
-                    //     gui.addGraphicalElement(new ImageElement(tailleCase * j + tailleCase / 2,
-                    //             i * tailleCase, current_case.getNature().getImagePath(), tailleCase, tailleCase, gui));
-                    // }
-                    // if (carte.getCase(i + 1, j).getNature() == NatureTerrain.FORET) {
-                    //     gui.addGraphicalElement(new ImageElement(tailleCase * j,
-                    //             i * tailleCase + tailleCase / 2, current_case.getNature().getImagePath(), tailleCase,
-                    //             tailleCase, gui));
-                    // }
+                Case _case = carte.getCase(i, j);
+                if (_case.getNature() == NatureTerrain.FORET)
                     gui.addGraphicalElement(new ImageElement(tailleCase * j,
-                            i * tailleCase, current_case.getNature().getImagePath(), tailleCase, tailleCase, gui));
-                } else if (current_case.getNature() == NatureTerrain.TERRAIN_LIBRE) {
-                    gui.addGraphicalElement(new ImageElement(tailleCase * j,
-                            i * tailleCase, current_case.getNature().getImagePath(), tailleCase, tailleCase, gui));
-                } else
-                    gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j,
-                            tailleCase / 2 + i * tailleCase, current_case.getNature().getColor(),
-                            current_case.getNature().getColor(), tailleCase));
+                            i * tailleCase, NatureTerrain.TERRAIN_LIBRE.getImagePath(), tailleCase, tailleCase, gui));
+            }
+        }
+        // Dessin effectif de toutes les cases
+        for (int i = 0; i < carte.getNbLignes(); i++) {
+            for (int j = 0; j < carte.getNbColonnes(); j++) {
+                NatureTerrain current_case_nature = carte.getCase(i, j).getNature();
+                gui.addGraphicalElement(new ImageElement(tailleCase * j,
+                        i * tailleCase, current_case_nature.getImagePath(), tailleCase, tailleCase, gui));
+                // Si c'est une forêt, on créé un effet de densité quand plusieurs forêt sont
+                // collées
+                if (current_case_nature == NatureTerrain.FORET) {
+                    if (j + 1 < carte.getNbColonnes() && carte.getCase(i, j + 1).getNature() == NatureTerrain.FORET) {
+                        gui.addGraphicalElement(new ImageElement(tailleCase * j + tailleCase / 2,
+                                i * tailleCase, current_case_nature.getImagePath(), tailleCase, tailleCase, gui));
+                    }
+                    if (i + 1 < carte.getNbLignes() && carte.getCase(i + 1, j).getNature() == NatureTerrain.FORET) {
+                        gui.addGraphicalElement(new ImageElement(tailleCase * j,
+                                i * tailleCase + tailleCase / 2, current_case_nature.getImagePath(), tailleCase,
+                                tailleCase, gui));
+                    }
+                }
             }
         }
     }
@@ -68,10 +73,14 @@ public class Dessin {
                 Case pos = incendie.getPosition();
                 int i = pos.getLigne();
                 int j = pos.getColonne();
-                gui.addGraphicalElement(new Oval(tailleCase / 2 + tailleCase * j,
-                        tailleCase / 2 + i * tailleCase, Color.GRAY, Incendie.getColor(), tailleCase / 2 + 10));
-                gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase / 2 + tailleCase * i,
-                        Color.BLACK, Integer.toString(incendie.getLitres())));
+                gui.addGraphicalElement(new ImageElement((int)(tailleCase * j + tailleCase / 2 * (1 - (float)incendie.getLitres() / incendie.getLitresInit())),
+                        (int)(i * tailleCase + tailleCase / 2 * (1 - (float)incendie.getLitres() / incendie.getLitresInit())), "assets/Fire.png", tailleCase * incendie.getLitres() / incendie.getLitresInit(), tailleCase * incendie.getLitres() / incendie.getLitresInit(), gui));
+                // gui.addGraphicalElement(new Oval(tailleCase / 2 + tailleCase * j,
+                // tailleCase / 2 + i * tailleCase, Color.GRAY, Incendie.getColor(), tailleCase
+                // / 2 + 10));
+                // gui.addGraphicalElement(new Text(tailleCase / 2 + tailleCase * j, tailleCase
+                // / 2 + tailleCase * i,
+                // Color.BLACK, Integer.toString(incendie.getLitres())));
             }
         }
     }
@@ -111,10 +120,9 @@ public class Dessin {
      * @param simulateur : Simulateur utilisé pour la simulation. Permet de
      *                   récupérer {@code dateSimulation}.
      */
-    private static void dessinDateSimulation(GUISimulator gui, Simulateur simulateur) {
+    private static void dessinDateSimulation(GUISimulator gui, Simulateur simulateur, int tailleCarte) {
         gui.addGraphicalElement(
-                new Text(gui.getPanelWidth() - 150, gui.getPanelHeight() / 2, Color.WHITE,
-                        "Date: " + Long.toString(simulateur.getDateSimulation())));
+                new Text(tailleCarte, 25, Color.WHITE, "Date: " + Long.toString(simulateur.getDateSimulation())));
     }
 
     /**
@@ -129,11 +137,12 @@ public class Dessin {
      * @param tailleCase : Taille des cases telles qu'elles doivent apparaître sur
      *                   le dessin (non pas la taille fictive des cases)
      */
-    public static void dessin(DonneesSimulation donnees, GUISimulator gui, Simulateur simulateur, int tailleCase) {
+    public static void dessin(DonneesSimulation donnees, GUISimulator gui, Simulateur simulateur) {
+        int tailleCase = gui.getHeight() / (donnees.getCarte().getNbLignes() + 5);
         dessinCases(donnees.getCarte(), gui, tailleCase);
         dessinRobots(donnees.getRobots(), gui, tailleCase);
         dessinIncendies(donnees.getIncendies(), gui, tailleCase);
-        dessinDateSimulation(gui, simulateur);
+        dessinDateSimulation(gui, simulateur, tailleCase * donnees.getCarte().getNbColonnes() + tailleCase);
     }
 
 }

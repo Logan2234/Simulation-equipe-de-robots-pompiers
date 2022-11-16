@@ -1,32 +1,21 @@
 package Donnees;
 
-import java.awt.Color;
-
 /**
  * Enum des différents terrains.
- * Chaque terrain est associé à une couleur utilisée par la fonction {@code Dessin.dessin}
+ * Chaque terrain est associé un chemin vers une image utilisée par la fonction
+ * {@code Dessin.dessin}
  */
 public enum NatureTerrain {
-    EAU(new Color(135, 206, 235)),
-    FORET(new Color(4, 106, 56), "assets/Forest2.png"),
-    ROCHE(new Color(128, 132, 135)),
-    TERRAIN_LIBRE(new Color(48, 183, 0), "assets/Grass.png"),
-    HABITAT(new Color(220, 85, 57));
+    EAU("assets/Water.png"),
+    FORET("assets/Forest.png"),
+    ROCHE("assets/Rocks.png"),
+    TERRAIN_LIBRE("assets/Grass.jpg"),
+    HABITAT("assets/House.png");
 
-    private Color color;
     private String image_path;
 
-    private NatureTerrain(Color color) {
-        this.color = color;
-    }
-
-    private NatureTerrain(Color color, String image_path) {
-        this.color = color;
+    private NatureTerrain(String image_path) {
         this.image_path = image_path;
-    }
-
-    public Color getColor() {
-        return this.color;
     }
 
     public String getImagePath() {
