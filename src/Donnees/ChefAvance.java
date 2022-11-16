@@ -69,7 +69,7 @@ public class ChefAvance {
         boolean ilYAUnChemin = false;
 
         for (Case caseEau : casesAvecEau) {
-            if (robot instanceof RobotDrone) { // Car on remplit le réservoir au-dessus
+            if (robot.getCapacite() == 10000) { // Car on remplit le réservoir au-dessus
                 try {
                     Chemin cheminVersEau = calculateur.dijkstra(positionRobot, caseEau, robot, robot.getLastDate());
                     // Actualisation du chemin vers eau si on en trouve un plus court
@@ -245,7 +245,7 @@ public class ChefAvance {
                 try{
                     gestionIncendies(incendie);
                 } catch (PasEauDansCarte e){
-
+                    System.out.println("Il n'y a pas d'eau dans la mappe. Les robots ne peuvent pas remplir son reservoir.");
                 }
             }
         }
