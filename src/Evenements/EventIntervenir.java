@@ -15,9 +15,9 @@ public class EventIntervenir extends Evenement {
         robot.setLastDate(date + robot.getTmpVersement());
     }
 
-    
-    /** 
-     * @throws NoFireException : Exception levée dans le cas où il n'y a pas de feu sur la case
+    /**
+     * @throws NoFireException : Exception levée dans le cas où il n'y a pas de feu
+     *                         sur la case
      */
     @Override
     public void execute() throws NoFireException {
@@ -34,8 +34,7 @@ public class EventIntervenir extends Evenement {
         this.incendie.eteindre(qteVersee);
     }
 
-    
-    /** 
+    /**
      * @return String : Affiche la date de l'évènement
      */
     @Override

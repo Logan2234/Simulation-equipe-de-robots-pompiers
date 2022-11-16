@@ -1,9 +1,10 @@
 package Tests;
 
 import java.awt.Color;
-import java.io.FileNotFoundException;
-import java.util.zip.DataFormatException;
 import java.awt.Toolkit;
+import java.io.FileNotFoundException;
+import java.util.Iterator;
+import java.util.zip.DataFormatException;
 
 import Autre.CalculPCC;
 import Autre.Chemin;
@@ -11,6 +12,7 @@ import Donnees.Carte;
 import Donnees.Case;
 import Donnees.Direction;
 import Donnees.DonneesSimulation;
+import Donnees.Incendie;
 import Donnees.Robot.Robot;
 import Evenements.EventIntervenir;
 import Evenements.EventMouvement;
@@ -30,6 +32,7 @@ public class TestScenarios {
             donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
             Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestScenarios, fichier);
+            
             Carte carte = donnees.getCarte();
             Robot robot1 = donnees.getRobots()[0];
             Robot robot2 = donnees.getRobots()[1];
@@ -48,6 +51,14 @@ public class TestScenarios {
                 }
             } catch (CellOutOfMapException e) {
                 try {
+                    // On veut récupérer dans ce test le 5ème incendie, on skip donc les 4 premiers
+                    Iterator<Incendie> iter = donnees.getIncendies().iterator();
+                    iter.next();
+                    iter.next();
+                    iter.next();
+                    iter.next();
+                    Incendie incendie = iter.next();
+
                     chemin.creerEvenements(simulateur, robot1);
                     chemin.getChemin().clear();
 
@@ -55,17 +66,11 @@ public class TestScenarios {
                     nextCase = carte.getVoisin(pos, Direction.NORD);
 
                     simulateur.ajouteEvenement(
-                            new EventMouvement(CalculPCC.tpsDpltCaseACase(pos, nextCase, robot2), robot2,
-                                    nextCase));
+                            new EventMouvement(CalculPCC.tpsDpltCaseACase(pos, nextCase, robot2), robot2, nextCase));
 
-                    for (int i = 0; i < Math.min(donnees.getIncendies().get(4).getLitres() / robot2.getQteVersement(),
-                            robot2.getReservoir() / robot2.getQteVersement()); i++) { // ! Attention cette formule de
-                                                                                      // calcul du nombre d'intervention
-                                                                                      // ne marche pas dans le cas du
-                                                                                      // robot à pattes
-                        simulateur.ajouteEvenement(
-                                new EventIntervenir(robot2.getLastDate(), robot2,
-                                        donnees.getIncendies().get(4)));
+                    for (int i = 0; i < Math.min(incendie.getLitres() / robot2.getQteVersement(),
+                            robot2.getReservoir() / robot2.getQteVersement()); i++) {
+                        simulateur.ajouteEvenement(new EventIntervenir(robot2.getLastDate(), robot2, incendie));
                     }
 
                     pos = nextCase;
@@ -81,9 +86,9 @@ public class TestScenarios {
 
                     chemin.creerEvenements(simulateur, robot2);
                     chemin.getChemin().clear();
-                    
+
                     simulateur.ajouteEvenement(new EventRemplir(robot2.getLastDate(), robot2));
-                    
+
                     chemin.addElement(pos, robot2.getLastDate());
                     Direction[] dirs2 = { Direction.EST, Direction.EST };
                     for (Direction dir : dirs2) {
@@ -96,21 +101,14 @@ public class TestScenarios {
                     chemin.creerEvenements(simulateur, robot2);
                     chemin.getChemin().clear();
 
-                    for (int i = 0; i < Math.min(donnees.getIncendies().get(4).getLitres() /
-                            robot2.getQteVersement(),
-                            robot2.getReservoir() / robot2.getQteVersement()); i++) { // ! Attention cette formule de
-                                                                                      // calcul du nombre d'intervention
-                                                                                      // ne marche pas dans le cas du
-                                                                                      // robot à pattes
-                        simulateur.ajouteEvenement(
-                                new EventIntervenir(robot2.getLastDate(), robot2,
-                                        donnees.getIncendies().get(4)));
+                    for (int i = 0; i < Math.min(incendie.getLitres() / robot2.getQteVersement(),
+                            robot2.getReservoir() / robot2.getQteVersement()); i++) {
+                        simulateur.ajouteEvenement(new EventIntervenir(robot2.getLastDate(), robot2, incendie));
                     }
 
                     nextCase = carte.getVoisin(pos, Direction.OUEST);
                     simulateur.ajouteEvenement(
-                            new EventMouvement(robot2.getLastDate() + CalculPCC.tpsDpltCaseACase(pos,
-                                    nextCase, robot2),
+                            new EventMouvement(robot2.getLastDate() + CalculPCC.tpsDpltCaseACase(pos, nextCase, robot2),
                                     robot2, nextCase));
                 } catch (IllegalPathException e1) {
                     System.out.println(e1);
@@ -133,7 +131,8 @@ public class TestScenarios {
         }
         // crée la fenêtre graphique dans laquelle dessiner
         GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
-        gui.setSize((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 100, (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 50);
+        gui.setSize((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 100,
+                (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 50);
 
         initialize(args[0], gui);
     }

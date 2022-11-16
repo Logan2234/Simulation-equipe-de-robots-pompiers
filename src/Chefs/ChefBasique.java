@@ -23,7 +23,7 @@ import Exceptions.PasDeCheminException;
  * @param morts         : Table dynamique qui comporte l'ensemble des robots
  *                      morts (i.e qui n'ont plus d'eau dans le réservoir)
  */
-public class ChefBasique extends Chef{
+public class ChefBasique extends Chef {
 
     private HashMap<Incendie, Robot> incendies_rob;
     private ArrayList<Robot> morts;
@@ -56,18 +56,19 @@ public class ChefBasique extends Chef{
     private void donneOrdre(Robot robot, Incendie incendie) throws PasDeCheminException {
         try {
             Chemin chemin = new Chemin();
-            chemin = CalculPCC.dijkstra(donnees, robot.getPosition(), incendie.getPosition(), robot, robot.getLastDate());
+            chemin = CalculPCC.dijkstra(donnees.getCarte(), robot.getPosition(), incendie.getPosition(), robot,
+                    robot.getLastDate());
             chemin.creerEvenements(simulateur, robot); // le robot va jusqu'à l'incendie
-            if (robot.getCapacite() != -1) { // si ce n'est pas un robot à pattes
-                for (int i = 0; i < Math.min(incendie.getLitres() / robot.getQteVersement(),
-                        robot.getReservoir() / robot.getQteVersement()); i++) {
+
+            if (robot.getCapacite() != -1) // si ce n'est pas un robot à pattes
+                for (int i = 0; i <= Math.min(incendie.getLitres() / robot.getQteVersement(),
+                        robot.getReservoir() / robot.getQteVersement()); i++)
                     simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
-                }
-            } else { // le robot à pattes va verser son eau
-                for (int i = 0; i < incendie.getLitres() / robot.getQteVersement(); i++) {
+
+            else // le robot à pattes va verser son eau
+                for (int i = 0; i <= incendie.getLitres() / robot.getQteVersement(); i++)
                     simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
-                }
-            }
+
         } catch (IllegalPathException e) {
             System.out.println(e);
         }
@@ -75,8 +76,7 @@ public class ChefBasique extends Chef{
 
     /**
      * Va essayer d'éteindre {@code incendie} en appelant un robot à la fois et en
-     * mettant à jour les tables
-     * {@code occupes} et {@code morts}.
+     * mettant à jour les tables {@code occupes} et {@code morts}.
      * 
      * @param incendie : Il ne doit avoir aucun robot affecté (dans
      *                 {@code incendies_rob})
@@ -96,9 +96,9 @@ public class ChefBasique extends Chef{
                 // Sinon on essaie de l'envoyer sur l'incendie, si cela échoue on va prendre un
                 // autre robot
                 try {
+                    donneOrdre(robot, incendie);
                     occupes.add(robot);
                     incendies_rob.put(incendie, robot);
-                    donneOrdre(robot, incendie);
                     break; // Si on a réussi, on ne va pas envoyer de second robot sur l'incendie
                 } catch (PasDeCheminException e) {
                     continue;
@@ -159,7 +159,8 @@ public class ChefBasique extends Chef{
         if (incendies_rob.isEmpty()) {
             System.out.println("Tous les incendies sont éteints\n");
         } else {
-            System.out.println("Tous les robots ont vidé leur réservoir");;
+            System.out.println("Tous les robots ont vidé leur réservoir");
+            ;
         }
     }
 }

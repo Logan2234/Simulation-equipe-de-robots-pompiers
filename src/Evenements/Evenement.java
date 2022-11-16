@@ -20,8 +20,7 @@ public abstract class Evenement implements Comparable<Evenement> {
 
     public abstract void execute() throws NoFireException, CellOutOfMapException, NoWaterException;
 
-    
-    /** 
+    /**
      * @param e : Évènement à comparer
      * @return int : Comparaison des deux évènement en fonction de leur date
      */

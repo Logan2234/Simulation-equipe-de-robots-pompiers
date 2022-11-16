@@ -65,7 +65,7 @@ public class ChefAvance extends Chef {
         for (Case caseEau : casesAvecEau) {
             if (robot.getCapacite() == 10000) { // Car on remplit le réservoir au-dessus dans le cas du drone
                 try {
-                    Chemin cheminVersEau = CalculPCC.dijkstra(donnees, positionRobot, caseEau, robot,
+                    Chemin cheminVersEau = CalculPCC.dijkstra(donnees.getCarte(), positionRobot, caseEau, robot,
                             robot.getLastDate());
                     // Actualisation du chemin vers eau si on en trouve un plus court
                     if (cheminVersEau.getTempsChemin() < tempsDeplacement) {
@@ -80,7 +80,7 @@ public class ChefAvance extends Chef {
                 for (Direction direction : Direction.values()) {
                     try {
                         if (positionRobot.getCarte().voisinExiste(caseEau, direction, robot)) {
-                            Chemin cheminVersEau = CalculPCC.dijkstra(donnees, positionRobot,
+                            Chemin cheminVersEau = CalculPCC.dijkstra(donnees.getCarte(), positionRobot,
                                     positionRobot.getCarte().getVoisin(caseEau, direction), robot, robot.getLastDate());
                             if (cheminVersEau.getTempsChemin() < tempsDeplacement) {
                                 tempsDeplacement = cheminVersEau.getTempsChemin();
@@ -151,7 +151,7 @@ public class ChefAvance extends Chef {
                 }
                 try {
                     Chemin chemin = new Chemin();
-                    chemin = CalculPCC.dijkstra(donnees, robot.getPosition(), incendie.getPosition(), robot,
+                    chemin = CalculPCC.dijkstra(donnees.getCarte(), robot.getPosition(), incendie.getPosition(), robot,
                             robot.getLastDate());
                     if (chemin.getTempsChemin() < tempsDeplacement) { // on trouve le robot avec le chemin le plus court
                         robotTrouve = true; // on a trouvé au moins un chemin

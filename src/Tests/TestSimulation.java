@@ -1,9 +1,10 @@
 package Tests;
 
 import java.awt.Color;
-import java.io.FileNotFoundException;
-import java.util.zip.DataFormatException;
 import java.awt.Toolkit;
+import java.io.FileNotFoundException;
+import java.util.Iterator;
+import java.util.zip.DataFormatException;
 
 import Autre.CalculPCC;
 import Autre.Chemin;
@@ -11,6 +12,7 @@ import Donnees.Carte;
 import Donnees.Case;
 import Donnees.Direction;
 import Donnees.DonneesSimulation;
+import Donnees.Incendie;
 import Donnees.Robot.Robot;
 import Evenements.EventIntervenir;
 import Evenements.EventRemplir;
@@ -35,6 +37,14 @@ public class TestSimulation {
             chemin.addElement(pos, robot.getLastDate());
             Case nextCase;
 
+            // On veut récupérer dans ce test le 5ème incendie, on skip donc les 4 premiers
+            Iterator<Incendie> iter = donnees.getIncendies().iterator();
+            iter.next();
+            iter.next();
+            iter.next();
+            iter.next();
+            Incendie incendie = iter.next();
+
             Direction[] moves = { Direction.SUD, Direction.SUD, Direction.EST, Direction.EST };
 
             for (Direction dir : moves) {
@@ -44,8 +54,7 @@ public class TestSimulation {
             }
 
             chemin.creerEvenements(simulateur, robot);
-            simulateur.ajouteEvenement(
-                    new EventIntervenir(robot.getLastDate(), robot, donnees.getIncendies().get(4)));
+            simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
             chemin.getChemin().clear();
             chemin.addElement(pos, robot.getLastDate());
 
@@ -55,9 +64,10 @@ public class TestSimulation {
                 pos = nextCase;
             }
 
+            incendie = iter.next();
+
             chemin.creerEvenements(simulateur, robot);
-            simulateur.ajouteEvenement(
-                new EventIntervenir(robot.getLastDate(), robot, donnees.getIncendies().get(5)));
+            simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
             chemin.getChemin().clear();
             chemin.addElement(pos, robot.getLastDate());
 
@@ -108,7 +118,8 @@ public class TestSimulation {
         }
         // crée la fenêtre graphique dans laquelle dessiner
         GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
-        gui.setSize((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 100, (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 50);
+        gui.setSize((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 100,
+                (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 50);
 
         initialize(args[0], gui);
     }
