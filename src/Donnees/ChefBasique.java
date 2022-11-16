@@ -31,6 +31,8 @@ public class ChefBasique {
     private CalculPCC calculateur;
     private ArrayList<Robot> morts;
 
+    //TODO : remplacer morts et occupes par des HashSet
+
     /**
      * Va implémenter la stratégie de base pour le chef pompier.
      * 
@@ -94,7 +96,7 @@ public class ChefBasique {
                 // Si son réservoir est vide, il est mort et on en cherche un autre
                 if (robot.getReservoir() == 0) {
                     if (!morts.contains(robot)) { // nécessaire pour ne pas avoir de doublons
-                        this.morts.add(robot);
+                        morts.add(robot);
                     }
                     continue;
                 }
@@ -108,14 +110,15 @@ public class ChefBasique {
                 } catch (PasDeCheminException e) {
                     continue;
                 }
-                // Si il est occupé
+            // Si il est occupé
             } else {
                 // Si il est mort
                 if (robot.getReservoir() == 0 && !morts.contains(robot)) {
                     occupes.remove(robot);
                     morts.add(robot);
-                    // Si il lui reste de l'eau, il est de nouveau disponible
-                } else if (!incendies_rob.containsValue(robot)) {
+                }
+                // Si il lui reste de l'eau, il est de nouveau disponible
+                else if (!incendies_rob.containsValue(robot) && !morts.contains(robot)) {
                     occupes.remove(robot); // Si le robot peut continuer, on l'efface
                 }
             }
