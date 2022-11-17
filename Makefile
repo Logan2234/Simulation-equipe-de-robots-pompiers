@@ -64,7 +64,7 @@ exeScenarios:
 	java -classpath bin:bin/gui.jar Tests/TestScenarios cartes/carteSujet.map
 
 exeDijkstra:
-	java -classpath bin:bin/gui.jar Tests/TestDijkstra cartes/spiralOfMadness-50x50.map
+	java -classpath bin:bin/gui.jar Tests/TestDijkstra cartes/carteSujet.map
 
 exeBasique:
 	java -classpath bin:bin/gui.jar Tests/TestBasique cartes/spiralOfMadness-50x50.map

@@ -20,7 +20,7 @@ public class TestDijkstra {
         try {
             DonneesSimulation donnees = LecteurDonnees.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            new Simulation(gui, donnees, simulateur, Test.TestDijkstra, fichier);
+            new Simulation(gui, donnees, simulateur, Test.TEST_DIJKSTRA, fichier);
 
             Robot robot = donnees.getRobots().get(2);
 

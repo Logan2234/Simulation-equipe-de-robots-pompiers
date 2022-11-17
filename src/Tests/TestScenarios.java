@@ -26,7 +26,7 @@ public class TestScenarios {
         try {
             DonneesSimulation donnees = LecteurDonnees.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            new Simulation(gui, donnees, simulateur, Test.TestScenarios, fichier);
+            new Simulation(gui, donnees, simulateur, Test.TEST_SCENARIOS, fichier);
             
             Carte carte = donnees.getCarte();
             Robot robot1 = donnees.getRobots().get(0);

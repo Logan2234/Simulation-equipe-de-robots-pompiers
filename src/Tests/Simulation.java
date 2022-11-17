@@ -33,6 +33,7 @@ class Simulation implements Simulable {
         try {
             Thread.sleep(10);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
 
         draw();
@@ -116,19 +117,19 @@ class Simulation implements Simulable {
 
         // On réinitialise les données en fonction du test appelant
         switch (testAppelant) {
-            case TestSimulation:
+            case TEST_SIMULATION:
                 TestSimulation.initialize(fichier, gui);
                 break;
-            case TestScenarios:
+            case TEST_SCENARIOS:
                 TestScenarios.initialize(fichier, gui);
                 break;
-            case TestDijkstra:
+            case TEST_DIJKSTRA:
                 TestDijkstra.initialize(fichier, gui);
                 break;
-            case TestBasique:
+            case TEST_BASIQUE:
                 TestBasique.initialize(fichier, gui);
                 break;
-            case TestAvance:
+            case TEST_AVANCE:
                 TestAvance.initialize(fichier, gui);
                 break;
             default:

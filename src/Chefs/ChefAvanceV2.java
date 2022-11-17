@@ -1,10 +1,16 @@
-package Donnees;
+package Chefs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import Autre.CalculPCC;
 import Autre.Chemin;
+import Donnees.Carte;
+import Donnees.Case;
+import Donnees.Direction;
+import Donnees.DonneesSimulation;
+import Donnees.Incendie;
+import Donnees.NatureTerrain;
 import Donnees.Robot.Robot;
 import Donnees.Robot.RobotDrone;
 import Evenements.EventIntervenir;
@@ -15,22 +21,17 @@ import Exceptions.IllegalPathException;
 import Exceptions.PasDeCheminException;
 import Exceptions.NoWaterException;
 
-public class ChefAvanceV2 {
+public class ChefAvanceV2 extends Chef{
     private Carte carte;
-    private DonneesSimulation donnees;
-    private Simulateur simulateur;
     private HashMap<Incendie, ArrayList<Robot>> incendies_rob;
-    private ArrayList<Robot> occupes;
     private ArrayList<Case> casesAvecEau;
 
     //TODO : encapsulation des méthodes (private, protected, public ...)
     //TODO : documentation de la classe et du constructeur (cf chef basique)
 
     public ChefAvanceV2(DonneesSimulation donnees, Simulateur simulateur) {
+        super(donnees, simulateur);
         this.carte = donnees.getCarte();
-        this.donnees = donnees;
-        this.simulateur = simulateur;
-        this.occupes = new ArrayList<Robot>();
         this.incendies_rob = new HashMap<Incendie, ArrayList<Robot>>();
         for (Incendie incendie : donnees.getIncendies()) {
             incendies_rob.put(incendie, new ArrayList<Robot>());
@@ -62,7 +63,7 @@ public class ChefAvanceV2 {
         }
     }
     
-    public void gestionIncendies(Incendie incendie) throws NoWaterException{
+    protected void gestionIncendies(Incendie incendie) throws NoWaterException{
         boolean robotTrouve = false;
         Robot robotAMobiliser = donnees.getRobots()[0];
         long tempsDuRobot = Long.MAX_VALUE;
@@ -122,7 +123,7 @@ public class ChefAvanceV2 {
         }
     }
 
-    public void donneOrdre(Robot robot, Incendie incendie, Chemin chemin) throws IllegalPathException{
+    protected void donneOrdre(Robot robot, Incendie incendie, Chemin chemin) throws IllegalPathException{
         try{
             chemin.creerEvenements(simulateur, robot);
             if (robot.getCapacite() != -1) { // si ce n'est pas un robot à pattes
