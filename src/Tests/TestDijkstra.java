@@ -11,7 +11,6 @@ import Donnees.DonneesSimulation;
 import Donnees.Incendie;
 import Donnees.Robot.Robot;
 import Evenements.Simulateur;
-import Exceptions.IllegalPathException;
 import Exceptions.PasDeCheminException;
 import gui.GUISimulator;
 import io.LecteurDonnees;
@@ -33,9 +32,6 @@ public class TestDijkstra {
             chemin = CalculPCC.dijkstra(donnees.getCarte(), robot.getPosition(), incendie.getPosition(), robot,
                     robot.getLastDate());
             chemin.creerEvenements(simulateur, robot);
-
-        } catch (IllegalPathException e) {
-            System.out.println(e);
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {
@@ -52,8 +48,8 @@ public class TestDijkstra {
         }
         // crée la fenêtre graphique dans laquelle dessiner
         GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
-        gui.setSize((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 100,
-                (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 50);
+        gui.setSize((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 200,
+                (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 150);
 
         initialize(args[0], gui);
     }

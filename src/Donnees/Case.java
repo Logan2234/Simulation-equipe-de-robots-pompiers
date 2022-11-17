@@ -2,9 +2,9 @@ package Donnees;
 
 public class Case {
 
-    private NatureTerrain nature;
-    private int ligne;
-    private int colonne;
+    private final NatureTerrain nature;
+    private final int ligne;
+    private final int colonne;
     // Pour trouver les voisins d'une case il faut qu'il y ait un lien entre les
     // cases et la carte
     private Carte carte;

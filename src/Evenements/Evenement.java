@@ -2,10 +2,11 @@ package Evenements;
 
 import Exceptions.CellOutOfMapException;
 import Exceptions.NoFireException;
+import Exceptions.NoMoreFireException;
 import Exceptions.NoWaterException;
 
 public abstract class Evenement implements Comparable<Evenement> {
-    private long date;
+    private final long date;
 
     public Evenement(long date) {
         this.date = date;
@@ -18,7 +19,7 @@ public abstract class Evenement implements Comparable<Evenement> {
         return this.date;
     }
 
-    public abstract void execute() throws NoFireException, CellOutOfMapException, NoWaterException;
+    public abstract void execute() throws NoFireException, CellOutOfMapException, NoWaterException, NoMoreFireException;
 
     /**
      * @param e : Évènement à comparer

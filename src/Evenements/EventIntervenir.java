@@ -5,8 +5,8 @@ import Donnees.Robot.Robot;
 import Exceptions.NoFireException;
 
 public class EventIntervenir extends Evenement {
-    private Robot robot;
-    private Incendie incendie;
+    private final Robot robot;
+    private final Incendie incendie;
 
     public EventIntervenir(long date, Robot robot, Incendie incendie) {
         super(date + robot.getTmpVersement());
@@ -25,12 +25,8 @@ public class EventIntervenir extends Evenement {
             throw new NoFireException();
 
         int qteRequise = this.incendie.getLitres();
-        int qteVersee;
-        if (robot.getCapacite() != -1) { // Si le robot n'est pas un robot à pattes
-            qteVersee = Math.min(qteRequise, Math.min(this.robot.getQteVersement(), this.robot.getReservoir()));
-            this.robot.deverserEau(qteVersee);
-        } else
-            qteVersee = Math.min(qteRequise, 10);
+        int qteVersee = Math.min(qteRequise, Math.min(this.robot.getQteVersement(), this.robot.getReservoir()));
+        this.robot.deverserEau(qteVersee);
         this.incendie.eteindre(qteVersee);
     }
 

@@ -1,13 +1,10 @@
 package Donnees;
 
-import java.awt.Color;
-
 public class Incendie {
 
-    private Case position;
-    private int litres_requis_init;
+    private final Case position;
+    private final int litres_requis_init;
     private int litres_requis;
-    private static Color colIncendie;
 
     /**
      * @param position      : case où se situe l'incencie
@@ -17,7 +14,6 @@ public class Incendie {
         this.position = position;
         this.litres_requis_init = litres_requis;
         this.litres_requis = litres_requis;
-        colIncendie = new Color(240, 78, 31);
     }
 
     /**
@@ -43,13 +39,6 @@ public class Incendie {
      */
     public Case getPosition() {
         return this.position;
-    }
-
-    /**
-     * @return Color : Couleur des incendies
-     */
-    public static Color getColor() {
-        return colIncendie;
     }
 
     /**

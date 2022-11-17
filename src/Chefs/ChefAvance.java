@@ -15,7 +15,6 @@ import Evenements.EventIntervenir;
 import Evenements.EventRemplir;
 import Evenements.Simulateur;
 import Exceptions.CellOutOfMapException;
-import Exceptions.IllegalPathException;
 import Exceptions.PasDeCheminException;
 
 public class ChefAvance extends Chef {
@@ -124,9 +123,6 @@ public class ChefAvance extends Chef {
                                                                                                                     // wesh
                     } catch (PasDeCheminException e) {
                         continue;
-                    } catch (IllegalPathException e) {
-                        System.out.println(e);
-                        continue;
                     }
                 }
                 occupes.remove(robotDeIcendie); // du coup le robot n'est plus occupé
@@ -181,9 +177,6 @@ public class ChefAvance extends Chef {
                         // On enlève le robot de la liste de l'intervention sur l'incendie
                     } catch (PasDeCheminException e) {
                         continue;
-                    } catch (IllegalPathException e) {
-                        System.out.println(e);
-                        continue;
                     }
                 } else
                     continue;
@@ -194,73 +187,64 @@ public class ChefAvance extends Chef {
             System.out.println(incendie);
             System.out.println(robotAMobiliser);
             System.out.println(occupes);
-            try {
-                // Mobilisation du robot en l'ajoutant à la liste
-                ArrayList<Robot> nouvelleListe = incendies_rob.get(incendie);
-                nouvelleListe.add(robotAMobiliser);
-                incendies_rob.put(incendie, nouvelleListe);
-                // System.out.println(cheminAParcourir);
-                occupes.add(robotAMobiliser);
-                cheminAParcourir.creerEvenements(simulateur, robotAMobiliser);
-                // On regarde si le feu n'a pas été éteint avant
-                if (incendie.getLitres() != 0) {
-                    System.out.println("On va éteindre ");
-                    if (robotAMobiliser.getCapacite() != -1) { // si ce n'est pas un robot à pattes
-                        for (int i = 0; i < Math.min(incendie.getLitres() / robotAMobiliser.getQteVersement(),
-                                robotAMobiliser.getReservoir() / robotAMobiliser.getQteVersement()); i++) {
-                            simulateur.ajouteEvenement(
-                                    new EventIntervenir(robotAMobiliser.getLastDate(), robotAMobiliser, incendie));
-                        }
-                    } else { // le robot à pattes va verser son eau
-                        for (int i = 0; i < incendie.getLitres() / robotAMobiliser.getQteVersement(); i++) {
-                            simulateur.ajouteEvenement(
-                                    new EventIntervenir(robotAMobiliser.getLastDate(), robotAMobiliser, incendie));
-                        }
+            // Mobilisation du robot en l'ajoutant à la liste
+            ArrayList<Robot> nouvelleListe = incendies_rob.get(incendie);
+            nouvelleListe.add(robotAMobiliser);
+            incendies_rob.put(incendie, nouvelleListe);
+            // System.out.println(cheminAParcourir);
+            occupes.add(robotAMobiliser);
+            cheminAParcourir.creerEvenements(simulateur, robotAMobiliser);
+            // On regarde si le feu n'a pas été éteint avant
+            if (incendie.getLitres() != 0) {
+                System.out.println("On va éteindre ");
+                if (robotAMobiliser.getTmpRemplissage() != -1) { // si ce n'est pas un robot à pattes
+                    for (int i = 0; i < Math.min(incendie.getLitres() / robotAMobiliser.getQteVersement(),
+                            robotAMobiliser.getReservoir() / robotAMobiliser.getQteVersement()); i++) {
+                        simulateur.ajouteEvenement(
+                                new EventIntervenir(robotAMobiliser.getLastDate(), robotAMobiliser, incendie));
                     }
-                    // On démobilise le robot
-                    if (incendies_rob.containsKey(incendie) && incendies_rob.get(incendie).contains(robotAMobiliser)) {
-                        nouvelleListe.remove(robotAMobiliser);
-                        incendies_rob.put(incendie, nouvelleListe);
+                } else { // le robot à pattes va verser son eau
+                    for (int i = 0; i < incendie.getLitres() / robotAMobiliser.getQteVersement(); i++) {
+                        simulateur.ajouteEvenement(
+                                new EventIntervenir(robotAMobiliser.getLastDate(), robotAMobiliser, incendie));
                     }
-                    System.out.println("On a essayé d'éteindre");
-                    // On regarde l'état de l'incendie
-                    if (incendie.getLitres() == 0) {
-                        System.out.println("MAAAARC");
-                        for (Robot robotDeIcendie : incendies_rob.get(incendie)) {
-                            if (robotDeIcendie.getReservoir() == 0) {
-                                try {
-                                    Chemin cheminVersEau = ouAllerRemplirReservoir(robotDeIcendie);
-                                    if (cheminVersEau == null)
-                                        continue; // ! On peut avoir un stack overflow s'il n'y a pas de robot à pattes
-                                    cheminVersEau.creerEvenements(this.simulateur, robotDeIcendie); // le robot va
-                                                                                                    // jusqu'à l'eau et
-                                                                                                    // se remplit
-                                    simulateur.ajouteEvenement(
-                                            new EventRemplir(robotDeIcendie.getLastDate(), robotDeIcendie));
-                                } catch (PasDeCheminException e) {
+                }
+                // On démobilise le robot
+                if (incendies_rob.containsKey(incendie) && incendies_rob.get(incendie).contains(robotAMobiliser)) {
+                    nouvelleListe.remove(robotAMobiliser);
+                    incendies_rob.put(incendie, nouvelleListe);
+                }
+                System.out.println("On a essayé d'éteindre");
+                // On regarde l'état de l'incendie
+                if (incendie.getLitres() == 0) {
+                    System.out.println("MAAAARC");
+                    for (Robot robotDeIcendie : incendies_rob.get(incendie)) {
+                        if (robotDeIcendie.getReservoir() == 0) {
+                            try {
+                                Chemin cheminVersEau = ouAllerRemplirReservoir(robotDeIcendie);
+                                if (cheminVersEau == null)
                                     continue;
-                                } catch (IllegalPathException e) {
-                                    System.out.println(e);
-                                    continue;
-                                }
+                                cheminVersEau.creerEvenements(this.simulateur, robotDeIcendie);
+                                simulateur.ajouteEvenement(
+                                        new EventRemplir(robotDeIcendie.getLastDate(), robotDeIcendie));
+                            } catch (PasDeCheminException e) {
+                                continue;
                             }
-                            occupes.remove(robotDeIcendie);
                         }
-                        incendies_rob.remove(incendie);
-                        System.out.println("On l'a éteint");
-                    }
-                    // Sinon on annule l'opération
-                } else { // On garde ça au cas où, mais on ne devrait pas rentrer là dedans.
-                    System.out.println("On l'a éteint avant nous\n");
-                    if (robotAMobiliser.getReservoir() > 0) {
-                        occupes.remove(robotAMobiliser);
-                    } else if (robotAMobiliser.getReservoir() == 0 && !occupes.contains(robotAMobiliser)) {
-                        occupes.add(robotAMobiliser);
+                        occupes.remove(robotDeIcendie);
                     }
                     incendies_rob.remove(incendie);
+                    System.out.println("On l'a éteint");
                 }
-            } catch (IllegalPathException e) {
-                System.out.println(e);
+                // Sinon on annule l'opération
+            } else { // On garde ça au cas où, mais on ne devrait pas rentrer là dedans.
+                System.out.println("On l'a éteint avant nous\n");
+                if (robotAMobiliser.getReservoir() > 0) {
+                    occupes.remove(robotAMobiliser);
+                } else if (robotAMobiliser.getReservoir() == 0 && !occupes.contains(robotAMobiliser)) {
+                    occupes.add(robotAMobiliser);
+                }
+                incendies_rob.remove(incendie);
             }
         }
     }

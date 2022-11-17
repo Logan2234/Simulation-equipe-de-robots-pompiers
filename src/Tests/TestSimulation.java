@@ -18,7 +18,6 @@ import Evenements.EventIntervenir;
 import Evenements.EventRemplir;
 import Evenements.Simulateur;
 import Exceptions.CellOutOfMapException;
-import Exceptions.IllegalPathException;
 import gui.GUISimulator;
 import io.LecteurDonnees;
 
@@ -99,9 +98,6 @@ public class TestSimulation {
 
             chemin.creerEvenements(simulateur, robot);
             simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
-
-        } catch (IllegalPathException e) {
-            System.out.println(e);
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {
@@ -118,8 +114,8 @@ public class TestSimulation {
         }
         // crée la fenêtre graphique dans laquelle dessiner
         GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
-        gui.setSize((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 100,
-                (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 50);
+        gui.setSize((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 200,
+                (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 150);
 
         initialize(args[0], gui);
     }

@@ -1,27 +1,36 @@
 package Tests;
 
+import java.util.Scanner;
+
+import Chefs.Chef;
 import Donnees.DonneesSimulation;
 import Evenements.Simulateur;
 import Exceptions.CellOutOfMapException;
 import Exceptions.NoFireException;
+import Exceptions.NoMoreFireException;
 import Exceptions.NoWaterException;
 import gui.GUISimulator;
 import gui.Simulable;
 import io.Dessin;
 
 class Simulation implements Simulable {
-    private GUISimulator gui;
-    private DonneesSimulation donnees;
-    private Test testAppelant;
-    private String fichier;
-    private Simulateur simulateur;
+    private final GUISimulator gui;
+    private final DonneesSimulation donnees;
+    private final Test testAppelant;
+    private final String fichier;
+    private final Simulateur simulateur;
+    private final Chef chef;
+    private boolean simulationTerminee;
 
-    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test test, String fichier) {
+    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test test, String fichier,
+            Chef chef) {
         this.gui = gui;
         this.donnees = donnees;
         this.testAppelant = test;
         this.fichier = fichier;
         this.simulateur = simulateur;
+        this.chef = chef;
+        this.simulationTerminee = false;
 
         gui.setSimulable(this);
 
@@ -30,7 +39,26 @@ class Simulation implements Simulable {
             Thread.sleep(10);
         } catch (InterruptedException e) {
         }
+        System.out.println();    
+        draw();
+    }
 
+    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test test, String fichier) {
+        this.gui = gui;
+        this.donnees = donnees;
+        this.testAppelant = test;
+        this.fichier = fichier;
+        this.simulateur = simulateur;
+        this.chef = null;
+
+        gui.setSimulable(this);
+
+        // Force l'affichage correct de la carte (c'est à dire à la bonne taille)
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+        }
+        System.out.println();
         draw();
     }
 
@@ -44,24 +72,40 @@ class Simulation implements Simulable {
 
     /**
      * Fonction de gui.jar overridée permettant d'exécuter les évènements
-     * correspondant à {@code dateSimulation} avant de l'incrémenter puis de
+     * correspondant à {@code dateSimulation} après avoir incrémenté la date puis de
      * redessiner le résultat
      */
     @Override
     public void next() {
-        if (!simulateur.simulationTerminee()){
-            simulateur.incrementeDate();
+        
+        if (!simulationTerminee) {
+            try {
+                // Si la simulation n'est pas terminée on incrémente la date
+                if (!simulateur.simulationTerminee())
+                    simulateur.incrementeDate();
+
+                // On exécute les évènements
+                simulateur.execute();
+                draw();
+            } catch (CellOutOfMapException e) {
+                System.out.println(e);
+            } catch (NoFireException e) {
+                System.out.println(e);
+            } catch (NoWaterException e) {
+                System.out.println(e);
+            } catch (NoMoreFireException e) {
+                simulationTerminee = true;
+                System.out.println(e);
+            }
+
+        } else {
+            // Pour quitter la simulation
+            System.out.println("\nLa simulation est terminée.\n\nAppuyez sur ENTRER pour quitter.");
+            Scanner scanner = new Scanner(System.in);
+            scanner.nextLine();
+            scanner.close();
+            System.exit(0);
         }
-        try {
-            simulateur.execute();
-        } catch (CellOutOfMapException e) {
-            System.out.println(e);
-        } catch (NoFireException e) {
-            System.out.println(e);
-        } catch (NoWaterException e) {
-            System.out.println(e);
-        }
-        draw();
     }
 
     /**
