@@ -55,11 +55,12 @@ public class ChefBasique extends Chef {
         // Création du chemin et des événements associés
         Chemin chemin = CalculPCC.dijkstra(donnees.getCarte(), robot.getPosition(), incendie.getPosition(), robot,
                 simulateur.getDateSimulation());
+        System.out.println("chemin calcul \n");
         chemin.creerEvenements(simulateur, robot);
 
         // Création de toutes les interventions unitaires sur l'incendie
         for (int i = 0; i <= Math.min(incendie.getLitres() / robot.getQteVersement(),
-                robot.getReservoir() / robot.getQteVersement()); i++)
+                            robot.getReservoir() / robot.getQteVersement()); i++)
             simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
     }
 
@@ -77,11 +78,15 @@ public class ChefBasique extends Chef {
             if (!occupes.contains(robot) && !morts.contains(robot)) {
                 // On essaie de l'envoyer sur l'incendie, si cela échoue on en prend un autre
                 try {
+                    System.out.println(incendie);
                     donneOrdre(robot, incendie);
+                    System.out.println(robot);
                     occupes.add(robot);
                     incendiesRob.put(incendie, robot);
-                    return; // Si on a réussi, on ne va pas envoyer de second robot sur l'incendie
+                    break; // Si on a réussi, on ne va pas envoyer de second robot sur l'incendie
                 } catch (NoPathAvailableException e) {
+                    System.out.println(e);
+                    continue;
                     // On n'a pas besoin d'afficher quoi que ce soit, juste on continue
                 }
             }
@@ -96,7 +101,7 @@ public class ChefBasique extends Chef {
     @Override
     public void strategie() throws NoMoreFireException, NoMoreRobotsException {
 
-        // Tant qu'il y a des incendies à éteidnre et des robots avec de l'eau
+        // S'il y a des incendies à éteindre et des robots avec de l'eau, on va choisir un incendie
         if (!incendiesRob.isEmpty() && donnees.getRobots().size() != morts.size()) {
             for (Incendie incendie : donnees.getIncendies()) {
 
@@ -106,10 +111,9 @@ public class ChefBasique extends Chef {
 
                 // Si il est en cours de traitement, on regarde son état
                 if (incendiesRob.get(incendie) != null) {
-
                     Robot robot = incendiesRob.get(incendie);
 
-                    // Si le robot est vide il devient innutilisable
+                    // Si le robot est vide il devient inutilisable
                     if (robot.getReservoir() == 0) {
                         incendiesRob.put(incendie, null);
                         occupes.remove(robot);
