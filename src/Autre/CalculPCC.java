@@ -130,7 +130,10 @@ public class CalculPCC {
 
             if (caseCourante.getCarte().voisinExiste(caseMinimale, Direction.SUD, robot)) {
                 try {
+                    System.out.println(caseMinimale.toString());
+                    System.out.println(robot.toString());
                     caseATraiter = caseCourante.getCarte().getVoisin(caseMinimale, Direction.SUD);
+                    System.out.println(caseATraiter.toString());
                     long temps = tpsDpltCaseACase(caseMinimale, caseATraiter, robot);
                     long tempsTotal = temps + distanceCaseMinimale;
                     if (tempsTotal < distance[I + 1][J]) {

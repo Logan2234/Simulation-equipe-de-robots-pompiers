@@ -13,7 +13,7 @@ import Evenements.Simulateur;
 import Exceptions.CellOutOfMapException;
 import Exceptions.IllegalPathException;
 import Exceptions.PasDeCheminException;
-import Exceptions.PasEauDansCarte;
+import Exceptions.NoWaterException;
 
 public class ChefAvanceV2 {
     private Carte carte;
@@ -21,7 +21,6 @@ public class ChefAvanceV2 {
     private Simulateur simulateur;
     private HashMap<Incendie, ArrayList<Robot>> incendies_rob;
     private ArrayList<Robot> occupes;
-    private CalculPCC calculateur;
     private ArrayList<Case> casesAvecEau;
 
     //TODO : encapsulation des méthodes (private, protected, public ...)
@@ -33,7 +32,6 @@ public class ChefAvanceV2 {
         this.simulateur = simulateur;
         this.occupes = new ArrayList<Robot>();
         this.incendies_rob = new HashMap<Incendie, ArrayList<Robot>>();
-        calculateur = new CalculPCC(donnees);
         for (Incendie incendie : donnees.getIncendies()) {
             incendies_rob.put(incendie, new ArrayList<Robot>());
         }
@@ -57,14 +55,14 @@ public class ChefAvanceV2 {
                 }
                 try{
                     gestionIncendies(incendie);
-                } catch (PasEauDansCarte e){
+                } catch (NoWaterException e){
                     System.out.println("Il n'y a pas d'eau dans la mappe. Les robots ne peuvent pas remplir son reservoir.");
                 }
             }
         }
     }
     
-    public void gestionIncendies(Incendie incendie) throws PasEauDansCarte{
+    public void gestionIncendies(Incendie incendie) throws NoWaterException{
         boolean robotTrouve = false;
         Robot robotAMobiliser = donnees.getRobots()[0];
         long tempsDuRobot = Long.MAX_VALUE;
@@ -91,7 +89,7 @@ public class ChefAvanceV2 {
             }
             if (!occupes.contains(robot)){
                 try {
-                    Chemin chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot, robot.getLastDate());
+                    Chemin chemin = CalculPCC.dijkstra(carte, robot.getPosition(), incendie.getPosition(), robot, robot.getLastDate());
                     if (chemin.getTempsChemin() < tempsDuRobot){
                         robotTrouve = true;
                         robotAMobiliser = robot;
@@ -151,21 +149,20 @@ public class ChefAvanceV2 {
      * @return Chemin - Chemin idéal vers une source d'eau
      * @throws PasDeCheminException - Exception s'il n'y a pas de chemins possibles
      *                              du robot vers une source d'eau
-     * @throws PasEauDansCarte      - Exception s'il n'y a pas d'eau dans la carte
+     * @throws NoWaterException      - Exception s'il n'y a pas d'eau dans la carte
      */
-    public Chemin ouAllerRemplirReservoir(Robot robot) throws PasEauDansCarte, PasDeCheminException { 
+    public Chemin ouAllerRemplirReservoir(Robot robot) throws NoWaterException, PasDeCheminException { 
         if (casesAvecEau.size() == 0)
-            throw new PasEauDansCarte();
+            throw new NoWaterException();
         // Initialisation du chemin
         Chemin cheminARetourner = new Chemin();
         long tempsDeplacement = Long.MAX_VALUE;
         Case positionRobot = robot.getPosition();
         boolean ilYAUnChemin = false;
-
         for (Case caseEau : casesAvecEau) {
             if (robot.getCapacite() == 10000) { // Car on remplit le réservoir au-dessus
                 try {
-                    Chemin cheminVersEau = calculateur.dijkstra(positionRobot, caseEau, robot, robot.getLastDate());
+                    Chemin cheminVersEau = CalculPCC.dijkstra(carte, positionRobot, caseEau, robot, robot.getLastDate());
                     // Actualisation du chemin vers eau si on en trouve un plus court
                     if (cheminVersEau.getTempsChemin() < tempsDeplacement) {
                         tempsDeplacement = cheminVersEau.getTempsChemin();
@@ -179,7 +176,7 @@ public class ChefAvanceV2 {
                 for (Direction direction : Direction.values()) {
                     try {
                         if (positionRobot.getCarte().voisinExiste(caseEau, direction, robot)) {
-                            Chemin cheminVersEau = calculateur.dijkstra(positionRobot,
+                            Chemin cheminVersEau = CalculPCC.dijkstra(carte, positionRobot,
                                     positionRobot.getCarte().getVoisin(caseEau, direction), robot, robot.getLastDate());
                             if (cheminVersEau.getTempsChemin() < tempsDeplacement) {
                                 tempsDeplacement = cheminVersEau.getTempsChemin();
@@ -202,12 +199,12 @@ public class ChefAvanceV2 {
         return cheminARetourner;
     }
     
-    public void vaRemplirEau(Robot robot) throws PasEauDansCarte{
+    public void vaRemplirEau(Robot robot) throws NoWaterException{
         try {
             Chemin chemin = ouAllerRemplirReservoir(robot);
             chemin.creerEvenements(simulateur, robot);
             simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
-        } catch (PasEauDansCarte e){
+        } catch (NoWaterException e){
             throw e;
         } catch (PasDeCheminException e){
             System.out.println("Pas possible de remplir reservoir.");

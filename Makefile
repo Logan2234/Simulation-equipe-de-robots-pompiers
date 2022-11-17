@@ -67,7 +67,7 @@ exeDijkstra:
 	java -classpath bin:bin/gui.jar Tests/TestDijkstra cartes/carteSujet.map
 
 exeBasique:
-	java -classpath bin:bin/gui.jar Tests/TestBasique cartes/mushroomofHell-20x20.map
+	java -classpath bin:bin/gui.jar Tests/TestBasique cartes/spiralOfMadness-50x50.map
 
 exeAvance:
 	java -classpath bin:bin/gui.jar Tests/TestAvance cartes/carteSujet.map
