@@ -20,7 +20,8 @@ public class TestBasique {
             DonneesSimulation donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
             ChefBasique chef = new ChefBasique(donnees, simulateur);
-            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestBasique, fichier, chef);
+            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestBasique, fichier);
+            
             chef.strategie();
 
         } catch (FileNotFoundException e) {

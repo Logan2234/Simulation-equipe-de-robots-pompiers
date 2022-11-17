@@ -2,7 +2,6 @@ package Tests;
 
 import java.util.Scanner;
 
-import Chefs.Chef;
 import Donnees.DonneesSimulation;
 import Evenements.Simulateur;
 import Exceptions.CellOutOfMapException;
@@ -19,29 +18,7 @@ class Simulation implements Simulable {
     private final Test testAppelant;
     private final String fichier;
     private final Simulateur simulateur;
-    private final Chef chef;
     private boolean simulationTerminee;
-
-    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test test, String fichier,
-            Chef chef) {
-        this.gui = gui;
-        this.donnees = donnees;
-        this.testAppelant = test;
-        this.fichier = fichier;
-        this.simulateur = simulateur;
-        this.chef = chef;
-        this.simulationTerminee = false;
-
-        gui.setSimulable(this);
-
-        // Force l'affichage correct de la carte (c'est à dire à la bonne taille)
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-        }
-        System.out.println();    
-        draw();
-    }
 
     public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test test, String fichier) {
         this.gui = gui;
@@ -49,16 +26,13 @@ class Simulation implements Simulable {
         this.testAppelant = test;
         this.fichier = fichier;
         this.simulateur = simulateur;
-        this.chef = null;
 
         gui.setSimulable(this);
 
-        // Force l'affichage correct de la carte (c'est à dire à la bonne taille)
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-        }
-        System.out.println();
+        System.out.println("\n====================================================================");
+        System.out.println("                       DEBUT DE LA SIMULATION                        ");
+        System.out.println("====================================================================\n");
+        
         draw();
     }
 
@@ -94,13 +68,16 @@ class Simulation implements Simulable {
             } catch (NoWaterException e) {
                 System.out.println(e);
             } catch (NoMoreFireException e) {
+                System.out.println(e.getMessage());
                 simulationTerminee = true;
-                System.out.println(e);
             }
 
         } else {
             // Pour quitter la simulation
-            System.out.println("\nLa simulation est terminée.\n\nAppuyez sur ENTRER pour quitter.");
+            System.out.println("\n====================================================================");
+            System.out.println("                        FIN DE LA SIMULATION                         ");
+            System.out.println("====================================================================\n");
+            System.out.println("Appuyez sur ENTRER pour quitter...");
             Scanner scanner = new Scanner(System.in);
             scanner.nextLine();
             scanner.close();

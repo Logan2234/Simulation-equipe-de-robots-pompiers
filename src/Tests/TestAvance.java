@@ -19,7 +19,7 @@ public class TestAvance {
             DonneesSimulation donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
             ChefAvance chef = new ChefAvance(donnees, simulateur);
-            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestBasique, fichier, chef);
+            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestBasique, fichier);
 
             chef.strategie();
 
