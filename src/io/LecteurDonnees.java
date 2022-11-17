@@ -2,10 +2,11 @@ package io;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.zip.DataFormatException;
 
 import Donnees.Carte;
@@ -51,7 +52,7 @@ public class LecteurDonnees {
 
         // Création du tableau des incendies
         int nbIncendies = lireIncendies();
-        LinkedList<Incendie> incendies = new LinkedList<Incendie>();
+        Set<Incendie> incendies = new HashSet<Incendie>();
 
         for (int i = 0; i < nbIncendies; i++) {
             incendies.add(lireIncendie(i, carte));

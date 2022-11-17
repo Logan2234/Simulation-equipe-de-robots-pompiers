@@ -46,9 +46,9 @@ public class RobotChenilles extends Robot {
     @Override
     public double getVitesse(NatureTerrain nature) {
         if (nature == NatureTerrain.FORET)
-            return this.getVitesseDefaut() / 2;
+            return vitesseDefaut / 2;
         else if (nature != NatureTerrain.EAU && nature != NatureTerrain.ROCHE)
-            return this.getVitesseDefaut();
+            return vitesseDefaut;
         else
             return 0;
     }

@@ -5,7 +5,7 @@ import java.awt.Toolkit;
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 
-import Donnees.ChefAvance;
+import Chefs.ChefAvance;
 import Donnees.DonneesSimulation;
 import Evenements.Simulateur;
 import gui.GUISimulator;

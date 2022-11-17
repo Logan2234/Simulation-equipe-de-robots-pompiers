@@ -8,14 +8,15 @@ import Exceptions.NoWaterException;
 
 public abstract class Robot {
     private Case position;
-    private int capacite; // en L.
     private int reservoir; // en L.
-    private int tmpVersement; // en s.
-    private int qteVersement; // en L.
-    private int tmpRemplissage; // en s.
-    private double vitesseDefaut; // en m/s.
     private long lastDate;
-    private String imagePath;
+    private final int capacite; // en L.
+    private final int tmpVersement; // en s.
+    private final int qteVersement; // en L.
+    private final int tmpRemplissage; // en s.
+    protected final double vitesseDefaut; // en m/s. Protected car utilisé dans les sous-classes
+    private final String imagePath;
+    
     /**
      * @param position      : spécifie la position actuelle du robot
      * @param capacite      : donne la capacité maximale du réservoir du robot

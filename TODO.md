@@ -7,10 +7,10 @@
 
 ## REPORTED BUGS:
 * On ne peut pas restart les tests quand on à un chef (TestBasique.java)
+* La simulation ne se termine pas toujours quand le pas est trop élevé (sauf sur carteSujet et mushroomOfHell)
+* Pourquoi le spiralOfMadness ne passe pas du tout ? Jorge plz fix Dijkstra.
 
 ## BUGS BEING INVESTIGATED:
-* Pourquoi le spiralOfMadness ne passe pas du tout ?
-* Pourquoi le testBasique ne marche pas sur desertOfDeath ?
 
 ## PISTE D'AMÉLIORATION:
 * 

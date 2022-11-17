@@ -1,4 +1,4 @@
-# Ensimag 2A POO - TP 2018/19
+# Ensimag 2A POO - TP 2022/23
 # ============================
 #
 # Ce Makefile permet de compiler le test de l'ihm en ligne de commande.
@@ -67,7 +67,7 @@ exeDijkstra:
 	java -classpath bin:bin/gui.jar Tests/TestDijkstra cartes/carteSujet.map
 
 exeBasique:
-	java -classpath bin:bin/gui.jar Tests/TestBasique cartes/mushroomOfHell-20x20.map
+	java -classpath bin:bin/gui.jar Tests/TestBasique cartes/desertOfDeath-20x20.map
 
 exeAvance:
 	java -classpath bin:bin/gui.jar Tests/TestAvance cartes/carteSujet.map

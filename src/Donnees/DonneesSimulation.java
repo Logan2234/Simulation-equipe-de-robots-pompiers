@@ -1,13 +1,13 @@
 package Donnees;
 
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.Set;
 
 import Donnees.Robot.Robot;
 
 public class DonneesSimulation {
     private Carte carte;
-    private LinkedList<Incendie> incendies;
+    private Set<Incendie> incendies;
     private Robot robots[];
 
     /**
@@ -15,7 +15,7 @@ public class DonneesSimulation {
      * @param incendies : liste des incendies de départ de la simulation
      * @param robots    : table des robots à disposition
      */
-    public DonneesSimulation(Carte carte, LinkedList<Incendie> incendies, Robot[] robots) {
+    public DonneesSimulation(Carte carte, Set<Incendie> incendies, Robot[] robots) {
         this.carte = carte;
         this.incendies = incendies;
         this.robots = robots;
@@ -29,9 +29,9 @@ public class DonneesSimulation {
     }
 
     /**
-     * @return LinkedList<Incendie> : liste des incendies actuels dans la simulation
+     * @return List<Incendie> : liste des incendies actuels dans la simulation
      */
-    public LinkedList<Incendie> getIncendies() {
+    public Set<Incendie> getIncendies() {
         return incendies;
     }
 

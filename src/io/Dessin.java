@@ -1,7 +1,7 @@
 package io;
 
 import java.awt.Color;
-import java.util.LinkedList;
+import java.util.Set;
 
 import Donnees.Carte;
 import Donnees.Case;
@@ -75,8 +75,8 @@ public class Dessin {
 
             // Dessin de la jauge
             if (robot.getReservoir() != 0) {
-                float pourcentageReservoir = (float)robot.getReservoir() / robot.getCapacite();
-                gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j + 3 * tailleCase / 10,
+                float pourcentageReservoir = (float) robot.getReservoir() / robot.getCapacite();
+                gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j + 3 * tailleCase / 7,
                         tailleCase * i + tailleCase / 2 + (int) ((tailleCase / 4) * (1 - pourcentageReservoir)),
                         Color.BLUE, Color.BLUE, 3, (int) (tailleCase / 2 * pourcentageReservoir)));
             }
@@ -91,7 +91,7 @@ public class Dessin {
      * @param tailleCase : Taille des cases telles qu'elles doivent apparaître sur
      *                   le dessin (non pas la taille fictive des cases)
      */
-    private static void dessinIncendies(LinkedList<Incendie> incendies, GUISimulator gui, int tailleCase) {
+    private static void dessinIncendies(Set<Incendie> incendies, GUISimulator gui, int tailleCase) {
         for (Incendie incendie : incendies) {
             if (incendie.getLitres() > 0) {
                 Case pos = incendie.getPosition();

@@ -30,7 +30,7 @@ class Simulation implements Simulable {
             Thread.sleep(10);
         } catch (InterruptedException e) {
         }
-        
+
         draw();
     }
 
@@ -49,6 +49,9 @@ class Simulation implements Simulable {
      */
     @Override
     public void next() {
+        if (!simulateur.simulationTerminee()){
+            simulateur.incrementeDate();
+        }
         try {
             simulateur.execute();
         } catch (CellOutOfMapException e) {
@@ -58,7 +61,6 @@ class Simulation implements Simulable {
         } catch (NoWaterException e) {
             System.out.println(e);
         }
-        simulateur.incrementeDate();
         draw();
     }
 

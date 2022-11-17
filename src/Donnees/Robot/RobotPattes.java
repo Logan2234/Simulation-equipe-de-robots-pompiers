@@ -42,7 +42,7 @@ public class RobotPattes extends Robot {
         if (nature == NatureTerrain.ROCHE)
             return 10/3.6;
         else if (nature != NatureTerrain.EAU)
-            return this.getVitesseDefaut();
+            return vitesseDefaut;
         else
             return 0;
     }
