@@ -71,14 +71,6 @@ public class CalculPCC {
         Coordonees minCoordonees;
 
         while (!ouverts.isEmpty()) {
-            // for (int i = 0; i < carte.getNbLignes(); i++) {
-            //     for (int j = 0; j < carte.getNbColonnes(); j++) {
-            //         System.out.print(distance[i][j] + " ");
-            //     }
-            //     System.out.println();
-            // }
-            // System.out.println();
-            // System.out.println();
 
             // On cherche valeur minimale de distance
             minDistance = distance[ouverts.get(0).getI()][ouverts.get(0).getJ()];
@@ -166,7 +158,7 @@ public class CalculPCC {
             }
         }
 
-        if (distance[caseSuiv.getLigne()][caseSuiv.getColonne()] == Long.MAX_VALUE)
+        if (distance[caseSuiv.getLigne()][caseSuiv.getColonne()] == 10000000)
             throw new NoPathAvailableException();
 
         return chemins[caseSuiv.getLigne()][caseSuiv.getColonne()];
