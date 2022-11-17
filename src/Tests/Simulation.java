@@ -28,6 +28,12 @@ class Simulation implements Simulable {
         System.out.println("\n====================================================================");
         System.out.println("                       DEBUT DE LA SIMULATION                        ");
         System.out.println("====================================================================\n");
+        
+        // Force l'affichage correct de la carte (c'est à dire à la bonne taille)
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+        }
 
         draw();
     }

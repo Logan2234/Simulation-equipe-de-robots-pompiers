@@ -134,7 +134,7 @@ public class ChefAvance extends Chef {
         }
         // Cherchons le robot le plus proche de l'incendie
         boolean robotTrouve = false;
-        Robot robotAMobiliser = donnees.getRobots()[0]; // On initialise avec un robot random
+        Robot robotAMobiliser = donnees.getRobots().get(0); // On initialise avec un robot random
         Chemin cheminAParcourir = new Chemin(); // On initialise avec un chemin random
         long tempsDeplacement = Long.MAX_VALUE;
         // Cherchons le robot le plus proche de l'incendie et le chemin à parcourir

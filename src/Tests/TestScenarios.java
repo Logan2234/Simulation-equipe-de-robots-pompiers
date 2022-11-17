@@ -3,7 +3,6 @@ package Tests;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.io.FileNotFoundException;
-import java.util.Iterator;
 import java.util.zip.DataFormatException;
 
 import Autre.CalculPCC;
@@ -30,8 +29,8 @@ public class TestScenarios {
             new Simulation(gui, donnees, simulateur, Test.TestScenarios, fichier);
             
             Carte carte = donnees.getCarte();
-            Robot robot1 = donnees.getRobots()[0];
-            Robot robot2 = donnees.getRobots()[1];
+            Robot robot1 = donnees.getRobots().get(0);
+            Robot robot2 = donnees.getRobots().get(1);
 
             Chemin chemin = new Chemin();
             Case pos = robot1.getPosition();
@@ -50,12 +49,7 @@ public class TestScenarios {
                     chemin.creerEvenements(simulateur, robot1);
                     chemin.getChemin().clear();
                     
-                    // On veut récupérer dans ce test le 5ème incendie, on skip donc les 4 premiers
-                    Iterator<Incendie> iter = donnees.getIncendies().iterator();
-                    iter.next();
-                    iter.next();
-                    iter.next();
-                    Incendie incendie = iter.next();
+                    Incendie incendie = donnees.getIncendies().get(4);
 
                     pos = robot2.getPosition();
                     nextCase = carte.getVoisin(pos, Direction.NORD);

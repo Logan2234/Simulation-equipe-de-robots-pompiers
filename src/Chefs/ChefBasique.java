@@ -97,7 +97,7 @@ public class ChefBasique extends Chef {
     public void strategie() throws NoMoreFireException, NoMoreRobotsException {
 
         // Tant qu'il y a des incendies à éteidnre et des robots avec de l'eau
-        if (!incendiesRob.isEmpty() && donnees.getRobots().length != morts.size()) {
+        if (!incendiesRob.isEmpty() && donnees.getRobots().size() != morts.size()) {
             for (Incendie incendie : donnees.getIncendies()) {
 
                 // Si il est déjà éteint, on ne va pas traiter son cas

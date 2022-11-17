@@ -3,7 +3,6 @@ package Tests;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.io.FileNotFoundException;
-import java.util.Iterator;
 import java.util.zip.DataFormatException;
 
 import Autre.CalculPCC;
@@ -12,7 +11,6 @@ import Donnees.Carte;
 import Donnees.Case;
 import Donnees.Direction;
 import Donnees.DonneesSimulation;
-import Donnees.Incendie;
 import Donnees.Robot.Robot;
 import Evenements.EventIntervenir;
 import Evenements.EventRemplir;
@@ -29,18 +27,11 @@ public class TestSimulation {
             new Simulation(gui, donnees, simulateur, Test.TestSimulation, fichier);
 
             Carte carte = donnees.getCarte();
-            Robot robot = donnees.getRobots()[0];
+            Robot robot = donnees.getRobots().get(0);
             Chemin chemin = new Chemin();
             Case pos = robot.getPosition();
             chemin.addElement(pos, robot.getLastDate());
             Case nextCase;
-
-            // On veut récupérer dans ce test le 5ème incendie, on skip donc les 4 premiers
-            Iterator<Incendie> iter = donnees.getIncendies().iterator();
-            iter.next();
-            iter.next();
-            iter.next();
-            Incendie incendie = iter.next();
 
             Direction[] moves = { Direction.SUD, Direction.SUD, Direction.EST, Direction.EST };
 
@@ -51,7 +42,7 @@ public class TestSimulation {
             }
 
             chemin.creerEvenements(simulateur, robot);
-            simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
+            simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, donnees.getIncendies().get(4)));
             chemin.getChemin().clear();
             chemin.addElement(pos, robot.getLastDate());
 
@@ -61,10 +52,8 @@ public class TestSimulation {
                 pos = nextCase;
             }
 
-            incendie = iter.next();
-
             chemin.creerEvenements(simulateur, robot);
-            simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
+            simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, donnees.getIncendies().get(5)));
             chemin.getChemin().clear();
             chemin.addElement(pos, robot.getLastDate());
 
@@ -84,7 +73,7 @@ public class TestSimulation {
             chemin.creerEvenements(simulateur, robot);
             chemin.getChemin().clear();
 
-            robot = donnees.getRobots()[2];
+            robot = donnees.getRobots().get(2);
             pos = robot.getPosition();
             chemin.addElement(pos, robot.getLastDate());
 

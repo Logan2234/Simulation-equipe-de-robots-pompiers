@@ -1,7 +1,7 @@
 package io;
 
 import java.awt.Color;
-import java.util.Set;
+import java.util.List;
 
 import Donnees.Carte;
 import Donnees.Case;
@@ -68,7 +68,7 @@ public class Dessin {
      * @param tailleCase : Taille des cases telles qu'elles doivent apparaître sur
      *                   le dessin (non pas la taille fictive des cases)
      */
-    private static void dessinRobots(Robot[] robots, GUISimulator gui, int tailleCase) {
+    private static void dessinRobots(List<Robot> robots, GUISimulator gui, int tailleCase) {
         for (Robot robot : robots) {
             Case pos = robot.getPosition();
             int i = pos.getLigne();
@@ -96,7 +96,7 @@ public class Dessin {
      * @param tailleCase : Taille des cases telles qu'elles doivent apparaître sur
      *                   le dessin (non pas la taille fictive des cases)
      */
-    private static void dessinIncendies(Set<Incendie> incendies, GUISimulator gui, int tailleCase) {
+    private static void dessinIncendies(List<Incendie> incendies, GUISimulator gui, int tailleCase) {
         for (Incendie incendie : incendies) {
             if (incendie.getLitres() > 0) {
                 Case pos = incendie.getPosition();

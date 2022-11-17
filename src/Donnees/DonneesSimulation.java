@@ -1,21 +1,20 @@
 package Donnees;
 
-import java.util.Arrays;
-import java.util.Set;
+import java.util.List;
 
 import Donnees.Robot.Robot;
 
 public class DonneesSimulation {
     private final Carte carte;
-    private final Set<Incendie> incendies; // TODO: Mettre une ArrayList pour les robots et les incendies
-    private final Robot[] robots;
+    private final List<Incendie> incendies;
+    private final List<Robot> robots;
 
     /**
      * @param carte     : carte de notre simulation
      * @param incendies : liste des incendies de départ de la simulation
      * @param robots    : table des robots à disposition
      */
-    public DonneesSimulation(Carte carte, Set<Incendie> incendies, Robot[] robots) {
+    public DonneesSimulation(Carte carte, List<Incendie> incendies, List<Robot> robots) {
         this.carte = carte;
         this.incendies = incendies;
         this.robots = robots;
@@ -29,16 +28,16 @@ public class DonneesSimulation {
     }
 
     /**
-     * @return List<Incendie> : liste des incendies actuels dans la simulation
+     * @return List<Incendie> : liste des incendies dans la simulation
      */
-    public Set<Incendie> getIncendies() {
+    public List<Incendie> getIncendies() {
         return incendies;
     }
 
     /**
-     * @return Robot[] : table des robots à disposition
+     * @return List<Robot> : liste des robots à disposition
      */
-    public Robot[] getRobots() {
+    public List<Robot> getRobots() {
         return robots;
     }
 
@@ -48,7 +47,7 @@ public class DonneesSimulation {
      */
     @Override
     public String toString() {
-        return "DonneesSimulation [carte=" + carte + ", incendies=" + incendies + ", robots=" + Arrays.toString(robots)
+        return "DonneesSimulation [carte=" + carte + ", incendies=" + incendies + ", robots=" + robots
                 + "]";
     }
 

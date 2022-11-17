@@ -22,7 +22,7 @@ public class TestDijkstra {
             Simulateur simulateur = new Simulateur();
             new Simulation(gui, donnees, simulateur, Test.TestDijkstra, fichier);
 
-            Robot robot = donnees.getRobots()[2];
+            Robot robot = donnees.getRobots().get(2);
 
             // On veut récupérer dans ce test le 1er incendie
             Incendie incendie = donnees.getIncendies().iterator().next();
