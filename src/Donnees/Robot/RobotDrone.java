@@ -20,6 +20,11 @@ public class RobotDrone extends Robot {
         super(position, 10000, Math.min(vitesse, 150) / 3.6, 30, 10000, 1800, "assets/Drone.png");
     }
 
+    @Override
+    public double getVitesse(NatureTerrain nature) {
+        return vitesseDefaut;
+    }
+
     /**
      * Remplit le réservoir du drone avec {@code fillReservoir} s'il est bien
      * au-dessus de l'eau.

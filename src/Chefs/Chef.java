@@ -8,19 +8,20 @@ import Donnees.Incendie;
 import Donnees.Robot.Robot;
 import Evenements.Simulateur;
 import Exceptions.NoMoreFireException;
+import Exceptions.NoMoreRobotsException;
 
-abstract public class Chef {
+public abstract class Chef {
     protected final DonneesSimulation donnees; // Protected car utilisé dans les sous-classes
     protected final Simulateur simulateur; // Protected car utilisé dans les sous-classes
     protected Set<Robot> occupes; // Protected car utilisé dans les sous-classes
 
-    public Chef(DonneesSimulation donnees, Simulateur simulateur) {
+    protected Chef(DonneesSimulation donnees, Simulateur simulateur) {
         this.donnees = donnees;
         this.simulateur = simulateur;
-        this.occupes = new HashSet<Robot>();
+        this.occupes = new HashSet<>();
     }
 
-    abstract public void strategie() throws NoMoreFireException;
+    public abstract void strategie() throws NoMoreFireException, NoMoreRobotsException;
 
-    abstract protected void gestionIncendies(Incendie incendie);
+    protected abstract void gestionIncendies(Incendie incendie);
 }

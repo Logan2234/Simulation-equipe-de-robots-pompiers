@@ -10,7 +10,7 @@ public class Carte {
     private int tailleCases; // En m.
     private final int nbLignes;
     private final int nbColonnes;
-    private Case[][] tab_cases;
+    private Case[][] tabCases;
 
     /**
      * Initialise la carte de notre situation
@@ -21,7 +21,7 @@ public class Carte {
     public Carte(int nbLignes, int nbColonnes) {
         this.nbLignes = nbLignes;
         this.nbColonnes = nbColonnes;
-        tab_cases = new Case[nbLignes][nbColonnes];
+        tabCases = new Case[nbLignes][nbColonnes];
     }
 
     /**
@@ -59,8 +59,8 @@ public class Carte {
      * 
      * @param tab_cases : table de cases
      */
-    public void setTab_cases(Case[][] tab_cases) {
-        this.tab_cases = tab_cases;
+    public void setTabCases(Case[][] tabCases) {
+        this.tabCases = tabCases;
     }
 
     /**
@@ -70,7 +70,7 @@ public class Carte {
      * @param col : indicée à partir de 0
      */
     public Case getCase(int lig, int col) {
-        return tab_cases[lig][col];
+        return tabCases[lig][col];
     }
 
     /**
@@ -115,7 +115,7 @@ public class Carte {
      */
     public boolean voisinExiste(Case src, Direction dir, Robot robot) {
         try {
-            boolean natureCompatible = robot.getVitesse(this.getVoisin(src, dir).getNature()) != 0;
+            boolean natureCompatible = robot.getVitesse(this.getVoisin(src, dir).getNature()) != 0 && robot.getVitesse(src.getNature()) != 0;
             return this.voisinExiste(src, dir) && natureCompatible;
         } catch (CellOutOfMapException e){
             return false;
@@ -137,13 +137,13 @@ public class Carte {
             int colonne = src.getColonne();
             switch (dir) {
                 case NORD:
-                    return tab_cases[ligne - 1][colonne];
+                    return tabCases[ligne - 1][colonne];
                 case SUD:
-                    return tab_cases[ligne + 1][colonne];
+                    return tabCases[ligne + 1][colonne];
                 case OUEST:
-                    return tab_cases[ligne][colonne - 1];
+                    return tabCases[ligne][colonne - 1];
                 case EST:
-                    return tab_cases[ligne][colonne + 1];
+                    return tabCases[ligne][colonne + 1];
                 default:
                     break;
             }
@@ -159,6 +159,6 @@ public class Carte {
     @Override
     public String toString() {
         return "Carte [tailleCases=" + tailleCases + ", nbLignes=" + nbLignes + ", nbColonnes=" + nbColonnes
-                + ", tab_cases=" + Arrays.toString(tab_cases) + "]";
+                + ", tab_cases=" + Arrays.toString(tabCases) + "]";
     }
 }

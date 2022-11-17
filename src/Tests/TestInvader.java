@@ -17,7 +17,7 @@ public class TestInvader {
         GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
         gui.setSize((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 100, (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 50);
         // crée l'invader, en l'associant à la fenêtre graphique précédente
-        Invader invader = new Invader(gui, Color.decode("#f2ff28"));
+        new Invader(gui, Color.decode("#f2ff28"));
     }
 }
 
@@ -79,8 +79,8 @@ class Invader implements Simulable {
         yMax -= yMax % 10;
 
         // let's plan the invader displacement!
-        List<Integer> xCoords = new ArrayList<Integer>();
-        List<Integer> yCoords = new ArrayList<Integer>();
+        List<Integer> xCoords = new ArrayList<>();
+        List<Integer> yCoords = new ArrayList<>();
         // going right
         for (int x = xMin + 10; x <= xMax; x += 10) {
             xCoords.add(x);

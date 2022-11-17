@@ -2,9 +2,9 @@ package Evenements;
 
 import java.util.PriorityQueue;
 
-import Exceptions.CellOutOfMapException;
 import Exceptions.NoFireException;
 import Exceptions.NoMoreFireException;
+import Exceptions.NoMoreRobotsException;
 import Exceptions.NoWaterException;
 
 public class Simulateur {
@@ -14,7 +14,7 @@ public class Simulateur {
 
     public Simulateur() {
         this.dateSimulation = 0;
-        this.evenementsPQueue = new PriorityQueue<Evenement>();
+        this.evenementsPQueue = new PriorityQueue<>();
     }
 
     /**
@@ -54,26 +54,28 @@ public class Simulateur {
      * Méthode exécutant tout les évènements pour la date courante définie dans
      * {@code dateSimulation}
      * 
-     * @throws CellOutOfMapException - Dans le cas où l'évènement est
-     *                               {@code EventMouvement} mais sur une case en
-     *                               dehors de la carte
-     * @throws NoFireException       - Dans le cas où l'évènement est
-     *                               {@code EventIntervenir} mais sur une case qui
-     *                               n'est pas en feu
-     * @throws NoWaterException      - Dans le cas où l'évènement est
-     *                               {@code EventRemplir} mais qu'il n'y a pas d'eau
-     *                               à proximité
      * @throws NoMoreFireException   - Dans le cas où l'évènement est
      *                               {@code EventChefOrdonne} mais qu'il n'y a plus
-     *                               de feu sur la carte
+     *                               de feu sur la carte. Exception renvoyée par le
+     *                               {@code chef}
+     * @throws NoMoreRobotsException - Dans le cas où l'évènement est
+     *                               {@code EventChefOrdonne} mais qu'il n'y a plus
+     *                               de robots disponible sur la carte. Exception
+     *                               renvoyée par le {@code chef}
      */
-    public void execute() throws CellOutOfMapException, NoFireException, NoWaterException, NoMoreFireException {
-        if (!simulationTerminee()) {
-            Evenement event = evenementsPQueue.peek();
-            while (event != null && event.getDate() <= dateSimulation) {
-                evenementsPQueue.poll().execute();
-                event = evenementsPQueue.peek();
+    public void execute() throws NoMoreFireException, NoMoreRobotsException {
+        try {
+            if (!simulationTerminee()) {
+                Evenement event = evenementsPQueue.peek();
+                while (event != null && event.getDate() <= dateSimulation) {
+                    evenementsPQueue.poll().execute();
+                    event = evenementsPQueue.peek();
+                }
             }
+        } catch (NoFireException | NoWaterException e) {
+            // En utilisant Dijkstra on attérit jamais là car est sûr d'aller sur une case
+            // en feu / à côté de l'eau
+            System.out.println(e);
         }
     }
 
@@ -84,7 +86,7 @@ public class Simulateur {
      * @return boolean : 1 si la simulation est terminée, 0 sinon
      */
     public boolean simulationTerminee() {
-        return (this.evenementsPQueue.size() == 0);
+        return (this.evenementsPQueue.isEmpty());
     }
 
     /**

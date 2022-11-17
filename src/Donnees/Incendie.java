@@ -3,17 +3,17 @@ package Donnees;
 public class Incendie {
 
     private final Case position;
-    private final int litres_requis_init;
-    private int litres_requis;
+    private final int litresRequisInit;
+    private int litresRequis;
 
     /**
      * @param position      : case où se situe l'incencie
-     * @param litres_requis : litres requis pour éteindre l'incendie
+     * @param litresRequis : litres requis pour éteindre l'incendie
      */
-    public Incendie(Case position, int litres_requis) {
+    public Incendie(Case position, int litresRequis) {
         this.position = position;
-        this.litres_requis_init = litres_requis;
-        this.litres_requis = litres_requis;
+        this.litresRequisInit = litresRequis;
+        this.litresRequis = litresRequis;
     }
 
     /**
@@ -21,7 +21,7 @@ public class Incendie {
      *         donné
      */
     public int getLitres() {
-        return this.litres_requis;
+        return this.litresRequis;
     }
 
     /**
@@ -31,7 +31,7 @@ public class Incendie {
      * @return int : quantité d'eau nécessaire pour éteindre le feu au départ
      */
     public int getLitresInit() {
-        return this.litres_requis_init;
+        return this.litresRequisInit;
     }
 
     /**
@@ -48,7 +48,7 @@ public class Incendie {
      * @param qteVersee : quantité (en L) à verser sur l'incendie
      */
     public void eteindre(int qteVersee) {
-        litres_requis -= qteVersee;
+        litresRequis -= qteVersee;
     }
 
     /**
@@ -57,7 +57,7 @@ public class Incendie {
      */
     @Override
     public String toString() {
-        return "Incendie [position=" + position + ", litres_requis=" + litres_requis + "]";
+        return "Incendie [position=" + position + ", litres_requis=" + litresRequis + "]";
     }
 
 }
