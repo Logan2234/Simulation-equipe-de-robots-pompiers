@@ -2,6 +2,7 @@ package Evenements;
 
 import Chefs.Chef;
 import Exceptions.NoMoreFireException;
+import Exceptions.NoMoreRobotsException;
 
 public class EventChefOrdonne extends Evenement {
     private final Chef chef;
@@ -12,7 +13,7 @@ public class EventChefOrdonne extends Evenement {
     }
 
     @Override
-    public void execute() throws NoMoreFireException {
+    public void execute() throws NoMoreFireException, NoMoreRobotsException {
         chef.strategie();
     }
 

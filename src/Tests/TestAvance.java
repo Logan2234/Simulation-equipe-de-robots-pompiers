@@ -15,11 +15,10 @@ public class TestAvance {
 
     public static void initialize(String fichier, GUISimulator gui) {
         try {
-            LecteurDonnees lecteur = new LecteurDonnees();
-            DonneesSimulation donnees = lecteur.creerSimulation(fichier);
+            DonneesSimulation donnees = LecteurDonnees.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
             ChefAvance chef = new ChefAvance(donnees, simulateur);
-            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestBasique, fichier);
+            new Simulation(gui, donnees, simulateur, Test.TestBasique, fichier);
 
             chef.strategie();
 

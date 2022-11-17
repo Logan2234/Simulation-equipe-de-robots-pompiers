@@ -8,9 +8,15 @@ import Donnees.Case;
 import Donnees.Direction;
 import Donnees.Robot.Robot;
 import Exceptions.CellOutOfMapException;
-import Exceptions.PasDeCheminException;
+import Exceptions.NoPathAvailableException;
 
 public class CalculPCC {
+
+    private CalculPCC() {
+        throw new IllegalStateException(
+                "Cette classe ne doit pas être instanciée puisque toutes ses fonctions utiles sont statiques");
+    }
+
     /**
      * Calcul le temps nécessaire à un robot donné pour se déplacer
      * d'une case à une autre case adjacente.
@@ -23,17 +29,11 @@ public class CalculPCC {
      */
     public static long tpsDpltCaseACase(Case caseCourante, Case caseSuiv, Robot robot) {
         // On part du principe que le robot va jusqu'au centre de la case d'après
-        int taille_cases = caseCourante.getCarte().getTailleCases();
-
-        double vitesseInit = robot.getVitesse(caseCourante.getNature());
+        int tailleCases = caseCourante.getCarte().getTailleCases();
         double vitesseSuiv = robot.getVitesse(caseSuiv.getNature());
+        double vitesseInit = robot.getVitesse(caseCourante.getNature());
 
-        if (vitesseSuiv == 0)
-            return Long.MAX_VALUE;
-
-        long temps = (long) (taille_cases / ((vitesseInit + vitesseSuiv) / 2));
-
-        return temps;
+        return (long) (tailleCases / ((vitesseInit + vitesseSuiv) / 2));
     }
 
     /**
@@ -48,11 +48,11 @@ public class CalculPCC {
      * @return Chemin optimal que le robot prendra pour aller d'une case à l'autre
      */
     public static Chemin dijkstra(Carte carte, Case caseCourante, Case caseSuiv, Robot robot, long date)
-            throws PasDeCheminException {
+            throws NoPathAvailableException {
 
-        long distance[][] = new long[carte.getNbLignes()][carte.getNbColonnes()];
-        Chemin chemins[][] = new Chemin[carte.getNbLignes()][carte.getNbColonnes()];
-        ArrayList<Coordonees> ouverts = new ArrayList<Coordonees>();
+        long[][] distance = new long[carte.getNbLignes()][carte.getNbColonnes()];
+        Chemin[][] chemins = new Chemin[carte.getNbLignes()][carte.getNbColonnes()];
+        ArrayList<Coordonees> ouverts = new ArrayList<>();
 
         for (int i = 0; i < carte.getNbLignes(); i++) {
             for (int j = 0; j < carte.getNbColonnes(); j++) {
@@ -61,7 +61,7 @@ public class CalculPCC {
                 chemins[i][j] = new Chemin();
             }
         }
-        
+
         distance[caseCourante.getLigne()][caseCourante.getColonne()] = 0;
         chemins[caseCourante.getLigne()][caseCourante.getColonne()].addElement(caseCourante, date);
 
@@ -69,7 +69,7 @@ public class CalculPCC {
         Case caseMinimale;
         long minDistance;
         Coordonees minCoordonees;
-        
+
         while (!ouverts.isEmpty()) {
             // for (int i = 0; i < carte.getNbLignes(); i++) {
             //     for (int j = 0; j < carte.getNbColonnes(); j++) {
@@ -89,13 +89,13 @@ public class CalculPCC {
                     minDistance = distance[ouverts.get(i).getI()][ouverts.get(i).getJ()];
                 }
             }
-            
+
             ouverts.remove(minCoordonees);
 
             int I = minCoordonees.getI();
             int J = minCoordonees.getJ();
             caseMinimale = caseCourante.getCarte().getCase(I, J);
-            
+
             // On test si on peut si le robot peut se déplacer sur la caseMinimale
             if (robot.getVitesse(caseMinimale.getNature()) == 0)
                 continue;
@@ -167,7 +167,7 @@ public class CalculPCC {
         }
 
         if (distance[caseSuiv.getLigne()][caseSuiv.getColonne()] == Long.MAX_VALUE)
-            throw new PasDeCheminException();
+            throw new NoPathAvailableException();
 
         return chemins[caseSuiv.getLigne()][caseSuiv.getColonne()];
     }

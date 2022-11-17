@@ -2,25 +2,20 @@ package Evenements;
 
 import Donnees.Case;
 import Donnees.Robot.Robot;
-import Exceptions.CellOutOfMapException;
 
 public class EventMouvement extends Evenement {
     private final Robot robot;
     private final Case nextCase;
 
-    public EventMouvement(long date, Robot robot, Case _case) {
+    public EventMouvement(long date, Robot robot, Case cell) {
         super(date);
         this.robot = robot;
-        this.nextCase = _case;
+        this.nextCase = cell;
         robot.setLastDate(date);
     }
 
-    /**
-     * @throws CellOutOfMapException : Exception levée dans le cas où le robot ne
-     *                               peut pas se déplacer sur la case suivante
-     */
     @Override
-    public void execute() throws CellOutOfMapException {
+    public void execute() {
         robot.setPosition(this.nextCase);
     }
 
