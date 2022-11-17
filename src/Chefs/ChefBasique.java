@@ -55,7 +55,6 @@ public class ChefBasique extends Chef {
         // Création du chemin et des événements associés
         Chemin chemin = CalculPCC.dijkstra(donnees.getCarte(), robot.getPosition(), incendie.getPosition(), robot,
                 simulateur.getDateSimulation());
-        System.out.println("chemin calcul \n");
         chemin.creerEvenements(simulateur, robot);
 
         // Création de toutes les interventions unitaires sur l'incendie
@@ -78,14 +77,11 @@ public class ChefBasique extends Chef {
             if (!occupes.contains(robot) && !morts.contains(robot)) {
                 // On essaie de l'envoyer sur l'incendie, si cela échoue on en prend un autre
                 try {
-                    System.out.println(incendie);
                     donneOrdre(robot, incendie);
-                    System.out.println(robot);
                     occupes.add(robot);
                     incendiesRob.put(incendie, robot);
                     break; // Si on a réussi, on ne va pas envoyer de second robot sur l'incendie
                 } catch (NoPathAvailableException e) {
-                    System.out.println(e);
                     continue;
                     // On n'a pas besoin d'afficher quoi que ce soit, juste on continue
                 }
