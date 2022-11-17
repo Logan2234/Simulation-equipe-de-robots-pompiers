@@ -14,12 +14,8 @@ import Exceptions.IllegalPathException;
 import Exceptions.PasDeCheminException;
 
 /**
- * @param donnees       : Données utilisées pour la simulation
- * @param simulateur    : Simulateur à initialiser avant
  * @param incendies_rob : Table de hachage qui a pour clé les incendies
  *                      non-éteints et en valeur le robot qui s'en occupe.
- * @param calculateur   : Calculateur de chemin qui dépendra des données et du
- *                      simulateur
  * @param morts         : Table dynamique qui comporte l'ensemble des robots
  *                      morts (i.e qui n'ont plus d'eau dans le réservoir)
  */

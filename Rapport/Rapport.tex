@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc} %encodage des caractères
 \usepackage[french]{babel} %paquet de langue français
 \usepackage[T1]{fontenc} %encodage de la police
+\usepackage[top=2cm,bottom=2cm,left=2cm,right=2cm]{geometry} %marges
 \usepackage{graphicx} %affichage des images
 \usepackage{fancyhdr}
 \usepackage{verbatim}
@@ -41,7 +42,38 @@ Pour notre projet, nous avons fait le choix de rassembler en différents package
 \subsubsection{getLitresInit dans Incendie}
 \subsection{Classe Simulation}
 \subsection{Algorithme de plus court chemin : Dijkstra}
-\subsection{Les chefs pompiers : structure et algorithme}
+\subsection{Les chefs pompiers}
+La structure des deux chefs est commune, d'où l'utilisation d'une classe abstraite \texttt{Chef}. Typiquement, on retrouve :
+\begin{enumerate}
+    \item Le HashSet \texttt{occupes} qui garde tous les robots qui sont occupés (se dirige vers un incendie, l'éteint,
+    se dirige vers une source d'eau ou se remplit).
+    \item La méthode \texttt{strategie} qui va être la seule méthode publique : elle va boucler sur nos incendies jusqu'à qu'ils
+    soient tous éteints ou que tous les robots soient vides.
+\end{enumerate}
+
+\subsubsection{Chef basique}
+La  classe \texttt{ChefBasique} implémente la méthode basique proposée par le sujet pour aller éteindre les incendies.
+Après lecture du sujet, il restait des zones d'ombres. On a donc fait deux choix :
+\begin{itemize}
+    \item Les robots ne vont jamais se remplir : cet aspect sera vu dans \texttt{ChefAvance};
+    \item Le concept de pas n n'est pas utilisé, on le fixe à 1 et on va lancer la fonction \texttt{gestionIncendie} systématiquement 
+    et faire du traitement que s'il y a des robots non occupés.
+\end{itemize}
+
+Pour stocker l'état de nos robots et de nos incendies, nous avons créé la HashMap \texttt{incendies\_rob} 
+qui va stocker en clé les incendies encore allumés et en valeur le robot qui leur est affecté. L'intérêt d'avoir accès à la valeur de robot,
+permet de voir si ce robot a vidé son eau, si c'est le cas il est envoyé dans le HashSet \texttt{morts} et est retiré du HashSet \texttt{occupes}.
+
+Le code a été factorisé avec deux méthodes privées supplémentaires :
+\begin{enumerate}
+    \item \texttt{gestionIncendies} qui va envoyer un robot sur un incendie qui n'est pas éteint. S'il trouve un robot pas occupé et pas mort,
+    il va alors appeler la fonction \texttt{donneOrdre}. Pendant son appel, il va en profiter pour faire le tri dans les robots s'ils sont
+    mal placés (pas encore mort alors que le réservoir est vide, encore occupe alors qu'il n'est plus associé à un incendie et qu'il lui reste
+    de l'eau);
+    \item \texttt{donneOrdre} va donner l'ordre au robot d'aller jusqu'à l'incendie et d'intervenir dessus avec les événements nécessaires.
+\end{enumerate}
+
+\subsubsection{Chef avancé}
 \section{Tests effectués et résultats}
 \subsection{Le fonctionnement des tests}
 \subsubsection{Makefile et enum Test}
