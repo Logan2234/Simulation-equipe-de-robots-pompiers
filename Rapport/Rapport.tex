@@ -25,7 +25,7 @@ Pour notre projet, nous avons fait le choix de rassembler en différents package
     la simulation (\texttt{Robot}, \texttt{Carte}, \texttt{Case}, \texttt{Direction} ...).
     \item Le package \texttt{Robot}, lui même dans le package \texttt{Donnees}, comporte notre classe abstraite de \texttt{Robot} ainsi
     que toutes les classes de robots.
-    \item Le package \texttt{Evenements} comporte tous les évènements sélectionnables ainsi que la classe abstraite \texttt{Evenement}\\
+    \item Le package \texttt{Evenements} comporte tous les évènements sélectionnables ainsi que la classe abstraite \texttt{Evenement}
     \item Le package \texttt{Exceptions} comporte toutes les exceptions rajoutées par nos soins. Elles seront expliquées plus bas.
     \item Le package \texttt{Tests} comporte tous les tests créés pour tester les différentes parties du sujet. On y trouve également
     La classe \texttt{Simulation} et l'énumérateur \texttt{Test} qui liste tous nos tests (utile pour le Makefile).
@@ -37,11 +37,11 @@ Pour notre projet, nous avons fait le choix de rassembler en différents package
 \end{itemize}
 
 \subsection{Les exceptions}
-\subsection{Ajout de méthodes dans les objets}
+\subsection{Ajout de méthodes dans les objets prédéfinis}
 \subsubsection{getLastDate dans Robot}
 \subsubsection{getLitresInit dans Incendie}
 \subsection{Classe Simulation}
-\subsection{Algorithme de plus court chemin : Dijkstra}
+\subsection{Algorithme de plus court chemin : Dijkstra} %classe chemin et CalculPCC (pourquoi séparer les deux ?)
 \subsection{Les chefs pompiers}
 La structure des deux chefs est commune, d'où l'utilisation d'une classe abstraite \texttt{Chef}. Typiquement, on retrouve :
 \begin{enumerate}
@@ -76,8 +76,30 @@ Le code a été factorisé avec deux méthodes privées supplémentaires :
 \subsubsection{Chef avancé}
 \section{Tests effectués et résultats}
 \subsection{Le fonctionnement des tests}
-\subsubsection{Makefile et enum Test}
 \subsubsection{Lancer les tests}
+Les différents tests du package \texttt{Tests} sont là pour tester les différentes parties du sujet.
+\begin{itemize}
+    \item \texttt{TestSimulation} s'assure que l'on peut lancer une simulation.
+    \item \texttt{TestScenarios} lance les scénarios proposés dans la partie 2.2 du sujet.
+    \item \texttt{TestDijkstra} a pour but de vérifier que l'algorithme de Dijkstra fonctionne. Sur la carte sujet, 
+    on sélectionne le second robot, qui est le robot à pattes et on l'envoie sur le premier incendie (celui en bas à gauche).
+    On veut s'assurer qu'il contourne l'eau et passe bien par les rochers et ne fasse pas de détours.
+    \item \texttt{TestBasique} teste le chef pompier avec l'algorithme élémentaire du sujet.
+    \item \texttt{TestAvance} teste le chef pompier avec l'algorithme plus poussé fourni par le sujet.
+\end{itemize}
+
+\subsubsection{Makefile}
+Le Makefile et les tests rajoutés sont lancés sur la map du sujet par défaut.
+Pour compiler lancer les tests: 
+\begin{itemize}
+    \item \texttt{testSimulation} pour compiler \texttt{TestSimulation} puis \texttt{exeSimulation} pour exécuter;
+    \item \texttt{testScenarios} pour compiler \texttt{TestScenarios} puis \texttt{exeScenarios} pour exécuter;
+    \item \texttt{testDijkstra} pour compiler \texttt{TestDijkstra} puis \texttt{exeDijkstra} pour exécuter;
+    \item \texttt{testBasique} pour compiler \texttt{TestBasique} puis \texttt{exeBasique} pour exécuter;
+    \item \texttt{testAvance} pour compiler \texttt{TestAvance} puis \texttt{exeAvance} pour exécuter;
+\end{itemize}
+
+
 \subsection{Résultats obtenus}
 \subsection{Pistes d'amélioration}
 
