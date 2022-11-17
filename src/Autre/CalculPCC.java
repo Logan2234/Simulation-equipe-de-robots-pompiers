@@ -53,6 +53,11 @@ public class CalculPCC {
     public static Chemin dijkstra(Carte carte, Case caseCourante, Case caseArrivee, Robot robot, long date)
             throws NoPathAvailableException {
 
+        // Si la case d'arrivée n'est pas accessible on a pas besoin de faire tout le calcul
+        if (robot.getVitesse(caseArrivee.getNature()) == 0)
+            throw new NoPathAvailableException();
+        
+        // Sinon on commence à faire Dijkstra
         long[][] distance = new long[carte.getNbLignes()][carte.getNbColonnes()];
         Chemin[][] chemins = new Chemin[carte.getNbLignes()][carte.getNbColonnes()];
         ArrayList<Coordonees> ouverts = new ArrayList<>();
