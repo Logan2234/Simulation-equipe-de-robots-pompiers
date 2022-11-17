@@ -14,12 +14,8 @@ import Exceptions.IllegalPathException;
 import Exceptions.PasDeCheminException;
 
 /**
- * @param donnees       : Données utilisées pour la simulation
- * @param simulateur    : Simulateur à initialiser avant
  * @param incendies_rob : Table de hachage qui a pour clé les incendies
  *                      non-éteints et en valeur le robot qui s'en occupe.
- * @param calculateur   : Calculateur de chemin qui dépendra des données et du
- *                      simulateur
  * @param morts         : Table dynamique qui comporte l'ensemble des robots
  *                      morts (i.e qui n'ont plus d'eau dans le réservoir)
  */
@@ -27,6 +23,8 @@ public class ChefBasique extends Chef {
 
     private HashMap<Incendie, Robot> incendies_rob;
     private ArrayList<Robot> morts;
+
+    //TODO : remplacer morts et occupes par des HashSet
 
     /**
      * Va implémenter la stratégie de base pour le chef pompier.
@@ -89,7 +87,7 @@ public class ChefBasique extends Chef {
                 // Si son réservoir est vide, il est mort et on en cherche un autre
                 if (robot.getReservoir() == 0) {
                     if (!morts.contains(robot)) { // nécessaire pour ne pas avoir de doublons
-                        this.morts.add(robot);
+                        morts.add(robot);
                     }
                     continue;
                 }
@@ -103,14 +101,15 @@ public class ChefBasique extends Chef {
                 } catch (PasDeCheminException e) {
                     continue;
                 }
-                // Si il est occupé
+            // Si il est occupé
             } else {
                 // Si il est mort
                 if (robot.getReservoir() == 0 && !morts.contains(robot)) {
                     occupes.remove(robot);
                     morts.add(robot);
-                    // Si il lui reste de l'eau, il est de nouveau disponible
-                } else if (!incendies_rob.containsValue(robot)) {
+                }
+                // Si il lui reste de l'eau, il est de nouveau disponible
+                else if (!incendies_rob.containsValue(robot) && !morts.contains(robot)) {
                     occupes.remove(robot); // Si le robot peut continuer, on l'efface
                 }
             }
