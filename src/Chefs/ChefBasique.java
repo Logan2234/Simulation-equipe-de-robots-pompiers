@@ -159,7 +159,6 @@ public class ChefBasique extends Chef {
             System.out.println("Tous les incendies sont éteints\n");
         } else {
             System.out.println("Tous les robots ont vidé leur réservoir");
-            ;
         }
     }
 }
