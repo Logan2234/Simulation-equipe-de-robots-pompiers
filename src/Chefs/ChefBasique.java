@@ -82,7 +82,6 @@ public class ChefBasique extends Chef {
                     incendiesRob.put(incendie, robot);
                     break; // Si on a réussi, on ne va pas envoyer de second robot sur l'incendie
                 } catch (NoPathAvailableException e) {
-                    // System.out.println(e);
                     continue;
                     // On n'a pas besoin d'afficher quoi que ce soit, juste on continue
                 }
