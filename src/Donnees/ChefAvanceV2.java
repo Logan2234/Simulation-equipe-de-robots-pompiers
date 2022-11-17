@@ -10,8 +10,7 @@ import Donnees.Robot.RobotDrone;
 import Evenements.EventIntervenir;
 import Evenements.EventRemplir;
 import Evenements.Simulateur;
-import Exceptions.CellOutOfMapException;
-import Exceptions.IllegalPathException;
+import Exceptions.CellOutOfMapException;n
 import Exceptions.PasDeCheminException;
 import Exceptions.NoWaterException;
 
