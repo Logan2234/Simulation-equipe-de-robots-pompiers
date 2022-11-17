@@ -18,7 +18,7 @@ public class TestBasique {
             DonneesSimulation donnees = LecteurDonnees.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
             ChefBasique chef = new ChefBasique(donnees, simulateur);
-            new Simulation(gui, donnees, simulateur, Test.TestBasique, fichier, chef);
+            new Simulation(gui, donnees, simulateur, Test.TEST_BASIQUE, fichier, chef);
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {

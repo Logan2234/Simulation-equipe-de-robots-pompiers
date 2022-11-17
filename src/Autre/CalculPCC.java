@@ -33,6 +33,9 @@ public class CalculPCC {
         double vitesseSuiv = robot.getVitesse(caseSuiv.getNature());
         double vitesseInit = robot.getVitesse(caseCourante.getNature());
 
+        if (vitesseSuiv == 0)
+            return Long.MAX_VALUE;
+
         return (long) (tailleCases / ((vitesseInit + vitesseSuiv) / 2));
     }
 
@@ -41,13 +44,13 @@ public class CalculPCC {
      * Dijkstra.
      * 
      * @param caseCourante : Case de départ
-     * @param caseSuiv     : Case d'arrivée
+     * @param caseArrivee     : Case d'arrivée
      * @param robot        : Robot effectuant le déplacement
      * @param date         : Date d'origine de la construction du chemin
      * @param carte        : Carte de la simulation
      * @return Chemin optimal que le robot prendra pour aller d'une case à l'autre
      */
-    public static Chemin dijkstra(Carte carte, Case caseCourante, Case caseSuiv, Robot robot, long date)
+    public static Chemin dijkstra(Carte carte, Case caseCourante, Case caseArrivee, Robot robot, long date)
             throws NoPathAvailableException {
 
         long[][] distance = new long[carte.getNbLignes()][carte.getNbColonnes()];
@@ -56,7 +59,7 @@ public class CalculPCC {
 
         for (int i = 0; i < carte.getNbLignes(); i++) {
             for (int j = 0; j < carte.getNbColonnes(); j++) {
-                distance[i][j] = 10000000;//Long.MAX_VALUE;
+                distance[i][j] = Integer.MAX_VALUE;
                 ouverts.add(new Coordonees(i, j));
                 chemins[i][j] = new Chemin();
             }
@@ -71,14 +74,6 @@ public class CalculPCC {
         Coordonees minCoordonees;
 
         while (!ouverts.isEmpty()) {
-            // for (int i = 0; i < carte.getNbLignes(); i++) {
-            //     for (int j = 0; j < carte.getNbColonnes(); j++) {
-            //         System.out.print(distance[i][j] + " ");
-            //     }
-            //     System.out.println();
-            // }
-            // System.out.println();
-            // System.out.println();
 
             // On cherche valeur minimale de distance
             minDistance = distance[ouverts.get(0).getI()][ouverts.get(0).getJ()];
@@ -166,10 +161,10 @@ public class CalculPCC {
             }
         }
 
-        if (distance[caseSuiv.getLigne()][caseSuiv.getColonne()] == Long.MAX_VALUE)
+        if (distance[caseArrivee.getLigne()][caseArrivee.getColonne()] == Integer.MAX_VALUE)
             throw new NoPathAvailableException();
 
-        return chemins[caseSuiv.getLigne()][caseSuiv.getColonne()];
+        return chemins[caseArrivee.getLigne()][caseArrivee.getColonne()];
     }
 
 }
