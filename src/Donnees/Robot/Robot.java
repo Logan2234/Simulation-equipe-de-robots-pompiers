@@ -1,8 +1,5 @@
 package Donnees.Robot;
 
-import java.awt.Color;
-import java.util.HashMap;
-
 import Donnees.Case;
 import Donnees.Direction;
 import Donnees.NatureTerrain;
@@ -11,16 +8,15 @@ import Exceptions.NoWaterException;
 
 public abstract class Robot {
     private Case position;
-    private int capacite; // en L.
     private int reservoir; // en L.
-    private int tmpVersement; // en s.
-    private int qteVersement; // en L.
-    private int tmpRemplissage; // en s.
-    private double vitesseDefaut; // en m/s.
     private long lastDate;
-    private static Color colRobot;
-    private static HashMap<Object, String> noms;
-
+    private final int capacite; // en L.
+    private final int tmpVersement; // en s.
+    private final int qteVersement; // en L.
+    private final int tmpRemplissage; // en s.
+    protected final double vitesseDefaut; // en m/s. Protected car utilisé dans les sous-classes
+    private final String imagePath;
+    
     /**
      * @param position      : spécifie la position actuelle du robot
      * @param capacite      : donne la capacité maximale du réservoir du robot
@@ -32,7 +28,7 @@ public abstract class Robot {
      * @param tmpReplissage : indique le temps nécessaire (en s) pour un remplissage
      *                      complet
      */
-    public Robot(Case position, int capacite, double vitesse, int tmpVersement, int qteVersement, int tmpReplissage) {
+    public Robot(Case position, int capacite, double vitesse, int tmpVersement, int qteVersement, int tmpReplissage, String imagePath) {
         this.position = position;
         this.capacite = capacite;
         this.reservoir = capacite;
@@ -41,23 +37,7 @@ public abstract class Robot {
         this.qteVersement = qteVersement;
         this.tmpRemplissage = tmpReplissage;
         this.lastDate = 0;
-        colRobot = new Color(105, 105, 105);
-    }
-
-    
-    /** 
-     * @param classe : Classe précise du robot 
-     * @return String : Nom donné au robot en question
-     */
-    public static String getNom(Object classe) {
-        if (noms == null) {
-            noms = new HashMap<Object, String>();
-            noms.put(RobotChenilles.class, "C");
-            noms.put(RobotDrone.class, "D");
-            noms.put(RobotPattes.class, "P");
-            noms.put(RobotRoues.class, "R");
-        }
-        return noms.get(classe);
+        this.imagePath = imagePath;
     }
 
     /**
@@ -116,27 +96,23 @@ public abstract class Robot {
     public int getTmpRemplissage() {
         return tmpRemplissage;
     }
-    
+
     /**
      * @return long lastDate : Dernière date utilisée pour le robot
      */
-    public long getLastDate(){
+    public long getLastDate() {
         return lastDate;
     }
 
-    
-    /** 
-     * @param temps : Temps correspondant à la dernière action du robot
-     */
-    public void setLastDate(long temps){
-        lastDate = temps;
+    public String getImagePath() {
+        return imagePath;
     }
 
     /**
-     * @return Color : Couleur des robots
+     * @param temps : Temps correspondant à la dernière action du robot
      */
-    public static Color getColor() {
-        return colRobot;
+    public void setLastDate(long temps) {
+        lastDate = temps;
     }
 
     /**

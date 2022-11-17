@@ -3,20 +3,15 @@ package Autre;
 // PCC signifie "Plus Court Chemin"
 import java.util.ArrayList;
 
+import Donnees.Carte;
 import Donnees.Case;
-import Donnees.Robot.Robot;
-import Exceptions.CellOutOfMapException;
 import Donnees.Direction;
-import Donnees.DonneesSimulation;
+import Donnees.Robot.Robot;
+import Donnees.Robot.RobotRoues;
+import Exceptions.CellOutOfMapException;
 import Exceptions.PasDeCheminException;
 
 public class CalculPCC {
-    private DonneesSimulation donnees;
-
-    public CalculPCC(DonneesSimulation donnees) {
-        this.donnees = donnees;
-    }
-
     /**
      * Calcul le temps nécessaire à un robot donné pour se déplacer
      * d'une case à une autre case adjacente.
@@ -34,9 +29,8 @@ public class CalculPCC {
         double vitesseInit = robot.getVitesse(caseCourante.getNature());
         double vitesseSuiv = robot.getVitesse(caseSuiv.getNature());
 
-        if (vitesseSuiv == 0) {
+        if (vitesseSuiv == 0)
             return Long.MAX_VALUE;
-        }
 
         long temps = (long) (taille_cases / ((vitesseInit + vitesseSuiv) / 2));
 
@@ -44,43 +38,31 @@ public class CalculPCC {
     }
 
     /**
-     * Calcul le temps nécessaire à un robot donné pour se déplacer
-     * d'une case à une autre case dans un chemin.
-     * 
-     * @param chemin - Chemin à parcourir
-     * @param robot  - Robot effectuant le déplacement
-     * @return Temps pris (en s) par à un robot pour se déplacer du centre d'une
-     *         case à
-     *         une autre.
-     */
-    public int tpsDpltChemin(Chemin chemin, Robot robot) {
-        int tempsTotal = 0;
-        for (int i = 0; i < (chemin.getChemin()).size() - 1; i++)
-            tempsTotal += tpsDpltCaseACase(chemin.getElem(i).getCase(), chemin.getElem(i++).getCase(), robot);
-        return tempsTotal;
-    }
-
-    /**
      * Calcul du chemin optimal entre deux cases. La fonction suit l'algorithme de
      * Dijkstra.
      * 
-     * @param caseCourante - Case de départ
-     * @param caseSuiv     - Case d'arrivée
-     * @param robot        - Robot effectuant le déplacement
-     * @return Chemin optimal que le robot devrait prendre pour aller d'une case à
-     *         l'autre.
+     * @param caseCourante : Case de départ
+     * @param caseSuiv     : Case d'arrivée
+     * @param robot        : Robot effectuant le déplacement
+     * @param date         : Date d'origine de la construction du chemin
+     * @param carte        : Carte de la simulation
+     * @return Chemin optimal que le robot prendra pour aller d'une case à l'autre
      */
-    public Chemin dijkstra(Case caseCourante, Case caseSuiv, Robot robot, long date) throws PasDeCheminException {
-        long distance[][] = new long[this.donnees.getCarte().getNbLignes()][this.donnees.getCarte().getNbColonnes()];
-        Chemin chemins[][] = new Chemin[this.donnees.getCarte().getNbLignes()][this.donnees.getCarte().getNbColonnes()];
+    public static Chemin dijkstra(Carte carte, Case caseCourante, Case caseSuiv, Robot robot, long date)
+            throws PasDeCheminException {
+
+        long distance[][] = new long[carte.getNbLignes()][carte.getNbColonnes()];
+        Chemin chemins[][] = new Chemin[carte.getNbLignes()][carte.getNbColonnes()];
         ArrayList<Coordonees> ouverts = new ArrayList<Coordonees>();
-        for (int i = 0; i < this.donnees.getCarte().getNbLignes(); i++) {
-            for (int j = 0; j < this.donnees.getCarte().getNbColonnes(); j++) {
+
+        for (int i = 0; i < carte.getNbLignes(); i++) {
+            for (int j = 0; j < carte.getNbColonnes(); j++) {
                 distance[i][j] = Long.MAX_VALUE;
                 ouverts.add(new Coordonees(i, j));
                 chemins[i][j] = new Chemin();
             }
         }
+
         distance[caseCourante.getLigne()][caseCourante.getColonne()] = 0;
         chemins[caseCourante.getLigne()][caseCourante.getColonne()].addElement(caseCourante, date);
 
@@ -88,6 +70,7 @@ public class CalculPCC {
         Case caseMinimale;
         long minDistance;
         Coordonees minCoordonees;
+        
         while (!ouverts.isEmpty()) {
 
             // On cherche valeur minimale de distance
@@ -99,18 +82,22 @@ public class CalculPCC {
                     minDistance = distance[ouverts.get(i).getI()][ouverts.get(i).getJ()];
                 }
             }
+            
             ouverts.remove(minCoordonees);
 
             int I = minCoordonees.getI();
             int J = minCoordonees.getJ();
             caseMinimale = caseCourante.getCarte().getCase(minCoordonees.getI(), minCoordonees.getJ());
+            
             if (robot.getVitesse(caseMinimale.getNature()) == 0)
                 continue;
 
             // On cherche le chemin
 
             long distanceCaseMinimale = distance[minCoordonees.getI()][minCoordonees.getJ()];
+
             // TODO: Factoriser le code.
+
             if (caseCourante.getCarte().voisinExiste(caseMinimale, Direction.NORD, robot)) {
                 try {
                     caseATraiter = caseCourante.getCarte().getVoisin(caseMinimale, Direction.NORD);
@@ -125,13 +112,11 @@ public class CalculPCC {
                     System.out.println(e);
                 }
             }
+
             if (caseCourante.getCarte().voisinExiste(caseMinimale, Direction.EST, robot)) {
                 try {
                     caseATraiter = caseCourante.getCarte().getVoisin(caseMinimale, Direction.EST);
                     long temps = tpsDpltCaseACase(caseMinimale, caseATraiter, robot);
-                    // System.out.println(caseMinimale.toString());
-                    // System.out.println(caseCourante.toString());
-                    // System.out.println(caseATraiter.toString());
                     long tempsTotal = temps + distanceCaseMinimale;
                     if (tempsTotal < distance[I][J + 1]) {
                         distance[I][J + 1] = tempsTotal;
@@ -142,6 +127,7 @@ public class CalculPCC {
                     System.out.println(e);
                 }
             }
+
             if (caseCourante.getCarte().voisinExiste(caseMinimale, Direction.SUD, robot)) {
                 try {
                     caseATraiter = caseCourante.getCarte().getVoisin(caseMinimale, Direction.SUD);
@@ -156,6 +142,7 @@ public class CalculPCC {
                     System.out.println(e);
                 }
             }
+
             if (caseCourante.getCarte().voisinExiste(caseMinimale, Direction.OUEST, robot)) {
                 try {
                     caseATraiter = caseCourante.getCarte().getVoisin(caseMinimale, Direction.OUEST);
@@ -170,7 +157,6 @@ public class CalculPCC {
                     System.out.println(e);
                 }
             }
-
         }
 
         if (distance[caseSuiv.getLigne()][caseSuiv.getColonne()] == Long.MAX_VALUE)

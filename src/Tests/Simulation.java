@@ -15,7 +15,6 @@ class Simulation implements Simulable {
     private Test testAppelant;
     private String fichier;
     private Simulateur simulateur;
-    private int tailleCase;
 
     public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test test, String fichier) {
         this.gui = gui;
@@ -23,10 +22,14 @@ class Simulation implements Simulable {
         this.testAppelant = test;
         this.fichier = fichier;
         this.simulateur = simulateur;
-        this.tailleCase = Math.min((gui.getPanelWidth() - 10) / donnees.getCarte().getNbColonnes(),
-                (gui.getPanelHeight() - 10) / donnees.getCarte().getNbLignes());
 
         gui.setSimulable(this);
+
+        // Force l'affichage correct de la carte (c'est à dire à la bonne taille)
+        try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+        }
 
         draw();
     }
@@ -36,7 +39,7 @@ class Simulation implements Simulable {
      */
     private void draw() {
         gui.reset();
-        Dessin.dessin(this.donnees, this.gui, this.simulateur, this.tailleCase);
+        Dessin.dessin(this.donnees, this.gui, this.simulateur);
     }
 
     /**
@@ -46,12 +49,10 @@ class Simulation implements Simulable {
      */
     @Override
     public void next() {
+        if (!simulateur.simulationTerminee()){
+            simulateur.incrementeDate();
+        }
         try {
-            if (simulateur.simulationTerminee())
-            {
-                System.out.println("Simulation terminée");
-                // System.exit(0);
-            }
             simulateur.execute();
         } catch (CellOutOfMapException e) {
             System.out.println(e);
@@ -60,7 +61,6 @@ class Simulation implements Simulable {
         } catch (NoWaterException e) {
             System.out.println(e);
         }
-        simulateur.incrementeDate();
         draw();
     }
 

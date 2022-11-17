@@ -15,17 +15,16 @@ public class EventMouvement extends Evenement {
         robot.setLastDate(date);
     }
 
-    
-    /** 
-     * @throws CellOutOfMapException : Exception levée dans le cas où le robot ne peut pas se déplacer sur la case suivante
+    /**
+     * @throws CellOutOfMapException : Exception levée dans le cas où le robot ne
+     *                               peut pas se déplacer sur la case suivante
      */
     @Override
     public void execute() throws CellOutOfMapException {
         robot.setPosition(this.nextCase);
     }
 
-    
-    /** 
+    /**
      * @return String : Affiche la date de l'évènement
      */
     @Override

@@ -1,6 +1,7 @@
 package Tests;
 
 import java.awt.Color;
+import java.awt.Toolkit;
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 
@@ -22,14 +23,15 @@ public class TestDijkstra {
             DonneesSimulation donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
             Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestDijkstra, fichier);
-            CalculPCC calculateur = new CalculPCC(donnees);
 
             Robot robot = donnees.getRobots()[2];
-            Incendie incendie = donnees.getIncendies().getFirst();
+
+            // On veut récupérer dans ce test le 1er incendie
+            Incendie incendie = donnees.getIncendies().iterator().next();
             Chemin chemin = new Chemin();
 
-            chemin = calculateur.dijkstra(robot.getPosition(), incendie.getPosition(), robot, robot.getLastDate());
-            System.out.println(chemin.toString());
+            chemin = CalculPCC.dijkstra(donnees.getCarte(), robot.getPosition(), incendie.getPosition(), robot,
+                    robot.getLastDate());
             chemin.creerEvenements(simulateur, robot);
 
         } catch (IllegalPathException e) {
@@ -50,6 +52,8 @@ public class TestDijkstra {
         }
         // crée la fenêtre graphique dans laquelle dessiner
         GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
+        gui.setSize((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 100,
+                (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 50);
 
         initialize(args[0], gui);
     }
