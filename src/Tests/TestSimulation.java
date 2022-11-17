@@ -24,10 +24,9 @@ import io.LecteurDonnees;
 public class TestSimulation {
     public static void initialize(String fichier, GUISimulator gui) {
         try {
-            LecteurDonnees lecteur = new LecteurDonnees();
-            DonneesSimulation donnees = lecteur.creerSimulation(fichier);
+            DonneesSimulation donnees = LecteurDonnees.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestSimulation, fichier);
+            new Simulation(gui, donnees, simulateur, Test.TestSimulation, fichier);
 
             Carte carte = donnees.getCarte();
             Robot robot = donnees.getRobots()[0];
@@ -38,7 +37,6 @@ public class TestSimulation {
 
             // On veut récupérer dans ce test le 5ème incendie, on skip donc les 4 premiers
             Iterator<Incendie> iter = donnees.getIncendies().iterator();
-            iter.next();
             iter.next();
             iter.next();
             iter.next();
@@ -98,6 +96,7 @@ public class TestSimulation {
 
             chemin.creerEvenements(simulateur, robot);
             simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
+
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {

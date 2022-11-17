@@ -23,17 +23,17 @@ public class RobotChenilles extends Robot {
      * Modifie la position du robot à condition que la nouvelle case ne soit pas de
      * l'eau ou de la roche.
      * 
-     * @param new_case : la nouvelle case où le déplacer
+     * @param newCase : la nouvelle case où le déplacer
      * 
      * @exception IllegalArgumentException on va dans l'eau ou dans les rochers
      */
     @Override
-    public void setPosition(Case new_case) {
-        NatureTerrain new_terrain = new_case.getNature();
-        if (new_terrain == NatureTerrain.EAU || new_terrain == NatureTerrain.ROCHE) {
+    public void setPosition(Case newCase) {
+        NatureTerrain newTerrain = newCase.getNature();
+        if (newTerrain == NatureTerrain.EAU || newTerrain == NatureTerrain.ROCHE) {
             throw new IllegalArgumentException("Le robot à chenilles ne peut pas aller sur de l'eau ou des rochers");
         }
-        super.setPosition(new_case);
+        super.setPosition(newCase);
     }
 
     /**

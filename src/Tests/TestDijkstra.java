@@ -11,32 +11,29 @@ import Donnees.DonneesSimulation;
 import Donnees.Incendie;
 import Donnees.Robot.Robot;
 import Evenements.Simulateur;
-import Exceptions.PasDeCheminException;
+import Exceptions.NoPathAvailableException;
 import gui.GUISimulator;
 import io.LecteurDonnees;
 
 public class TestDijkstra {
     public static void initialize(String fichier, GUISimulator gui) {
         try {
-            LecteurDonnees lecteur = new LecteurDonnees();
-            DonneesSimulation donnees = lecteur.creerSimulation(fichier);
+            DonneesSimulation donnees = LecteurDonnees.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestDijkstra, fichier);
+            new Simulation(gui, donnees, simulateur, Test.TestDijkstra, fichier);
 
             Robot robot = donnees.getRobots()[2];
 
             // On veut récupérer dans ce test le 1er incendie
             Incendie incendie = donnees.getIncendies().iterator().next();
-            Chemin chemin = new Chemin();
-
-            chemin = CalculPCC.dijkstra(donnees.getCarte(), robot.getPosition(), incendie.getPosition(), robot,
+            Chemin chemin = CalculPCC.dijkstra(donnees.getCarte(), robot.getPosition(), incendie.getPosition(), robot,
                     robot.getLastDate());
             chemin.creerEvenements(simulateur, robot);
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {
             System.out.println("\n\t**format du fichier " + fichier + " invalide: " + e.getMessage());
-        } catch (PasDeCheminException e) {
+        } catch (NoPathAvailableException e) {
             System.out.println(e);
         }
     }

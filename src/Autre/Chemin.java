@@ -9,20 +9,20 @@ import Evenements.Simulateur;
 
 public class Chemin {
 
-    private LinkedList<AssociationTempsCase> chemin;
+    private LinkedList<AssociationCaseTemps> cheminCasesTemps;
 
     public Chemin() {
-        this.chemin = new LinkedList<AssociationTempsCase>();
+        this.cheminCasesTemps = new LinkedList<>();
     }
 
     
     /** 
-     * Renvoie le chemin 
+     * Renvoie le chemin. Fonction utilisée uniquement dans les tests "à la main"
      * 
-     * @return Chemin sous forme de liste chainée
+     * @return Chemin sous forme de liste chainée de tuple (case, temps)
      */
-    public LinkedList<AssociationTempsCase> getChemin() {
-        return chemin;
+    public LinkedList<AssociationCaseTemps> getChemin() {
+        return cheminCasesTemps;
     }
 
     
@@ -31,7 +31,7 @@ public class Chemin {
      */
     public Chemin deepCopyChemin(){
         Chemin cheminCopy = new Chemin();
-        for(AssociationTempsCase temp : this.chemin){
+        for(AssociationCaseTemps temp : this.cheminCasesTemps){
             cheminCopy.addElement(temp.getCase(), temp.getT());
         }
         return cheminCopy;
@@ -44,7 +44,7 @@ public class Chemin {
      * @param date      - Date de passage par le nouveau élément
      */
     public void addElement(Case caseSuiv, long date) {
-        this.chemin.add(new AssociationTempsCase(caseSuiv, date));
+        this.cheminCasesTemps.add(new AssociationCaseTemps(caseSuiv, date));
     }
 
     
@@ -54,11 +54,11 @@ public class Chemin {
      * @return Date du dernier élément du chemin
      */
     public long getLastDate(){
-        return this.chemin.getLast().getT();
+        return this.cheminCasesTemps.getLast().getT();
     }
 
     public long getTempsChemin(){
-        return this.chemin.getLast().getT() - this.chemin.getFirst().getT();
+        return this.cheminCasesTemps.getLast().getT() - this.cheminCasesTemps.getFirst().getT();
     }
 
     
@@ -68,12 +68,12 @@ public class Chemin {
      * @param index                 - indice de l'élément à retourner
      * @return AssociationTempsCase - Retourne l'élément et la date de passage par l'élément
      */
-    public AssociationTempsCase getElem(int index) {
+    public AssociationCaseTemps getElem(int index) {
         if (index == -1) {
-            return this.chemin.getLast();
+            return this.cheminCasesTemps.getLast();
         }
-        if (index >= 0 && index < this.chemin.size())
-            return this.chemin.get(index);
+        if (index >= 0 && index < this.cheminCasesTemps.size())
+            return this.cheminCasesTemps.get(index);
         else
             throw new IllegalArgumentException("L'index doit être compris entre -1 et taille du chemin - 1");
     }
@@ -85,7 +85,7 @@ public class Chemin {
      * @param robot      : Robot concerné par le déplacement sur le chemin
      */
     public void creerEvenements(Simulateur simulateur, Robot robot) {
-        for (AssociationTempsCase tc : this.chemin) {
+        for (AssociationCaseTemps tc : this.cheminCasesTemps) {
             // Si c'est la première case ça sert à rien de s'y déplacer
             if (tc.getCase() != robot.getPosition()) {
                 simulateur.ajouteEvenement(new EventMouvement(tc.getT(), robot, tc.getCase()));
@@ -99,22 +99,22 @@ public class Chemin {
      */
     @Override
     public String toString() {
-        return "Chemin [chemin=" + chemin + "]";
+        return "Chemin [chemin=" + cheminCasesTemps + "]";
     }
 }
 
-class AssociationTempsCase {
+class AssociationCaseTemps {
 
-    private Case _case;
+    private Case cell;
     private long t;
 
-    public AssociationTempsCase(Case _case, long t) {
-        this._case = _case;
+    public AssociationCaseTemps(Case cell, long t) {
+        this.cell = cell;
         this.t = t;
     }
 
     public Case getCase() {
-        return _case;
+        return cell;
     }
 
     public long getT() {
@@ -127,6 +127,6 @@ class AssociationTempsCase {
 
     @Override
     public String toString() {
-        return "AssociationTempsCase [_case=" + _case + ", t=" + t + "]";
+        return "AssociationTempsCase [_case=" + cell + ", t=" + t + "]";
     }
 }

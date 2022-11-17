@@ -8,7 +8,6 @@ import java.util.zip.DataFormatException;
 import Chefs.ChefBasique;
 import Donnees.DonneesSimulation;
 import Evenements.Simulateur;
-import Exceptions.NoMoreFireException;
 import gui.GUISimulator;
 import io.LecteurDonnees;
 
@@ -16,25 +15,19 @@ public class TestBasique {
 
     public static void initialize(String fichier, GUISimulator gui) {
         try {
-            LecteurDonnees lecteur = new LecteurDonnees();
-            DonneesSimulation donnees = lecteur.creerSimulation(fichier);
+            DonneesSimulation donnees = LecteurDonnees.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
             ChefBasique chef = new ChefBasique(donnees, simulateur);
-            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestBasique, fichier);
-            
-            chef.strategie();
-
+            new Simulation(gui, donnees, simulateur, Test.TestBasique, fichier, chef);
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {
             System.out.println("\n\t**format du fichier " + fichier + " invalide: " + e.getMessage());
-        } catch (NoMoreFireException e) {
-            System.out.println(e);
         }
     }
 
     public static void main(String[] args) {
-        if (args.length < 0) {
+        if (args.length < 1) {
             System.out.println("Syntaxe: java TestBasique <nomDeFichier>");
             System.exit(1);
         }

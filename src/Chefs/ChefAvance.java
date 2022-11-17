@@ -15,7 +15,7 @@ import Evenements.EventIntervenir;
 import Evenements.EventRemplir;
 import Evenements.Simulateur;
 import Exceptions.CellOutOfMapException;
-import Exceptions.PasDeCheminException;
+import Exceptions.NoPathAvailableException;
 
 public class ChefAvance extends Chef {
 
@@ -46,10 +46,11 @@ public class ChefAvance extends Chef {
      * 
      * @param robot - Robot qui doit aller remplir son reservoir
      * @return Chemin - Chemin idéal vers une source d'eau
-     * @throws PasDeCheminException Exception s'il n'y a pas de chemins possibles
-     *                              du robot vers une source d'eau
+     * @throws NoPathAvailableException Exception s'il n'y a pas de chemins
+     *                                  possibles
+     *                                  du robot vers une source d'eau
      */
-    private Chemin ouAllerRemplirReservoir(Robot robot) throws PasDeCheminException {
+    private Chemin ouAllerRemplirReservoir(Robot robot) throws NoPathAvailableException {
         if (casesAvecEau.size() == 0) {
             System.out.println("Il n'y a pas d'eau sur cette carte, le robot ne va donc pas se remplir");
             ;
@@ -72,7 +73,7 @@ public class ChefAvance extends Chef {
                         cheminARetourner = cheminVersEau;
                         ilYAUnChemin = true;
                     }
-                } catch (PasDeCheminException e) {
+                } catch (NoPathAvailableException e) {
                     continue;
                 }
             } else {
@@ -88,7 +89,7 @@ public class ChefAvance extends Chef {
                             }
                         } else
                             continue;
-                    } catch (PasDeCheminException e) {
+                    } catch (NoPathAvailableException e) {
                         continue;
                     } catch (CellOutOfMapException e) {
                         continue;
@@ -97,7 +98,7 @@ public class ChefAvance extends Chef {
             }
         }
         if (!ilYAUnChemin)
-            throw new PasDeCheminException();
+            throw new NoPathAvailableException();
         return cheminARetourner;
     }
 
@@ -121,7 +122,7 @@ public class ChefAvance extends Chef {
                         simulateur.ajouteEvenement(new EventRemplir(robotDeIcendie.getLastDate(), robotDeIcendie)); // remplit
                                                                                                                     // toi
                                                                                                                     // wesh
-                    } catch (PasDeCheminException e) {
+                    } catch (NoPathAvailableException e) {
                         continue;
                     }
                 }
@@ -155,7 +156,7 @@ public class ChefAvance extends Chef {
                         cheminAParcourir = chemin;
                         tempsDeplacement = chemin.getTempsChemin();
                     }
-                } catch (PasDeCheminException e) {
+                } catch (NoPathAvailableException e) {
                     continue;
                 }
             } else { // si le robot est occupé...
@@ -175,7 +176,7 @@ public class ChefAvance extends Chef {
                         simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
                         occupes.remove(robot); // le robot n'est plus occupé.
                         // On enlève le robot de la liste de l'intervention sur l'incendie
-                    } catch (PasDeCheminException e) {
+                    } catch (NoPathAvailableException e) {
                         continue;
                     }
                 } else
@@ -227,7 +228,7 @@ public class ChefAvance extends Chef {
                                 cheminVersEau.creerEvenements(this.simulateur, robotDeIcendie);
                                 simulateur.ajouteEvenement(
                                         new EventRemplir(robotDeIcendie.getLastDate(), robotDeIcendie));
-                            } catch (PasDeCheminException e) {
+                            } catch (NoPathAvailableException e) {
                                 continue;
                             }
                         }

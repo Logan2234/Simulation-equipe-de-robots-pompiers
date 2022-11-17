@@ -8,7 +8,7 @@ import Donnees.Robot.Robot;
 public class DonneesSimulation {
     private final Carte carte;
     private final Set<Incendie> incendies; // TODO: Mettre une ArrayList pour les robots et les incendies
-    private final Robot robots[];
+    private final Robot[] robots;
 
     /**
      * @param carte     : carte de notre simulation

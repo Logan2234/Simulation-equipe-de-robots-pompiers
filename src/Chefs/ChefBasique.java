@@ -13,17 +13,18 @@ import Evenements.EventChefOrdonne;
 import Evenements.EventIntervenir;
 import Evenements.Simulateur;
 import Exceptions.NoMoreFireException;
-import Exceptions.PasDeCheminException;
+import Exceptions.NoMoreRobotsException;
+import Exceptions.NoPathAvailableException;
 
 /**
- * @param incendies_rob : Table de hachage qui a pour clé les incendies
+ * @param incendiesRob : Table de hachage qui a pour clé les incendies
  *                      non-éteints et en valeur le robot qui s'en occupe.
  * @param morts         : Table dynamique qui comporte l'ensemble des robots
  *                      morts (i.e qui n'ont plus d'eau dans le réservoir)
  */
 public class ChefBasique extends Chef {
 
-    private HashMap<Incendie, Robot> incendies_rob;
+    private HashMap<Incendie, Robot> incendiesRob;
     private Set<Robot> morts;
 
     /**
@@ -34,10 +35,10 @@ public class ChefBasique extends Chef {
      */
     public ChefBasique(DonneesSimulation donnees, Simulateur simulateur) {
         super(donnees, simulateur);
-        this.morts = new HashSet<Robot>();
-        this.incendies_rob = new HashMap<Incendie, Robot>();
+        this.morts = new HashSet<>();
+        this.incendiesRob = new HashMap<>();
         for (Incendie incendie : donnees.getIncendies())
-            incendies_rob.put(incendie, null);
+            incendiesRob.put(incendie, null);
     }
 
     /**
@@ -47,10 +48,10 @@ public class ChefBasique extends Chef {
      * @param robot    : Il n'est ni occupé, ni mort
      * @param incendie : Il n'est affecté à aucun robot
      * 
-     * @throws PasDeCheminException Le robot choisi ne peut pas atteindre l'incendie
+     * @throws NoPathAvailableException Le robot choisi ne peut pas atteindre l'incendie
      *                              choisi
      */
-    private void donneOrdre(Robot robot, Incendie incendie) throws PasDeCheminException {
+    private void donneOrdre(Robot robot, Incendie incendie) throws NoPathAvailableException {
         // Création du chemin et des événements associés
         Chemin chemin = CalculPCC.dijkstra(donnees.getCarte(), robot.getPosition(), incendie.getPosition(), robot,
                 simulateur.getDateSimulation());
@@ -78,10 +79,10 @@ public class ChefBasique extends Chef {
                 try {
                     donneOrdre(robot, incendie);
                     occupes.add(robot);
-                    incendies_rob.put(incendie, robot);
-                    break; // Si on a réussi, on ne va pas envoyer de second robot sur l'incendie
-                } catch (PasDeCheminException e) {
-                    continue;
+                    incendiesRob.put(incendie, robot);
+                    return; // Si on a réussi, on ne va pas envoyer de second robot sur l'incendie
+                } catch (NoPathAvailableException e) {
+                    // On n'a pas besoin d'afficher quoi que ce soit, juste on continue
                 }
             }
         }
@@ -93,24 +94,24 @@ public class ChefBasique extends Chef {
      * On va traiter un incendie à la fois, tant qu'on en a qui ne sont pas éteints.
      */
     @Override
-    public void strategie() throws NoMoreFireException {
+    public void strategie() throws NoMoreFireException, NoMoreRobotsException {
 
         // Tant qu'il y a des incendies à éteidnre et des robots avec de l'eau
-        if (!incendies_rob.isEmpty() && donnees.getRobots().length != morts.size()) {
+        if (!incendiesRob.isEmpty() && donnees.getRobots().length != morts.size()) {
             for (Incendie incendie : donnees.getIncendies()) {
 
                 // Si il est déjà éteint, on ne va pas traiter son cas
-                if (!incendies_rob.containsKey(incendie))
+                if (!incendiesRob.containsKey(incendie))
                     continue;
 
                 // Si il est en cours de traitement, on regarde son état
-                if (incendies_rob.get(incendie) != null) {
+                if (incendiesRob.get(incendie) != null) {
 
-                    Robot robot = incendies_rob.get(incendie);
+                    Robot robot = incendiesRob.get(incendie);
 
                     // Si le robot est vide il devient innutilisable
                     if (robot.getReservoir() == 0) {
-                        incendies_rob.put(incendie, null);
+                        incendiesRob.put(incendie, null);
                         occupes.remove(robot);
                         morts.add(robot);
                     }
@@ -118,7 +119,7 @@ public class ChefBasique extends Chef {
                     // Si l'incendie est éteint, on met à jour incendies_rob
                     if (incendie.getLitres() <= 0) {
                         occupes.remove(robot);
-                        incendies_rob.remove(incendie);
+                        incendiesRob.remove(incendie);
                     }
                 }
                 // Si on n'a pas d'affectation pour cet incendie, on va lui envoyer un robot
@@ -126,9 +127,9 @@ public class ChefBasique extends Chef {
                     gestionIncendies(incendie);
             }
             simulateur.ajouteEvenement(new EventChefOrdonne(simulateur.getDateSimulation(), this));
-        } else if (incendies_rob.isEmpty()) {
+        } else if (incendiesRob.isEmpty()) {
             throw new NoMoreFireException();
         } else
-            System.out.println("Tous les robots ont vidé leur réservoir");
+            throw new NoMoreRobotsException();
     }
 }

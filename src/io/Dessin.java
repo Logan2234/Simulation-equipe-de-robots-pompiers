@@ -17,6 +17,11 @@ import gui.Text;
 
 public class Dessin {
 
+    private Dessin() {
+        throw new IllegalStateException(
+                "Cette classe ne doit pas être instanciée puisque toutes ses fonctions utiles sont statiques");
+    }
+
     /**
      * Fonction permettant de dessiner toutes les cases de la carte
      * 
@@ -37,18 +42,18 @@ public class Dessin {
         // Dessin effectif de toutes les cases
         for (int i = 0; i < carte.getNbLignes(); i++) {
             for (int j = 0; j < carte.getNbColonnes(); j++) {
-                NatureTerrain current_case_nature = carte.getCase(i, j).getNature();
+                NatureTerrain natureCase = carte.getCase(i, j).getNature();
                 gui.addGraphicalElement(new ImageElement(tailleCase * j,
-                        i * tailleCase, current_case_nature.getImagePath(), tailleCase, tailleCase, gui));
+                        i * tailleCase, natureCase.getImagePath(), tailleCase, tailleCase, gui));
                 // Si c'est une forêt, effet de densité si plusieurs forêts sont collées
-                if (current_case_nature == NatureTerrain.FORET) {
+                if (natureCase == NatureTerrain.FORET) {
                     if (j + 1 < carte.getNbColonnes() && carte.getCase(i, j + 1).getNature() == NatureTerrain.FORET) {
                         gui.addGraphicalElement(new ImageElement(tailleCase * j + tailleCase / 2,
-                                i * tailleCase, current_case_nature.getImagePath(), tailleCase, tailleCase, gui));
+                                i * tailleCase, natureCase.getImagePath(), tailleCase, tailleCase, gui));
                     }
                     if (i + 1 < carte.getNbLignes() && carte.getCase(i + 1, j).getNature() == NatureTerrain.FORET) {
                         gui.addGraphicalElement(new ImageElement(tailleCase * j, i * tailleCase + tailleCase / 2,
-                                current_case_nature.getImagePath(), tailleCase, tailleCase, gui));
+                                natureCase.getImagePath(), tailleCase, tailleCase, gui));
                     }
                 }
             }
@@ -77,8 +82,8 @@ public class Dessin {
             if (robot.getReservoir() != 0) {
                 float pourcentageReservoir = (float) robot.getReservoir() / robot.getCapacite();
                 gui.addGraphicalElement(new Rectangle(tailleCase / 2 + tailleCase * j + 3 * tailleCase / 7,
-                        tailleCase * i + tailleCase / 2 + (int) ((tailleCase / 4) * (1 - pourcentageReservoir)),
-                        Color.BLUE, Color.BLUE, 3, (int) (tailleCase / 2 * pourcentageReservoir)));
+                        tailleCase * i + tailleCase / 2 + (int) (((float)tailleCase / 4) * (1 - pourcentageReservoir)),
+                        Color.BLUE, Color.BLUE, 3, (int) ((float)tailleCase / 2 * pourcentageReservoir)));
             }
         }
     }
@@ -99,8 +104,8 @@ public class Dessin {
                 int j = pos.getColonne();
                 float pourcentageExtinction = (float) incendie.getLitres() / incendie.getLitresInit();
                 gui.addGraphicalElement(new ImageElement(
-                        (int) (tailleCase * j + tailleCase / 2 * (1 - pourcentageExtinction)),
-                        (int) (i * tailleCase + tailleCase / 2 * (1 - pourcentageExtinction)), "assets/Fire.png",
+                        (int) (tailleCase * j + (float)tailleCase / 2 * (1 - pourcentageExtinction)),
+                        (int) (i * tailleCase + (float)tailleCase / 2 * (1 - pourcentageExtinction)), "assets/Fire.png",
                         (int) (tailleCase * pourcentageExtinction), (int) (tailleCase * pourcentageExtinction), gui));
             }
         }

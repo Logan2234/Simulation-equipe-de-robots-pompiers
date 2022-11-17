@@ -16,7 +16,7 @@ public abstract class Robot {
     private final int tmpRemplissage; // en s.
     protected final double vitesseDefaut; // en m/s. Protected car utilisé dans les sous-classes
     private final String imagePath;
-    
+
     /**
      * @param position      : spécifie la position actuelle du robot
      * @param capacite      : donne la capacité maximale du réservoir du robot
@@ -28,15 +28,16 @@ public abstract class Robot {
      * @param tmpReplissage : indique le temps nécessaire (en s) pour un remplissage
      *                      complet
      */
-    public Robot(Case position, int capacite, double vitesse, int tmpVersement, int qteVersement, int tmpReplissage, String imagePath) {
+    protected Robot(Case position, int capacite, double vitesse, int tmpVersement, int qteVersement, int tmpReplissage,
+            String imagePath) {
         this.position = position;
-        this.capacite = capacite;
         this.reservoir = capacite;
+        this.lastDate = 0;
+        this.capacite = capacite;
         this.vitesseDefaut = vitesse;
         this.tmpVersement = tmpVersement;
         this.qteVersement = qteVersement;
         this.tmpRemplissage = tmpReplissage;
-        this.lastDate = 0;
         this.imagePath = imagePath;
     }
 
@@ -65,9 +66,7 @@ public abstract class Robot {
      * @param nature
      * @return double : la vitesse (en m/s) du robot pour une nature donnée
      */
-    public double getVitesse(NatureTerrain nature) {
-        return this.vitesseDefaut;
-    }
+    public abstract double getVitesse(NatureTerrain nature);
 
     /**
      * @return int : la capacité totale (en L) du robot
@@ -119,10 +118,10 @@ public abstract class Robot {
      * Modifie la position du robot.
      * Elle sera override dans ses filles.
      * 
-     * @param new_pos : case indiquant la nouvelle position du robot
+     * @param newPos : case indiquant la nouvelle position du robot
      */
-    public void setPosition(Case new_pos) {
-        this.position = new_pos;
+    public void setPosition(Case newPos) {
+        this.position = newPos;
     }
 
     /**
@@ -149,7 +148,7 @@ public abstract class Robot {
      * Remplit le réservoir d'un robot terrestre s'il est à côté d'une case de type
      * Eau.
      * 
-     * Cette méthode sera override dans le cas du drone.
+     * Cette méthode sera override dans le cas du drone et du robot à pattes.
      * 
      * @exception NoWaterException On n'est pas à côté d'un réservoir
      * 
@@ -163,7 +162,7 @@ public abstract class Robot {
                     break;
                 }
             } catch (CellOutOfMapException e) {
-                System.out.println(e);
+                continue;
             }
         }
         if (waterNear)

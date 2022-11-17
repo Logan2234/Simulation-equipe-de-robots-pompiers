@@ -24,13 +24,10 @@ import io.LecteurDonnees;
 
 public class TestScenarios {
     public static void initialize(String fichier, GUISimulator gui) {
-        LecteurDonnees lecteur;
-        DonneesSimulation donnees;
         try {
-            lecteur = new LecteurDonnees();
-            donnees = lecteur.creerSimulation(fichier);
+            DonneesSimulation donnees = LecteurDonnees.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestScenarios, fichier);
+            new Simulation(gui, donnees, simulateur, Test.TestScenarios, fichier);
             
             Carte carte = donnees.getCarte();
             Robot robot1 = donnees.getRobots()[0];
@@ -50,16 +47,15 @@ public class TestScenarios {
                 }
             } catch (CellOutOfMapException e) {
                 try {
+                    chemin.creerEvenements(simulateur, robot1);
+                    chemin.getChemin().clear();
+                    
                     // On veut récupérer dans ce test le 5ème incendie, on skip donc les 4 premiers
                     Iterator<Incendie> iter = donnees.getIncendies().iterator();
                     iter.next();
                     iter.next();
                     iter.next();
-                    iter.next();
                     Incendie incendie = iter.next();
-
-                    chemin.creerEvenements(simulateur, robot1);
-                    chemin.getChemin().clear();
 
                     pos = robot2.getPosition();
                     nextCase = carte.getVoisin(pos, Direction.NORD);

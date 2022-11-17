@@ -23,13 +23,18 @@ import Donnees.Robot.RobotRoues;
 public class LecteurDonnees {
     private static Scanner scanner;
 
+    private LecteurDonnees() {
+        throw new IllegalStateException(
+                "Cette classe ne doit pas être instanciée puisque toutes ses fonctions utiles sont statiques");
+    }
+
     /**
      * @param fichierDonnees : fichier à lire pour initialiser la simulation
      * @return DonneesSimulation : état initial de la simulation avec les données
      * @throws FileNotFoundException :pas de fichier fourni
      * @throws DataFormatException   : mauvais format de fichier
      */
-    public DonneesSimulation creerSimulation(String fichierDonnees)
+    public static DonneesSimulation creerSimulation(String fichierDonnees)
             throws FileNotFoundException, DataFormatException {
         scanner = new Scanner(new File(fichierDonnees));
         scanner.useLocale(Locale.US);
@@ -40,19 +45,19 @@ public class LecteurDonnees {
         Carte carte = new Carte(tailles[0], tailles[1]);
         carte.setTailleCases(tailles[2]);
 
-        Case[][] tab_cases = new Case[tailles[0]][tailles[1]];
+        Case[][] tabCases = new Case[tailles[0]][tailles[1]];
 
         for (int lig = 0; lig < tailles[0]; lig++) {
             for (int col = 0; col < tailles[1]; col++) {
-                tab_cases[lig][col] = lireCase(lig, col, carte);
+                tabCases[lig][col] = lireCase(lig, col, carte);
             }
         }
 
-        carte.setTab_cases(tab_cases);
+        carte.setTabCases(tabCases);
 
         // Création du tableau des incendies
         int nbIncendies = lireIncendies();
-        Set<Incendie> incendies = new HashSet<Incendie>();
+        Set<Incendie> incendies = new HashSet<>();
 
         for (int i = 0; i < nbIncendies; i++) {
             incendies.add(lireIncendie(i, carte));
@@ -73,7 +78,7 @@ public class LecteurDonnees {
      * @return int[] : Renvoie [nbLignes, nbColonnes, tailleCases] de la carte
      * @throws DataFormatException : mauvais format de fichier
      */
-    private int[] lireCarte() throws DataFormatException {
+    private static int[] lireCarte() throws DataFormatException {
         ignorerCommentaires();
         try {
             int nbLignes = scanner.nextInt();
@@ -84,7 +89,7 @@ public class LecteurDonnees {
             return tailles;
 
         } catch (NoSuchElementException e) {
-            throw new DataFormatException("Format invalide. " + "Attendu: nbLignes nbColonnes tailleCases");
+            throw new DataFormatException("Format invalide. Attendu: nbLignes nbColonnes tailleCases");
         }
     }
 
@@ -97,7 +102,7 @@ public class LecteurDonnees {
      * 
      * @throws DataFormatException : mauvais format de fichier
      */
-    private Case lireCase(int lig, int col, Carte carte) throws DataFormatException {
+    private static Case lireCase(int lig, int col, Carte carte) throws DataFormatException {
         ignorerCommentaires();
 
         try {
@@ -117,7 +122,7 @@ public class LecteurDonnees {
      * 
      * @throws DataFormatException : mauvais format de fichier
      */
-    private int lireIncendies() throws DataFormatException {
+    private static int lireIncendies() throws DataFormatException {
         ignorerCommentaires();
         try {
             return scanner.nextInt();
@@ -134,20 +139,20 @@ public class LecteurDonnees {
      * 
      * @throws DataFormatException : mauvais format de fichier
      */
-    private Incendie lireIncendie(int i, Carte carte) throws DataFormatException {
+    private static Incendie lireIncendie(int i, Carte carte) throws DataFormatException {
         ignorerCommentaires();
 
         try {
             int lig = scanner.nextInt();
             int col = scanner.nextInt();
             int intensite = scanner.nextInt();
-
+            
             if (intensite <= 0) {
                 throw new DataFormatException("incendie " + i + "nb litres pour eteindre doit etre > 0");
             }
-
+            
             verifieLigneTerminee();
-
+            
             return new Incendie(carte.getCase(lig, col), intensite);
         } catch (NoSuchElementException e) {
             throw new DataFormatException("format d'incendie invalide. " + "Attendu: ligne colonne intensite");
@@ -159,7 +164,7 @@ public class LecteurDonnees {
      * 
      * @throws DataFormatException : mauvais format de fichier
      */
-    private int lireRobots() throws DataFormatException {
+    private static int lireRobots() throws DataFormatException {
         ignorerCommentaires();
         try {
             return scanner.nextInt();
@@ -176,7 +181,7 @@ public class LecteurDonnees {
      * 
      * @throws DataFormatException : mauvais format de fichier
      */
-    private Robot lireRobot(int i, Carte carte) throws DataFormatException {
+    private static Robot lireRobot(int i, Carte carte) throws DataFormatException {
         ignorerCommentaires();
 
         try {
@@ -211,8 +216,8 @@ public class LecteurDonnees {
                         return new RobotChenilles(carte.getCase(lig, col), vitesse);
                     return new RobotChenilles(carte.getCase(lig, col));
                 default:
-                    throw new DataFormatException(
-                            "Un robot ne peut avoir qu'un des types suivant: DRONE, ROUES, PATTES, CHENILLES");
+                    throw new DataFormatException("Le robot " + i
+                            + " ne peut avoir qu'un des types suivant: DRONE, ROUES, PATTES, CHENILLES");
             }
 
         } catch (NoSuchElementException e) {
@@ -222,7 +227,7 @@ public class LecteurDonnees {
     }
 
     /** Ignore toute (fin de) ligne commencant par '#' */
-    private void ignorerCommentaires() {
+    private static void ignorerCommentaires() {
         while (scanner.hasNext("#.*")) {
             scanner.nextLine();
         }
@@ -233,7 +238,7 @@ public class LecteurDonnees {
      * 
      * @throws DataFormatException : mauvais format de fichier
      */
-    private void verifieLigneTerminee() throws DataFormatException {
+    private static void verifieLigneTerminee() throws DataFormatException {
         if (scanner.findInLine("(\\d+)") != null) {
             throw new DataFormatException("format invalide, donnees en trop.");
         }

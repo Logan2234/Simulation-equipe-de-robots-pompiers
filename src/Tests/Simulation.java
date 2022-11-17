@@ -2,12 +2,11 @@ package Tests;
 
 import java.util.Scanner;
 
+import Chefs.Chef;
 import Donnees.DonneesSimulation;
 import Evenements.Simulateur;
-import Exceptions.CellOutOfMapException;
-import Exceptions.NoFireException;
 import Exceptions.NoMoreFireException;
-import Exceptions.NoWaterException;
+import Exceptions.NoMoreRobotsException;
 import gui.GUISimulator;
 import gui.Simulable;
 import io.Dessin;
@@ -20,20 +19,42 @@ class Simulation implements Simulable {
     private final Simulateur simulateur;
     private boolean simulationTerminee;
 
+    /**
+     * Fonction permettant seulement de factoriser le code des constructeurs
+     */
+    private void initialisationCommune() {
+        gui.setSimulable(this);
+
+        System.out.println("\n====================================================================");
+        System.out.println("                       DEBUT DE LA SIMULATION                        ");
+        System.out.println("====================================================================\n");
+
+        draw();
+    }
+
     public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test test, String fichier) {
         this.gui = gui;
         this.donnees = donnees;
         this.testAppelant = test;
         this.fichier = fichier;
         this.simulateur = simulateur;
+        initialisationCommune();
+    }
 
-        gui.setSimulable(this);
+    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test test, String fichier,
+            Chef chef) {
+        this.gui = gui;
+        this.donnees = donnees;
+        this.testAppelant = test;
+        this.fichier = fichier;
+        this.simulateur = simulateur;
+        initialisationCommune();
 
-        System.out.println("\n====================================================================");
-        System.out.println("                       DEBUT DE LA SIMULATION                        ");
-        System.out.println("====================================================================\n");
-        
-        draw();
+        try {
+            chef.strategie();
+        } catch (NoMoreFireException | NoMoreRobotsException e) {
+            System.out.println(e);
+        }
     }
 
     /**
@@ -51,7 +72,7 @@ class Simulation implements Simulable {
      */
     @Override
     public void next() {
-        
+
         if (!simulationTerminee) {
             try {
                 // Si la simulation n'est pas terminée on incrémente la date
@@ -61,13 +82,7 @@ class Simulation implements Simulable {
                 // On exécute les évènements
                 simulateur.execute();
                 draw();
-            } catch (CellOutOfMapException e) {
-                System.out.println(e);
-            } catch (NoFireException e) {
-                System.out.println(e);
-            } catch (NoWaterException e) {
-                System.out.println(e);
-            } catch (NoMoreFireException e) {
+            } catch (NoMoreRobotsException | NoMoreFireException e) {
                 System.out.println(e.getMessage());
                 simulationTerminee = true;
             }
