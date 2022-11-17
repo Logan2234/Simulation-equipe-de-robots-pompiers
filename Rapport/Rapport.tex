@@ -25,15 +25,9 @@ Pour notre projet, nous avons fait le choix de rassembler en différents package
     \item Le package \texttt{Donnees} comporte tous les fichiers de classe des objets que l'on va manipuler pendant
     la simulation (\texttt{Robot}, \texttt{Carte}, \texttt{Case}, \texttt{Direction}\ldots).
     \item Le package \texttt{Robot}, lui même dans le package \texttt{Donnees}, comporte notre classe abstraite de \texttt{Robot} ainsi
-<<<<<<< HEAD
     que toutes les classes de robots qui en hérite.
     \item Le package \texttt{Evenements} comporte tous les évènements ainsi que la classe abstraite \texttt{Evenement}
     \item Le package \texttt{Exceptions} comporte toutes les exceptions rajoutées par nos soins.
-=======
-    que toutes les classes de robots.
-    \item Le package \texttt{Evenements} comporte tous les évènements sélectionnables ainsi que la classe abstraite \texttt{Evenement}
-    \item Le package \texttt{Exceptions} comporte toutes les exceptions rajoutées par nos soins. Elles seront expliquées plus bas.
->>>>>>> 19a892a574ded9ed1aadf1ea28b55e3995ddf331
     \item Le package \texttt{Tests} comporte tous les tests créés pour tester les différentes parties du sujet. On y trouve également
     La classe \texttt{Simulation} et l'énumérateur \texttt{Test} qui liste tous nos tests (son utilité sera expliquée plus bas).
     \item Le package \texttt{Chefs} comporte la classe abstraite \texttt{Chef} ainsi que \texttt{ChefBasique} et \texttt{ChefAvance} qui mettent
@@ -45,7 +39,6 @@ Pour notre projet, nous avons fait le choix de rassembler en différents package
 \end{itemize}
 
 \subsection{Les exceptions}
-<<<<<<< HEAD
 
 Nous avons décidé de rajouter quelques exceptions afin de rendre notre projet un peu plus robuste. 
 Ainsi, {\tt NoFireException} (resp. {\tt NoWaterException}) est soulevée lorsque qu'un robot essaie d'intéragir avec une case n'étant pas en feu (resp.\ de se remplir sans eau à proximité).
@@ -60,13 +53,6 @@ La classe {\tt Simulation} permet de factoriser le code des fonctions utilisées
 C'est cette classe qui implémente l'interface {\tt Simulable}.
 
 \subsection{Algorithme de plus court chemin: Dijkstra}
-=======
-\subsection{Ajout de méthodes dans les objets prédéfinis}
-\subsubsection{getLastDate dans Robot}
-\subsubsection{getLitresInit dans Incendie}
-\subsection{Classe Simulation}
-\subsection{Algorithme de plus court chemin : Dijkstra} %classe chemin et CalculPCC (pourquoi séparer les deux ?)
->>>>>>> 19a892a574ded9ed1aadf1ea28b55e3995ddf331
 \subsection{Les chefs pompiers}
 La structure des deux chefs est commune, d'où l'utilisation d'une classe abstraite \texttt{Chef}. Typiquement, on retrouve:
 \begin{enumerate}
