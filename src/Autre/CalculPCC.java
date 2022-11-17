@@ -56,7 +56,7 @@ public class CalculPCC {
 
         for (int i = 0; i < carte.getNbLignes(); i++) {
             for (int j = 0; j < carte.getNbColonnes(); j++) {
-                distance[i][j] = Long.MAX_VALUE;
+                distance[i][j] = 10000000;//Long.MAX_VALUE;
                 ouverts.add(new Coordonees(i, j));
                 chemins[i][j] = new Chemin();
             }
@@ -71,6 +71,14 @@ public class CalculPCC {
         Coordonees minCoordonees;
         
         while (!ouverts.isEmpty()) {
+            // for (int i = 0; i < carte.getNbLignes(); i++) {
+            //     for (int j = 0; j < carte.getNbColonnes(); j++) {
+            //         System.out.print(distance[i][j] + " ");
+            //     }
+            //     System.out.println();
+            // }
+            // System.out.println();
+            // System.out.println();
 
             // On cherche valeur minimale de distance
             minDistance = distance[ouverts.get(0).getI()][ouverts.get(0).getJ()];
@@ -93,7 +101,6 @@ public class CalculPCC {
                 continue;
 
             // On cherche le chemin
-
             long distanceCaseMinimale = distance[I][J];
 
             // TODO: Factoriser le code.
@@ -130,10 +137,7 @@ public class CalculPCC {
 
             if (caseCourante.getCarte().voisinExiste(caseMinimale, Direction.SUD, robot)) {
                 try {
-                    System.out.println(caseMinimale.toString());
-                    System.out.println(robot.toString());
                     caseATraiter = caseCourante.getCarte().getVoisin(caseMinimale, Direction.SUD);
-                    System.out.println(caseATraiter.toString());
                     long temps = tpsDpltCaseACase(caseMinimale, caseATraiter, robot);
                     long tempsTotal = temps + distanceCaseMinimale;
                     if (tempsTotal < distance[I + 1][J]) {
