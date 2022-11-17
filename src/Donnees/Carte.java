@@ -115,7 +115,7 @@ public class Carte {
      */
     public boolean voisinExiste(Case src, Direction dir, Robot robot) {
         try {
-            boolean natureCompatible = robot.getVitesse(this.getVoisin(src, dir).getNature()) != 0;
+            boolean natureCompatible = robot.getVitesse(this.getVoisin(src, dir).getNature()) != 0 && robot.getVitesse(src.getNature()) != 0;
             return this.voisinExiste(src, dir) && natureCompatible;
         } catch (CellOutOfMapException e){
             return false;
