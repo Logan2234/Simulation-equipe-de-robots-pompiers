@@ -66,7 +66,16 @@ exeScenarios:
 exeDijkstra:
 	java -classpath bin:bin/gui.jar Tests/TestDijkstra cartes/carteSujet.map
 
-exeBasique:
+exeBasiqueCarteSujet:
+	java -classpath bin:bin/gui.jar Tests/TestBasique cartes/carteSujet.map
+
+exeBasiqueMushroom:
+	java -classpath bin:bin/gui.jar Tests/TestBasique cartes/mushroomOfHell-20x20.map
+
+exeBasiqueDesert:
+	java -classpath bin:bin/gui.jar Tests/TestBasique cartes/desertOfDeath-20x20.map
+
+exeBasiqueSpiral:
 	java -classpath bin:bin/gui.jar Tests/TestBasique cartes/spiralOfMadness-50x50.map
 
 exeAvance:
