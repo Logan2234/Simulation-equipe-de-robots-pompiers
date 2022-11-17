@@ -7,9 +7,9 @@ package Tests;
  * Utilisé seulement dans {@code Simulation.java}
  */
 public enum Test {
-    TestSimulation,
-    TestScenarios,
-    TestDijkstra,
-    TestBasique,
-    TestAvance
+    TEST_SIMULATION,
+    TEST_SCENARIOS,
+    TEST_DIJKSTRA,
+    TEST_BASIQUE,
+    TEST_AVANCE
 }

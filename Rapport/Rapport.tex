@@ -9,53 +9,63 @@
 \usepackage{hyperref}
 \usepackage{appendix}
 \usepackage{amsmath}
-\usepackage[french]{algorithme} %on pourrait ausi utiliser [english] pour la langue des mots-clés
+% \usepackage[french]{algorithme} %on pourrait ausi utiliser [english] pour la langue des mots-clés
 
 \title{Rapport TPL POO}
-\author{Equipe Teide : 10}
+\author{Equipe Teide: 10}
 \date{} %suppression de l'affichage de la date
 
 \begin{document}
+
 \maketitle
 \section{Choix de conception}
 \subsection{Structure des sources} %différents dossiers et classes abstraites
-Pour notre projet, nous avons fait le choix de rassembler en différents packages nos sources pour les organiser : 
+Pour notre projet, nous avons fait le choix de rassembler en différents packages nos sources pour les organiser: 
 \begin{itemize}
     \item Le package \texttt{Donnees} comporte tous les fichiers de classe des objets que l'on va manipuler pendant
-    la simulation (\texttt{Robot}, \texttt{Carte}, \texttt{Case}, \texttt{Direction} ...).
+    la simulation (\texttt{Robot}, \texttt{Carte}, \texttt{Case}, \texttt{Direction}\ldots).
     \item Le package \texttt{Robot}, lui même dans le package \texttt{Donnees}, comporte notre classe abstraite de \texttt{Robot} ainsi
-    que toutes les classes de robots.
-    \item Le package \texttt{Evenements} comporte tous les évènements sélectionnables ainsi que la classe abstraite \texttt{Evenement}\\
-    \item Le package \texttt{Exceptions} comporte toutes les exceptions rajoutées par nos soins. Elles seront expliquées plus bas.
+    que toutes les classes de robots qui en hérite.
+    \item Le package \texttt{Evenements} comporte tous les évènements ainsi que la classe abstraite \texttt{Evenement}
+    \item Le package \texttt{Exceptions} comporte toutes les exceptions rajoutées par nos soins.
     \item Le package \texttt{Tests} comporte tous les tests créés pour tester les différentes parties du sujet. On y trouve également
-    La classe \texttt{Simulation} et l'énumérateur \texttt{Test} qui liste tous nos tests (utile pour le Makefile).
+    La classe \texttt{Simulation} et l'énumérateur \texttt{Test} qui liste tous nos tests (son utilité sera expliquée plus bas).
     \item Le package \texttt{Chefs} comporte la classe abstraite \texttt{Chef} ainsi que \texttt{ChefBasique} et \texttt{ChefAvance} qui mettent
     en place les deux stratégies proposées par l'énoncé.
-    \item Enfin, le package \texttt{Autre} comporte les classes \texttt{Chemin} et \texttt{CalculPCC} qui s'occupe de gérer les chemin et de 
-    calculer le plus rapide.
+    \item Le package \texttt{io} gère les entrées et sorties du programme. 
+    On y retrouve donc la classe utilitaire finale \texttt{LecteurDonnees} construisant les \texttt{DonneesSimulation}, la classe \texttt{LecteurDonneesTextuel} (classe initialement fournie et nommée \texttt{LecteurDonnees}) et la classe utilitaire finale \texttt{Dessin} regroupant les fonctions utiles pour la fonction \texttt{draw} de la classe \texttt{Simulation}. 
+    \item Enfin, le package \texttt{Autre} comporte la classe \texttt{Chemin} et la classe utilitaire finale \texttt{CalculPCC} qui s'occupe de calculer le chemin le plus rapide entre deux cases.
     
 \end{itemize}
 
 \subsection{Les exceptions}
+
+Nous avons décidé de rajouter quelques exceptions afin de rendre notre projet un peu plus robuste. 
+Ainsi, {\tt NoFireException} (resp. {\tt NoWaterException}) est soulevée lorsque qu'un robot essaie d'intéragir avec une case n'étant pas en feu (resp.\ de se remplir sans eau à proximité).
+{\tt NoMoreFireException} est soulevée quand il n'y a plus de feu sur la carte (la simulation est donc terminée) tandis que {\tt NoMoreRobotsException} est lancée quand plus aucun robot n'a d'eau dans son réservoir (et que le chef n'est pas en capacité de leur ordonner de se remplir).
+
 \subsection{Ajout de méthodes dans les objets}
 \subsubsection{getLastDate dans Robot}
 \subsubsection{getLitresInit dans Incendie}
 \subsection{Classe Simulation}
-\subsection{Algorithme de plus court chemin : Dijkstra}
+
+La classe {\tt Simulation} permet de factoriser le code des fonctions utilisées dans chacun des tests, que ce soit la fonction {\tt draw}, {\tt next} ou encore {\tt restart}.
+C'est cette classe qui implémente l'interface {\tt Simulable}.
+
+\subsection{Algorithme de plus court chemin: Dijkstra}
 \subsection{Les chefs pompiers}
-La structure des deux chefs est commune, d'où l'utilisation d'une classe abstraite \texttt{Chef}. Typiquement, on retrouve :
+La structure des deux chefs est commune, d'où l'utilisation d'une classe abstraite \texttt{Chef}. Typiquement, on retrouve:
 \begin{enumerate}
     \item Le HashSet \texttt{occupes} qui garde tous les robots qui sont occupés (se dirige vers un incendie, l'éteint,
     se dirige vers une source d'eau ou se remplit).
-    \item La méthode \texttt{strategie} qui va être la seule méthode publique : elle va boucler sur nos incendies jusqu'à qu'ils
-    soient tous éteints ou que tous les robots soient vides.
+    \item La méthode \texttt{strategie} qui va être la seule méthode publique: elle va boucler sur nos incendies afin de leur assigner un robot.
 \end{enumerate}
 
 \subsubsection{Chef basique}
 La  classe \texttt{ChefBasique} implémente la méthode basique proposée par le sujet pour aller éteindre les incendies.
-Après lecture du sujet, il restait des zones d'ombres. On a donc fait deux choix :
+Après lecture du sujet, il restait des zones d'ombres. On a donc fait deux choix:
 \begin{itemize}
-    \item Les robots ne vont jamais se remplir : cet aspect sera vu dans \texttt{ChefAvance};
+    \item Les robots ne vont jamais se remplir: cet aspect sera vu dans \texttt{ChefAvance};
     \item Le concept de pas n n'est pas utilisé, on le fixe à 1 et on va lancer la fonction \texttt{gestionIncendie} systématiquement 
     et faire du traitement que s'il y a des robots non occupés.
 \end{itemize}
@@ -64,7 +74,7 @@ Pour stocker l'état de nos robots et de nos incendies, nous avons créé la Has
 qui va stocker en clé les incendies encore allumés et en valeur le robot qui leur est affecté. L'intérêt d'avoir accès à la valeur de robot,
 permet de voir si ce robot a vidé son eau, si c'est le cas il est envoyé dans le HashSet \texttt{morts} et est retiré du HashSet \texttt{occupes}.
 
-Le code a été factorisé avec deux méthodes privées supplémentaires :
+Le code a été factorisé avec deux méthodes privées supplémentaires:
 \begin{enumerate}
     \item \texttt{gestionIncendies} qui va envoyer un robot sur un incendie qui n'est pas éteint. S'il trouve un robot pas occupé et pas mort,
     il va alors appeler la fonction \texttt{donneOrdre}. Pendant son appel, il va en profiter pour faire le tri dans les robots s'ils sont
