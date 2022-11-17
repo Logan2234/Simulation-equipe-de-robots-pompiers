@@ -7,7 +7,6 @@ import Donnees.Carte;
 import Donnees.Case;
 import Donnees.Direction;
 import Donnees.Robot.Robot;
-import Donnees.Robot.RobotRoues;
 import Exceptions.CellOutOfMapException;
 import Exceptions.PasDeCheminException;
 
@@ -62,7 +61,7 @@ public class CalculPCC {
                 chemins[i][j] = new Chemin();
             }
         }
-
+        
         distance[caseCourante.getLigne()][caseCourante.getColonne()] = 0;
         chemins[caseCourante.getLigne()][caseCourante.getColonne()].addElement(caseCourante, date);
 
@@ -87,14 +86,15 @@ public class CalculPCC {
 
             int I = minCoordonees.getI();
             int J = minCoordonees.getJ();
-            caseMinimale = caseCourante.getCarte().getCase(minCoordonees.getI(), minCoordonees.getJ());
+            caseMinimale = caseCourante.getCarte().getCase(I, J);
             
+            // On test si on peut si le robot peut se déplacer sur la caseMinimale
             if (robot.getVitesse(caseMinimale.getNature()) == 0)
                 continue;
 
             // On cherche le chemin
 
-            long distanceCaseMinimale = distance[minCoordonees.getI()][minCoordonees.getJ()];
+            long distanceCaseMinimale = distance[I][J];
 
             // TODO: Factoriser le code.
 

@@ -18,9 +18,9 @@ public class TestAvance {
             LecteurDonnees lecteur = new LecteurDonnees();
             DonneesSimulation donnees = lecteur.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
+            ChefAvance chef = new ChefAvance(donnees, simulateur);
             Simulation simulation = new Simulation(gui, donnees, simulateur, Test.TestBasique, fichier);
 
-            ChefAvance chef = new ChefAvance(donnees, simulateur);
             chef.strategie();
 
         } catch (FileNotFoundException e) {

@@ -4,6 +4,7 @@ import java.util.PriorityQueue;
 
 import Exceptions.CellOutOfMapException;
 import Exceptions.NoFireException;
+import Exceptions.NoMoreFireException;
 import Exceptions.NoWaterException;
 
 public class Simulateur {
@@ -62,8 +63,11 @@ public class Simulateur {
      * @throws NoWaterException      - Dans le cas où l'évènement est
      *                               {@code EventRemplir} mais qu'il n'y a pas d'eau
      *                               à proximité
+     * @throws NoMoreFireException   - Dans le cas où l'évènement est
+     *                               {@code EventChefOrdonne} mais qu'il n'y a plus
+     *                               de feu sur la carte
      */
-    public void execute() throws CellOutOfMapException, NoFireException, NoWaterException {
+    public void execute() throws CellOutOfMapException, NoFireException, NoWaterException, NoMoreFireException {
         if (!simulationTerminee()) {
             Evenement event = evenementsPQueue.peek();
             while (event != null && event.getDate() <= dateSimulation) {

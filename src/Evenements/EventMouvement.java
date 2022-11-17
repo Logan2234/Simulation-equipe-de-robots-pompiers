@@ -5,8 +5,8 @@ import Donnees.Robot.Robot;
 import Exceptions.CellOutOfMapException;
 
 public class EventMouvement extends Evenement {
-    private Robot robot;
-    private Case nextCase;
+    private final Robot robot;
+    private final Case nextCase;
 
     public EventMouvement(long date, Robot robot, Case _case) {
         super(date);

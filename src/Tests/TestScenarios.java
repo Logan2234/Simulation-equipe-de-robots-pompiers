@@ -19,7 +19,6 @@ import Evenements.EventMouvement;
 import Evenements.EventRemplir;
 import Evenements.Simulateur;
 import Exceptions.CellOutOfMapException;
-import Exceptions.IllegalPathException;
 import gui.GUISimulator;
 import io.LecteurDonnees;
 
@@ -110,8 +109,6 @@ public class TestScenarios {
                     simulateur.ajouteEvenement(
                             new EventMouvement(robot2.getLastDate() + CalculPCC.tpsDpltCaseACase(pos, nextCase, robot2),
                                     robot2, nextCase));
-                } catch (IllegalPathException e1) {
-                    System.out.println(e1);
                 } catch (CellOutOfMapException e2) {
                     System.out.println(e2);
                 }
@@ -131,8 +128,8 @@ public class TestScenarios {
         }
         // crée la fenêtre graphique dans laquelle dessiner
         GUISimulator gui = new GUISimulator(800, 600, Color.BLACK);
-        gui.setSize((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 100,
-                (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 50);
+        gui.setSize((int) Toolkit.getDefaultToolkit().getScreenSize().getWidth() - 200,
+                (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight() - 150);
 
         initialize(args[0], gui);
     }

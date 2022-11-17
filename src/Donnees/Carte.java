@@ -8,8 +8,8 @@ import Exceptions.CellOutOfMapException;
 public class Carte {
 
     private int tailleCases; // En m.
-    private int nbLignes;
-    private int nbColonnes;
+    private final int nbLignes;
+    private final int nbColonnes;
     private Case[][] tab_cases;
 
     /**

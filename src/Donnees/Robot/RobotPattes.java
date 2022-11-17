@@ -8,7 +8,7 @@ public class RobotPattes extends Robot {
      * @param position : spécifie la position actuelle du robot
      */
     public RobotPattes(Case position) {
-        super(position, -1, 30/3.6, 1, 10, -1, "assets/Pattes.png");
+        super(position, Integer.MAX_VALUE, 30/3.6, 1, 10, -1, "assets/Pattes.png");
     }
     
     /** 

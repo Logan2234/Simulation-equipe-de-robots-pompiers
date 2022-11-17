@@ -4,7 +4,7 @@ import Donnees.Robot.Robot;
 import Exceptions.NoWaterException;
 
 public class EventRemplir extends Evenement {
-    private Robot robot;
+    private final Robot robot;
 
     public EventRemplir(long date, Robot robot) {
         super(date + robot.getTmpRemplissage());
