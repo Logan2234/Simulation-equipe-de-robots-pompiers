@@ -1,7 +1,7 @@
 package Chefs;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import Autre.CalculPCC;
 import Autre.Chemin;
@@ -22,9 +22,7 @@ import Exceptions.PasDeCheminException;
 public class ChefBasique extends Chef {
 
     private HashMap<Incendie, Robot> incendies_rob;
-    private ArrayList<Robot> morts;
-
-    //TODO : remplacer morts et occupes par des HashSet
+    private HashSet<Robot> morts;
 
     /**
      * Va implémenter la stratégie de base pour le chef pompier.
@@ -34,7 +32,7 @@ public class ChefBasique extends Chef {
      */
     public ChefBasique(DonneesSimulation donnees, Simulateur simulateur) {
         super(donnees, simulateur);
-        this.morts = new ArrayList<Robot>();
+        this.morts = new HashSet<Robot>();
         this.incendies_rob = new HashMap<Incendie, Robot>();
         for (Incendie incendie : donnees.getIncendies()) {
             incendies_rob.put(incendie, null);
@@ -62,7 +60,6 @@ public class ChefBasique extends Chef {
                 for (int i = 0; i <= Math.min(incendie.getLitres() / robot.getQteVersement(),
                         robot.getReservoir() / robot.getQteVersement()); i++)
                     simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
-
             else // le robot à pattes va verser son eau
                 for (int i = 0; i <= incendie.getLitres() / robot.getQteVersement(); i++)
                     simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
@@ -86,9 +83,7 @@ public class ChefBasique extends Chef {
             if (!occupes.contains(robot)) {
                 // Si son réservoir est vide, il est mort et on en cherche un autre
                 if (robot.getReservoir() == 0) {
-                    if (!morts.contains(robot)) { // nécessaire pour ne pas avoir de doublons
-                        morts.add(robot);
-                    }
+                    morts.add(robot);
                     continue;
                 }
                 // Sinon on essaie de l'envoyer sur l'incendie, si cela échoue on va prendre un
@@ -140,9 +135,7 @@ public class ChefBasique extends Chef {
                     if (robot.getReservoir() == 0) {
                         occupes.remove(robot);
                         incendies_rob.put(incendie, null);
-                        if (!morts.contains(robot)) { // nécessaire pour ne pas avoir de doublons
-                            morts.add(robot);
-                        }
+                        morts.add(robot);
                     }
                     // Si l'incendie est éteint, on met à jour incendies_rob
                     if (incendie.getLitres() <= 0) {
