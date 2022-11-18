@@ -94,29 +94,6 @@ public class ChefAvanceV2 extends Chef{
         long tempsDuRobot = Long.MAX_VALUE;
         Chemin cheminDuRobot = new Chemin();
         for (Robot robot : donnees.getRobots()){
-            if (incendie.getLitres() == 0){
-                for (Robot robotAux : incendies_rob.get(incendie)){
-                    occupes.remove(robotAux);
-                }
-                incendies_rob.remove(incendie);
-                return;
-            }
-            if (robot.getReservoir() == 0){
-                for (Incendie incendieAux : incendies_rob.keySet()){
-                    Set<Robot> robotList = incendies_rob.get(incendieAux);
-                    if (robotList.contains(robot)){
-                        robotList.remove(robot);
-                        break;
-                    }
-                }
-                if (!occupes.contains(robot)) occupes.add(robot);
-                try{
-                    vaRemplirEau(robot);
-                } catch ( NoWaterException e){
-                    System.out.println("Pas d'eau dans la carte. Le robot ne peux pas remplir le réservoir.");
-                }
-                continue;
-            }
             if (!occupes.contains(robot)){
                 try {
                     Chemin chemin = CalculPCC.dijkstra(carte, robot.getPosition(), incendie.getPosition(), robot, robot.getLastDate());
@@ -129,38 +106,26 @@ public class ChefAvanceV2 extends Chef{
                 } catch (NoPathAvailableException e) {
                     continue;
                 }
-            } else {
-                Set<Robot> robotList = incendies_rob.get(incendie);
-                if (!robotList.contains(robot)) {//! ça je l'ai fait puisque c'était fait au basique mais je ne comprends pas pourquoi.
-                    occupes.remove(robot);
-                }
-            }
-
-            
+            } 
         }
 
         if (robotTrouve){
+            donneOrdre(robotAMobiliser, incendie, cheminDuRobot);
+            occupes.add(robotAMobiliser);
             Set<Robot> nouvelleListe = incendies_rob.get(incendie);
             nouvelleListe.add(robotAMobiliser);
             incendies_rob.put(incendie, nouvelleListe);
-            occupes.add(robotAMobiliser);
-            donneOrdre(robotAMobiliser, incendie, cheminDuRobot);
         }
     }
 
     protected void donneOrdre(Robot robot, Incendie incendie, Chemin chemin){
 
         chemin.creerEvenements(simulateur, robot);
-        if (robot.getCapacite() != -1) { // si ce n'est pas un robot à pattes
-            for (int i = 0; i < Math.min(incendie.getLitres() / robot.getQteVersement(),
-                    robot.getReservoir() / robot.getQteVersement()); i++) {
-                simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
-            }
-        } else { // le robot à pattes va verser son eau
-            for (int i = 0; i < incendie.getLitres() / robot.getQteVersement(); i++) {
-                simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
-            }
-        }
+
+        // Création de toutes les interventions unitaires sur l'incendie
+        for (int i = 0; i <= Math.min(incendie.getLitres() / robot.getQteVersement(),
+                            robot.getReservoir() / robot.getQteVersement()); i++)
+            simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
     }
 
     /**
