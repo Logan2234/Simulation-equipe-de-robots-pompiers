@@ -21,22 +21,34 @@ import Exceptions.CellOutOfMapException;
 import gui.GUISimulator;
 import io.LecteurDonnees;
 
+
+/**
+ * Teste les deux scénarios fournis par le sujet.
+ */
 public class TestScenarios {
+    /**
+     * Va initialiser la simulation et la lancer
+     * @param fichier : fichier de données sur lequel lancer le test
+     * @param gui : gui
+     */
     public static void initialize(String fichier, GUISimulator gui) {
         try {
+            // On initialise les données et le simulateur pour pouvoir les manipuler
             DonneesSimulation donnees = LecteurDonnees.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
             new Simulation(gui, donnees, simulateur, Test.TEST_SCENARIOS, fichier);
-            
+            // On facilite les notations pour la suite 
             Carte carte = donnees.getCarte();
             Robot robot1 = donnees.getRobots().get(0);
             Robot robot2 = donnees.getRobots().get(1);
 
+            // On crée le chemin pour robot1
             Chemin chemin = new Chemin();
             Case pos = robot1.getPosition();
             chemin.addElement(pos, robot1.getLastDate());
             Case nextCase = pos;
 
+            // Scénario 0 
             try {
                 for (int i = 0; i < 4; i++) {
                     nextCase = carte.getVoisin(pos, Direction.NORD);
@@ -45,28 +57,31 @@ public class TestScenarios {
                     pos = nextCase;
                 }
             } catch (CellOutOfMapException e) {
+                // En cas de KO, on efface le scénrio 1 et on lance le scénario 2
                 try {
                     System.out.println(e);
-                    
+                    // On efface le chemin créé
                     chemin.creerEvenements(simulateur, robot1);
                     chemin.getChemin().clear();
                     
+                    // Scénario 2
                     Incendie incendie = donnees.getIncendies().get(4);
-
+                    //Déplacement  vers le Nord
                     pos = robot2.getPosition();
                     nextCase = carte.getVoisin(pos, Direction.NORD);
 
                     simulateur.ajouteEvenement(
                             new EventMouvement(CalculPCC.tpsDpltCaseACase(pos, nextCase, robot2), robot2, nextCase));
 
+                    // Intervention sur sa position
                     for (int i = 0; i < Math.min(incendie.getLitres() / robot2.getQteVersement(),
                             robot2.getReservoir() / robot2.getQteVersement()); i++) {
                         simulateur.ajouteEvenement(new EventIntervenir(robot2.getLastDate(), robot2, incendie));
                     }
 
+                    // Déplacement vers l'Ouest 2 fois
                     pos = nextCase;
                     chemin.addElement(pos, robot2.getLastDate());
-
                     Direction[] dirs = { Direction.OUEST, Direction.OUEST };
                     for (Direction dir : dirs) {
                         nextCase = carte.getVoisin(pos, dir);
@@ -78,8 +93,10 @@ public class TestScenarios {
                     chemin.creerEvenements(simulateur, robot2);
                     chemin.getChemin().clear();
 
+                    // Le robot se remplit
                     simulateur.ajouteEvenement(new EventRemplir(robot2.getLastDate(), robot2));
 
+                    // Le robot se déplace deux fois vers l'Est
                     chemin.addElement(pos, robot2.getLastDate());
                     Direction[] dirs2 = { Direction.EST, Direction.EST };
                     for (Direction dir : dirs2) {
@@ -92,6 +109,7 @@ public class TestScenarios {
                     chemin.creerEvenements(simulateur, robot2);
                     chemin.getChemin().clear();
 
+                    // Intervention du robot là où il se situe
                     for (int i = 0; i < Math.min(incendie.getLitres() / robot2.getQteVersement(),
                             robot2.getReservoir() / robot2.getQteVersement()); i++) {
                         simulateur.ajouteEvenement(new EventIntervenir(robot2.getLastDate(), robot2, incendie));

@@ -11,13 +11,24 @@ import Evenements.Simulateur;
 import gui.GUISimulator;
 import io.LecteurDonnees;
 
+/**
+ * Test qui a pour but de tester le chef pompier basique.
+ */
 public class TestBasique {
 
+    /** 
+     * Va initialiser et lancer la simulation
+     * 
+     * @param fichier : fichier avec les données à tester
+     * @param gui : gui
+     */
     public static void initialize(String fichier, GUISimulator gui) {
         try {
+            // Initialisation de simulation
             DonneesSimulation donnees = LecteurDonnees.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
             ChefBasique chef = new ChefBasique(donnees, simulateur);
+            // Lancement de la simulation avec le chef basique
             new Simulation(gui, donnees, simulateur, Test.TEST_BASIQUE, fichier, chef);
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
@@ -26,6 +37,7 @@ public class TestBasique {
         }
     }
 
+    
     public static void main(String[] args) {
         if (args.length < 1) {
             System.out.println("Syntaxe: java TestBasique <nomDeFichier>");

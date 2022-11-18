@@ -8,12 +8,15 @@ import Exceptions.NoWaterException;
 public abstract class Evenement implements Comparable<Evenement> {
     private final long date;
 
+    /**
+     * @param date : date où se situe l'événement
+     */
     protected Evenement(long date) {
         this.date = date;
     }
 
     /**
-     * @return long : Renvoie la date à laquelle l'évènement s'exécute
+     * @return long : renvoie la date à laquelle l'évènement s'exécute
      */
     public long getDate() {
         return this.date;
@@ -22,8 +25,8 @@ public abstract class Evenement implements Comparable<Evenement> {
     public abstract void execute() throws NoFireException, NoWaterException, NoMoreFireException, NoMoreRobotsException;
 
     /**
-     * @param e : Évènement à comparer
-     * @return int : Comparaison des deux évènement en fonction de leur date
+     * @param e : évènement à comparer
+     * @return int : 1 si l'événement e se passe avant, -1 sinon
      */
     @Override
     public int compareTo(Evenement e) {
@@ -34,6 +37,13 @@ public abstract class Evenement implements Comparable<Evenement> {
         return 0;
     }
 
+    
+    /** 
+     * Méthode equals qui va vérifier si la date est identique
+     * 
+     * @param o : objet à comparer
+     * @return boolean
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o)

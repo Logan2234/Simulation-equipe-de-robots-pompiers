@@ -17,9 +17,9 @@ public class Chemin {
 
     
     /** 
-     * Renvoie le chemin. Fonction utilisée uniquement dans les tests "à la main"
+     * Renvoie le chemin. Méthode utilisée uniquement dans les tests "à la main"
      * 
-     * @return Chemin sous forme de liste chainée de tuple (case, temps)
+     * @return Chemin : chemin sous forme de liste chainée de tuple (case, temps)
      */
     public LinkedList<AssociationCaseTemps> getChemin() {
         return cheminCasesTemps;
@@ -27,7 +27,7 @@ public class Chemin {
 
     
     /** 
-     * @return Chemin : Copie du chemin
+     * @return Chemin : deep-copie du chemin
      */
     public Chemin deepCopyChemin(){
         Chemin cheminCopy = new Chemin();
@@ -40,8 +40,8 @@ public class Chemin {
     /** 
      * Ajoute un élément au chemin
      * 
-     * @param caseSuiv  - Nouveau élément à ajouter
-     * @param date      - Date de passage par le nouveau élément
+     * @param caseSuiv  : nouvel élément à ajouter au chemin
+     * @param date      : date de passage par le nouveau élément
      */
     public void addElement(Case caseSuiv, long date) {
         this.cheminCasesTemps.add(new AssociationCaseTemps(caseSuiv, date));
@@ -51,12 +51,16 @@ public class Chemin {
     /** 
      * Retourne la date du dernier élément du chemin
      * 
-     * @return Date du dernier élément du chemin
+     * @return long : date du dernier élément du chemin
      */
     public long getLastDate(){
         return this.cheminCasesTemps.getLast().getT();
     }
 
+    
+    /** 
+     * @return long : temps total pour parcourir le chemin
+     */
     public long getTempsChemin(){
         return this.cheminCasesTemps.getLast().getT() - this.cheminCasesTemps.getFirst().getT();
     }
@@ -65,8 +69,8 @@ public class Chemin {
     /** 
      * Retourne le iº élément du chemin
      * 
-     * @param index                 - indice de l'élément à retourner
-     * @return AssociationTempsCase - Retourne l'élément et la date de passage par l'élément
+     * @param index                 : indice de l'élément à retourner
+     * @return AssociationTempsCase : le tuple (élément, la date de passage par l'élément)
      */
     public AssociationCaseTemps getElem(int index) {
         if (index == -1) {
@@ -81,8 +85,8 @@ public class Chemin {
     /**
      * Créé la liste d'évènements correspondant au déplacement le long du chemin
      * 
-     * @param simulateur : Simulateur permettant l'ajout d'évènements
-     * @param robot      : Robot concerné par le déplacement sur le chemin
+     * @param simulateur : simulateur permettant l'ajout d'évènements
+     * @param robot      : robot concerné par le déplacement sur le chemin
      */
     public void creerEvenements(Simulateur simulateur, Robot robot) {
         for (AssociationCaseTemps tc : this.cheminCasesTemps) {
@@ -95,7 +99,7 @@ public class Chemin {
 
     
     /** 
-     * @return String : Affiche la chaîne de caractères de la transcription du chemin à String
+     * @return String : affiche la chaîne de caractères de la transcription du chemin à String
      */
     @Override
     public String toString() {
@@ -103,6 +107,9 @@ public class Chemin {
     }
 }
 
+/**
+ * Sous-classe permettant d'avoir la date de passage sur chaque élément.
+ */
 class AssociationCaseTemps {
 
     private Case cell;
