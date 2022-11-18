@@ -2,6 +2,8 @@ package Chefs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import Autre.CalculPCC;
 import Autre.Chemin;
@@ -12,24 +14,26 @@ import Donnees.DonneesSimulation;
 import Donnees.Incendie;
 import Donnees.NatureTerrain;
 import Donnees.Robot.Robot;
+import Evenements.EventChefOrdonne;
 import Evenements.EventIntervenir;
 import Evenements.EventRemplir;
 import Evenements.Simulateur;
 import Exceptions.CellOutOfMapException;
+import Exceptions.NoMoreFireException;
 import Exceptions.NoWaterException;
 import Exceptions.NoPathAvailableException;
 
 public class ChefAvanceV2 extends Chef{
-    private HashMap<Incendie, ArrayList<Robot>> incendies_rob;
+    private HashMap<Incendie, Set<Robot>> incendies_rob;
     private ArrayList<Case> casesAvecEau;
     private Carte carte;
     
 
     public ChefAvanceV2(DonneesSimulation donnees, Simulateur simulateur) {
         super(donnees, simulateur);
-        this.incendies_rob = new HashMap<Incendie, ArrayList<Robot>>();
+        this.incendies_rob = new HashMap<Incendie, Set<Robot>>();
         for (Incendie incendie : donnees.getIncendies()) {
-            incendies_rob.put(incendie, new ArrayList<Robot>());
+            incendies_rob.put(incendie, new HashSet<>());
         }
         this.carte = donnees.getCarte();
 
@@ -44,15 +48,44 @@ public class ChefAvanceV2 extends Chef{
         this.casesAvecEau = casesAvecEau;
     }
 
-    public void strategie(){
-        while (!incendies_rob.isEmpty()){
+    public void strategie() throws NoMoreFireException{
+        if (!incendies_rob.isEmpty()){
             for (Incendie incendie : donnees.getIncendies()){
                 if (!incendies_rob.containsKey(incendie)) {
                     continue;
                 }
-                gestionIncendies(incendie);
+                
+                Set<Robot> robotsListe = incendies_rob.get(incendie);
+                if (!robotsListe.isEmpty()){
+
+                    for (Robot robot : robotsListe){
+                        if (robot.getReservoir() == 0){
+                            robotsListe.remove(robot);
+                            try{
+                                vaRemplirEau(robot);
+                            } catch ( NoWaterException e){
+                                System.out.println("Pas d'eau dans la carte. Le robot ne peux pas remplir le réservoir.");
+                            }
+                        }
+
+                        if (incendie.getLitres() <= 0){
+                            occupes.remove(robot);
+                        }
+                    }
+
+                    if (incendie.getLitres() > 0) { 
+                        incendies_rob.put(incendie, robotsListe);
+                        gestionIncendies(incendie);
+                    }
+                    else incendies_rob.remove(incendie);
+
+
+                } else
+                    gestionIncendies(incendie);
             }
-        }
+            simulateur.ajouteEvenement(new EventChefOrdonne(simulateur.getDateSimulation(), this));
+        } else 
+            throw new NoMoreFireException(); 
     }
     
     protected void gestionIncendies(Incendie incendie){
@@ -62,7 +95,7 @@ public class ChefAvanceV2 extends Chef{
         Chemin cheminDuRobot = new Chemin();
         for (Robot robot : donnees.getRobots()){
             if (incendie.getLitres() == 0){
-                for (Robot robotAux : incendies_rob.get(incendies_rob)){
+                for (Robot robotAux : incendies_rob.get(incendie)){
                     occupes.remove(robotAux);
                 }
                 incendies_rob.remove(incendie);
@@ -70,7 +103,7 @@ public class ChefAvanceV2 extends Chef{
             }
             if (robot.getReservoir() == 0){
                 for (Incendie incendieAux : incendies_rob.keySet()){
-                    ArrayList<Robot> robotList = incendies_rob.get(incendieAux);
+                    Set<Robot> robotList = incendies_rob.get(incendieAux);
                     if (robotList.contains(robot)){
                         robotList.remove(robot);
                         break;
@@ -97,7 +130,7 @@ public class ChefAvanceV2 extends Chef{
                     continue;
                 }
             } else {
-                ArrayList<Robot> robotList = incendies_rob.get(incendie);
+                Set<Robot> robotList = incendies_rob.get(incendie);
                 if (!robotList.contains(robot)) {//! ça je l'ai fait puisque c'était fait au basique mais je ne comprends pas pourquoi.
                     occupes.remove(robot);
                 }
@@ -107,7 +140,7 @@ public class ChefAvanceV2 extends Chef{
         }
 
         if (robotTrouve){
-            ArrayList<Robot> nouvelleListe = incendies_rob.get(incendie);
+            Set<Robot> nouvelleListe = incendies_rob.get(incendie);
             nouvelleListe.add(robotAMobiliser);
             incendies_rob.put(incendie, nouvelleListe);
             occupes.add(robotAMobiliser);
