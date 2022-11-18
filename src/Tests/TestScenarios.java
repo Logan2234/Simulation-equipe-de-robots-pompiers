@@ -46,6 +46,8 @@ public class TestScenarios {
                 }
             } catch (CellOutOfMapException e) {
                 try {
+                    System.out.println(e);
+                    
                     chemin.creerEvenements(simulateur, robot1);
                     chemin.getChemin().clear();
                     
