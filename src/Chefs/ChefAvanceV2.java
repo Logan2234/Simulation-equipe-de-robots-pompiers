@@ -68,7 +68,7 @@ public class ChefAvanceV2 extends Chef{
                             }
                         }
 
-                        if (incendie.getLitres() <= 0){
+                        if (incendie.getLitres() <= 0 && occupes.contains(robot)){
                             occupes.remove(robot);
                         }
                     }
