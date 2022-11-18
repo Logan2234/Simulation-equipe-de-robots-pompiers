@@ -54,7 +54,7 @@ C'est cette classe qui implémente l'interface {\tt Simulable}.
 
 \subsection{Algorithme de plus court chemin: Dijkstra}
 
-Pour réaliser ses déplacements dans le moindre nombre de mouvements possibles, nos robots doivent trouver le plus court chemin pour atteindre le feu à éteindre. Pour cela, nous devons considérer notre mappe comme étant un graphe pondéré où tous les poids sont positifs ou nuls. Ainsi, les sommets du graphe seraient les cases de la mappe et le poids serait le temps dépensé par le robot subissant le déplacement pour aller d'une case à une autre. Nous avons donc décidé d'utiliser un des algorithmes classiques de la Recherche Opérationnelle : l'algorithme de Dijkstra. \\ \\
+Pour réaliser ses déplacements dans le moindre nombre de mouvements possibles, nos robots doivent trouver le plus court chemin pour atteindre le feu à éteindre. Pour cela, nous devons considérer notre mappe comme étant un graphe pondéré où tous les poids sont positifs ou nuls. Ainsi, les sommets du graphe seraient les cases de la mappe et le poids serait le temps dépensé par le robot subissant le déplacement pour aller d'une case à une autre. Nous avons donc décidé d'utiliser un des algorithmes classiques de la Recherche Opérationnelle avec une compléxité $\theta(n^2)$ : l'algorithme de Dijkstra. \\ \\
 Ainsi, nous avons implémenté l'algorithme en adaptant le pseudo-code suivant : \\ \\
 
 \begin{tabbing}
