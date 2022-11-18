@@ -131,7 +131,7 @@ La classe \texttt{ChefAvance} implémente la méthode avancée proposée par le 
     \item Pour les robots autres que le drone, le remplissage doit se faire à côté d'une des cases d'eau : il faut donc calculer le chemin idéal entre toutes les cases adjacentes aux cases d'eau ;
     \item Nous avons maintenu le choix de fixer le pas à $n=50$, il est modifiable dans la classe \texttt{Evenement.EventChefOrdonne} 
     dans son constructeur ;
-\end{itemize}
+\end{itemize} \\
 
 Pour stocker l'état de nos incendies et robots, nous avons à nouveau utilisé une HashMap \texttt{incendiesRob} qui stocke en clé des incendies. Mais, cette fois-ci, nous pouvons avoir plus d'un robot associé à un même feu. Ainsi, on affecte un HashSet à chaque incendie contenant les robots qui sont en train de se déplacer et de gérer l'incendie.
 Nous allons aussi stocker dans un ArrayList les cases d'eau de la carte, afin de pouvoir trouver la case la plus proche en cas de devoir remplir le réservoir.
@@ -140,7 +140,7 @@ Nous allons aussi stocker dans un ArrayList les cases d'eau de la carte, afin de
     \item \texttt{gestionIncendies} va chercher le robot libre le plus proche de l'incendie. S'il le trouve, il va alors appeler la fonction \texttt{donneOrdre};
     \item \texttt{donneOrdre} va donner l'ordre au robot d'aller jusqu'à l'incendie par le plus court chemin (en le calculant avec Dijkstra)
     et d'intervenir dessus en créant et ajoutant les événements nécessaires.
-    \item \texttt{ouAllerRemplirReservoir} va chercher la case d'eau la plus proche d'un robot et renvoie le chemin pour arriver à cette case.
+    \item \texttt{ouAllerRemplirReservoir} va chercher la case d'eau la plus proche d'un robot grâce à l'algorithme de Dijkstra et renvoie le chemin idéal pour arriver à cette case.
     \item \texttt{vaRemplirEau} fait appel à \texttt{ouAllerRemplirReservoir} pour trouver le chemin vers la case d'eau la plus proche et envoie le robot pour se remplir d'eau.
 \end{enumerate}
 
@@ -189,8 +189,22 @@ Comme vous pourrez le voir avec nos différents fichiers de tests, l'algorithme 
 fournies, comme demandé par l'énoncé.
 
 \subsection{Pistes d'amélioration}
-Une première optimisation serait de trouver un moyen de ne pas recalculer systématiquement tous les chemins pour chaque action d'intervention ou de remplissage.
+Une première optimisation serait de trouver un moyen de ne pas recalculer systématiquement tous les chemins pour chaque action d'intervention ou de remplissage.\\
 
-Une seconde serait de considérer un algorithme pour trouver une assignation optimale des robots sur les incendies. On pourrait dans un premier temps partir sur un algorithme glouton qui pour chaque robot va assigner l'incendie le plus proche.
+Une seconde serait de considérer un algorithme pour trouver une assignation optimale des robots sur les incendies. On pourrait dans un premier temps partir sur un algorithme glouton qui pour chaque robot va assigner l'incendie le plus proche.\\
+
+Puis, \texttt{ChefAvance} ne fonctionne pas comme il devrait, il faut alors réparer quelques bugs que nous n'avons pas réussi à résoudre. On peut observer les bugs suivants :
+
+\begin{itemize}
+    \item Le drone vide son réservoir, va se remplir, mais après, il se téléporte vers des cases non adjacentes et réalise des mouvements bizarres (même si parfois continue à éteindre des feux) ;
+    \item Le robot à roue va éteindre le feu, vide son réservoir et il ne se bouge plus après ;
+    \item Le drone essaye d'éteindre des feux dans des cases qui ne brulent pas ;
+\end{itemize}
+
+Néanmoins, le robot à chenille réussie à éteindre tous les autres feux accessibles sans problème.\\
+
+Une autre piste d'amélioration serait l'optimisation de la recherche d'une case d'eau à proximité. Actuellement, un robot terrestre doit effectuer 4 recherches de Dijkstra (une pour chaque case adjacente) par case d'eau de la carte. Ceci résulte en une grande complexité. Il faut donc trouver une manière de rendre cette recherche plus optimale. \\
+
+\texttt{ChefAvance} pourrait distribuer mieux les robots vers les feux. Actuellement, on prend les incendies par ordre d'insertion et on leur assigne le robot le plus proche. Mais, dans l'idéal, chaque robot devrait aller éteindre l'incendie le plus proche à sa position. De cette façon, nous pourrions éviter les cas où, par exemple, un robot va éteindre un feu à distance moyenne au lieu d'éteindre un feu qui se trouve à côté de lui.
 
 \end{document}
