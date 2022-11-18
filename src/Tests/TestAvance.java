@@ -5,7 +5,7 @@ import java.awt.Toolkit;
 import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 
-import Chefs.ChefAvanceV2;
+import Chefs.ChefAvance;
 import Donnees.DonneesSimulation;
 import Evenements.Simulateur;
 import gui.GUISimulator;
@@ -27,7 +27,7 @@ public class TestAvance {
             // Initialisation de la simulation
             DonneesSimulation donnees = LecteurDonnees.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            ChefAvanceV2 chef = new ChefAvanceV2(donnees, simulateur);
+            ChefAvance chef = new ChefAvance(donnees, simulateur);
             new Simulation(gui, donnees, simulateur, EnumTest.TEST_BASIQUE, fichier, chef);
 
         } catch (FileNotFoundException e) {
