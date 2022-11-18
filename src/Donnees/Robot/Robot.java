@@ -62,11 +62,6 @@ public abstract class Robot {
         return this.vitesseDefaut;
     }
 
-    
-    /** 
-     * @param getCapacite(
-     * @return double
-     */
     /**
      * @param nature
      * @return double : la vitesse (en m/s) du robot pour une nature donnée
