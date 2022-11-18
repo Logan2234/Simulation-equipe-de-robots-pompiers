@@ -191,6 +191,7 @@ public class ChefAvanceV2 extends Chef{
             Chemin chemin = ouAllerRemplirReservoir(robot);
             chemin.creerEvenements(simulateur, robot);
             simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
+            occupes.remove(robot);
         } catch (NoWaterException e){
             throw e;
         } catch (NoPathAvailableException e){
