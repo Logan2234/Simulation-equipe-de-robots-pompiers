@@ -143,7 +143,7 @@ Les différents tests du package \texttt{Tests} sont là pour tester les différ
     \item \texttt{TestScenarios} lance les scénarios proposés dans la partie 2.2 du sujet.
     \item \texttt{TestDijkstra} a pour but de vérifier que l'algorithme de Dijkstra fonctionne. Sur la carte sujet, 
     on sélectionne le second robot, qui est le robot à pattes et on l'envoie sur le premier incendie (celui en bas à gauche).
-    On veut s'assurer qu'il contourne l'eau et passe bien par les rochers et ne fasse pas de détours.
+    On veut s'assurer qu'il contourne l'eau et passe bien par les rochers et ne fasse pas de détours mais qu'il évite quand même l'eau.
     \item \texttt{TestBasique} teste le chef pompier avec l'algorithme élémentaire du sujet.
     \item \texttt{TestAvance} teste le chef pompier avec l'algorithme plus poussé fourni par le sujet.
 \end{itemize}
@@ -160,6 +160,10 @@ Avec \texttt{<NomDuTest>} dans \texttt{Simulation}, \texttt{Scenarios}, \texttt{
 \texttt{<Map>} dans \texttt{CarteSujet}, \texttt{Mushroom}, \texttt{Desert} ou \texttt{Spiral}.
 
 \subsection{Résultats obtenus}
+Comme vous pourrez le voir avec nos différents fichiers de tests, l'algorithme élémentaire (\texttt{ChefBasique}) fonctionne sur toutes les cartes 
+fournies, comme demandé par l'énoncé.
+
 \subsection{Pistes d'amélioration}
+Une première optimisation serait de trouver un moyen de ne pas recalculer systématiquement tous les chemins pour chaque action d'intervention ou de remplissage.
 
 \end{document}
