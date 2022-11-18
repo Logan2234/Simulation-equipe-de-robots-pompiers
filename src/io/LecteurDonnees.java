@@ -20,7 +20,7 @@ import Donnees.Robot.RobotDrone;
 import Donnees.Robot.RobotPattes;
 import Donnees.Robot.RobotRoues;
 
-public class LecteurDonnees {
+public final class LecteurDonnees {
     private static Scanner scanner;
 
     private LecteurDonnees() {

@@ -36,7 +36,7 @@ public class TestScenarios {
             // On initialise les données et le simulateur pour pouvoir les manipuler
             DonneesSimulation donnees = LecteurDonnees.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            new Simulation(gui, donnees, simulateur, Test.TEST_SCENARIOS, fichier);
+            new Simulation(gui, donnees, simulateur, EnumTest.TEST_SCENARIOS, fichier);
             // On facilite les notations pour la suite 
             Carte carte = donnees.getCarte();
             Robot robot1 = donnees.getRobots().get(0);
@@ -57,14 +57,14 @@ public class TestScenarios {
                     pos = nextCase;
                 }
             } catch (CellOutOfMapException e) {
-                // En cas de KO, on efface le scénrio 1 et on lance le scénario 2
+                // L'erreur lancée par le scénario 0 permet de lancer le scénario 1
                 try {
                     System.out.println(e);
-                    // On efface le chemin créé
                     chemin.creerEvenements(simulateur, robot1);
+                    // On efface le chemin créé
                     chemin.getChemin().clear();
                     
-                    // Scénario 2
+                    // Scénario 1
                     Incendie incendie = donnees.getIncendies().get(4);
                     //Déplacement  vers le Nord
                     pos = robot2.getPosition();

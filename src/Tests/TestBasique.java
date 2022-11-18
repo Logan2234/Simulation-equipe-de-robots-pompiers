@@ -29,7 +29,7 @@ public class TestBasique {
             Simulateur simulateur = new Simulateur();
             ChefBasique chef = new ChefBasique(donnees, simulateur);
             // Lancement de la simulation avec le chef basique
-            new Simulation(gui, donnees, simulateur, Test.TEST_BASIQUE, fichier, chef);
+            new Simulation(gui, donnees, simulateur, EnumTest.TEST_BASIQUE, fichier, chef);
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
         } catch (DataFormatException e) {

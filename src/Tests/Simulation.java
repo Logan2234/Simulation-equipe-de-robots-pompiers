@@ -14,7 +14,7 @@ import io.Dessin;
 class Simulation implements Simulable {
     private final GUISimulator gui;
     private final DonneesSimulation donnees;
-    private final Test testAppelant;
+    private final EnumTest testAppelant;
     private final String fichier;
     private final Simulateur simulateur;
     private boolean simulationTerminee;
@@ -28,7 +28,7 @@ class Simulation implements Simulable {
         System.out.println("\n====================================================================");
         System.out.println("                       DEBUT DE LA SIMULATION                        ");
         System.out.println("====================================================================\n");
-        
+
         // Force l'affichage correct de la carte (c'est à dire à la bonne taille)
         try {
             Thread.sleep(10);
@@ -42,13 +42,15 @@ class Simulation implements Simulable {
     /**
      * Initialise une simulation.
      * 
-     * @param gui : gui
-     * @param donnees : fichier avec les données à tester
-     * @param simulateur : initialisé par la méthode {@code initialize}, définie dans les tests
-     * @param test : test que l'on souhaite lancer si il s'agit d'un test fait par nos soins (dans l'énumérateur Test)
-     * @param fichier : fichier à tester
+     * @param gui        : gui
+     * @param donnees    : fichier avec les données à tester
+     * @param simulateur : initialisé par la méthode {@code initialize}, définie
+     *                   dans les tests
+     * @param test       : test que l'on souhaite lancer si il s'agit d'un test fait
+     *                   par nos soins (dans l'énumérateur Test)
+     * @param fichier    : fichier à tester
      */
-    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test test, String fichier) {
+    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, EnumTest test, String fichier) {
         this.gui = gui;
         this.donnees = donnees;
         this.testAppelant = test;
@@ -60,14 +62,16 @@ class Simulation implements Simulable {
     /**
      * Initialise une simulation.
      * 
-     * @param gui : gui
-     * @param donnees : donnees du fichier envoyé
-     * @param simulateur : initialisé par la méthode {@code initialize}, définie dans les tests
-     * @param test : test que l'on souhaite lancer si il s'agit d'un test fait par nos soins (dans l'énumérateur Test)
-     * @param fichier : fichier avec les données à tester
-     * @param chef : méthode que l'on souhaite appelée (basique ou avancée)
+     * @param gui        : gui
+     * @param donnees    : donnees du fichier envoyé
+     * @param simulateur : initialisé par la méthode {@code initialize}, définie
+     *                   dans les tests
+     * @param test       : test que l'on souhaite lancer si il s'agit d'un test fait
+     *                   par nos soins (dans l'énumérateur Test)
+     * @param fichier    : fichier avec les données à tester
+     * @param chef       : méthode que l'on souhaite appelée (basique ou avancée)
      */
-    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test test, String fichier,
+    public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, EnumTest test, String fichier,
             Chef chef) {
         this.gui = gui;
         this.donnees = donnees;
@@ -93,19 +97,16 @@ class Simulation implements Simulable {
 
     /**
      * Méthode de gui.jar overridée permettant d'exécuter les événements
-     * correspondants à {@code dateSimulation} après avoir incrémenté la date puis de
-     * redessiner le résultat
+     * correspondants à {@code dateSimulation} après avoir incrémenté la date puis
+     * de redessiner le résultat
      */
     @Override
     public void next() {
 
         if (!simulationTerminee) {
             try {
-                // Si la simulation n'est pas terminée on incrémente la date
-                if (!simulateur.simulationTerminee())
-                    simulateur.incrementeDate();
-
-                // On exécute les évènements
+                // On incrémente la date et on exécute les évènements
+                simulateur.incrementeDate();
                 simulateur.execute();
                 draw();
             } catch (NoMoreRobotsException | NoMoreFireException e) {

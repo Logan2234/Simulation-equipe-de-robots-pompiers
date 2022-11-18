@@ -35,7 +35,7 @@ public class TestSimulation {
             // Initialisation de la simulation
             DonneesSimulation donnees = LecteurDonnees.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            new Simulation(gui, donnees, simulateur, Test.TEST_SIMULATION, fichier);
+            new Simulation(gui, donnees, simulateur, EnumTest.TEST_SIMULATION, fichier);
             // On facilite les notations pour la suite 
             Carte carte = donnees.getCarte();
             Robot robot = donnees.getRobots().get(0);

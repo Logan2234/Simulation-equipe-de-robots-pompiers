@@ -30,7 +30,7 @@ public class TestAvance {
             ChefAvance chef = new ChefAvance(donnees, simulateur);
 
             // Lancement du test avec le chef pompier avancé
-            new Simulation(gui, donnees, simulateur, Test.TEST_BASIQUE, fichier);
+            new Simulation(gui, donnees, simulateur, EnumTest.TEST_BASIQUE, fichier);
             chef.strategie();
 
         } catch (FileNotFoundException e) {

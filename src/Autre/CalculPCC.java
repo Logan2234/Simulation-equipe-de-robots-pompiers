@@ -10,7 +10,7 @@ import Donnees.Robot.Robot;
 import Exceptions.CellOutOfMapException;
 import Exceptions.NoPathAvailableException;
 
-public class CalculPCC {
+public final class CalculPCC {
 
     private CalculPCC() {
         throw new IllegalStateException(
