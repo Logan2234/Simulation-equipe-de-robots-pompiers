@@ -72,14 +72,14 @@ chemins $\leftarrow$          matrice de chemins vides de même taille que la ma
 chemins(case du robot) = case du robot \\
 ouverts $\leftarrow [|0,m.n|]$          avec m et n les dimensions de la map\\
 {\tt tant \= que} ouverts $\neq \oslash$ {\tt faire}\\
-\> soit j $\in$ ouverts tel que dist.(j) soit minimal\\
+\> soit j $\in$ ouverts tel que dist(j) soit minimal\\
 \> ouverts $\leftarrow $ ouverts $\setminus$ {j}\\
 \>{\tt pour} k \= voisin accessible par la case j {\tt faire} \\
-\>\> d $\leftarrow$ dist.(j) + distance(j $\rightarrow$ k)\\
+\>\> d $\leftarrow$ dist(j) + distance(j $\rightarrow$ k)\\
 \> \> {\tt si} d \=< dist(k) {\tt alors} \\
-\> \> \> dist.(k) $\leftarrow$ d\\
+\> \> \> dist(k) $\leftarrow$ d\\
 \> \> \> chemins(k) = chemins(s) $\Rightarrow$ k\\
-{\tt return} chemins.(case d'arrivée)
+{\tt return} chemins(case d'arrivée)
 \end{tabbing}
 \\ 
 
