@@ -12,29 +12,26 @@ import Donnees.DonneesSimulation;
 import Donnees.Incendie;
 import Donnees.NatureTerrain;
 import Donnees.Robot.Robot;
-import Donnees.Robot.RobotDrone;
 import Evenements.EventIntervenir;
 import Evenements.EventRemplir;
 import Evenements.Simulateur;
-import Exceptions.CellOutOfMapException;n
-import Exceptions.PasDeCheminException;
+import Exceptions.CellOutOfMapException;
 import Exceptions.NoWaterException;
+import Exceptions.NoPathAvailableException;
 
 public class ChefAvanceV2 extends Chef{
-    private Carte carte;
     private HashMap<Incendie, ArrayList<Robot>> incendies_rob;
     private ArrayList<Case> casesAvecEau;
-
-    //TODO : encapsulation des méthodes (private, protected, public ...)
-    //TODO : documentation de la classe et du constructeur (cf chef basique)
+    private Carte carte;
+    
 
     public ChefAvanceV2(DonneesSimulation donnees, Simulateur simulateur) {
         super(donnees, simulateur);
-        this.carte = donnees.getCarte();
         this.incendies_rob = new HashMap<Incendie, ArrayList<Robot>>();
         for (Incendie incendie : donnees.getIncendies()) {
             incendies_rob.put(incendie, new ArrayList<Robot>());
         }
+        this.carte = donnees.getCarte();
 
         // On va déclarer les cases qui contiennent de l'eau
         ArrayList<Case> casesAvecEau = new ArrayList<Case>();
@@ -53,18 +50,14 @@ public class ChefAvanceV2 extends Chef{
                 if (!incendies_rob.containsKey(incendie)) {
                     continue;
                 }
-                try{
-                    gestionIncendies(incendie);
-                } catch (NoWaterException e){
-                    System.out.println("Il n'y a pas d'eau dans la mappe. Les robots ne peuvent pas remplir son reservoir.");
-                }
+                gestionIncendies(incendie);
             }
         }
     }
     
-    protected void gestionIncendies(Incendie incendie) throws NoWaterException{
+    protected void gestionIncendies(Incendie incendie){
         boolean robotTrouve = false;
-        Robot robotAMobiliser = donnees.getRobots()[0];
+        Robot robotAMobiliser = donnees.getRobots().get(0);
         long tempsDuRobot = Long.MAX_VALUE;
         Chemin cheminDuRobot = new Chemin();
         for (Robot robot : donnees.getRobots()){
@@ -84,7 +77,11 @@ public class ChefAvanceV2 extends Chef{
                     }
                 }
                 if (!occupes.contains(robot)) occupes.add(robot);
-                vaRemplirEau(robot);
+                try{
+                    vaRemplirEau(robot);
+                } catch ( NoWaterException e){
+                    System.out.println("Pas d'eau dans la carte. Le robot ne peux pas remplir le réservoir.");
+                }
                 continue;
             }
             if (!occupes.contains(robot)){
@@ -96,7 +93,7 @@ public class ChefAvanceV2 extends Chef{
                         tempsDuRobot = chemin.getTempsChemin();
                         cheminDuRobot = chemin;
                     }
-                } catch (PasDeCheminException e) {
+                } catch (NoPathAvailableException e) {
                     continue;
                 }
             } else {
@@ -110,34 +107,26 @@ public class ChefAvanceV2 extends Chef{
         }
 
         if (robotTrouve){
-            try {
-                ArrayList<Robot> nouvelleListe = incendies_rob.get(incendie);
-                nouvelleListe.add(robotAMobiliser);
-                incendies_rob.put(incendie, nouvelleListe);
-                occupes.add(robotAMobiliser);
-                donneOrdre(robotAMobiliser, incendie, cheminDuRobot);
-            } catch (IllegalPathException e) {
-                System.out.println(e);
-            }
+            ArrayList<Robot> nouvelleListe = incendies_rob.get(incendie);
+            nouvelleListe.add(robotAMobiliser);
+            incendies_rob.put(incendie, nouvelleListe);
+            occupes.add(robotAMobiliser);
+            donneOrdre(robotAMobiliser, incendie, cheminDuRobot);
         }
     }
 
-    protected void donneOrdre(Robot robot, Incendie incendie, Chemin chemin) throws IllegalPathException{
-        try{
-            chemin.creerEvenements(simulateur, robot);
-            if (robot.getCapacite() != -1) { // si ce n'est pas un robot à pattes
-                for (int i = 0; i < Math.min(incendie.getLitres() / robot.getQteVersement(),
-                        robot.getReservoir() / robot.getQteVersement()); i++) {
-                    simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
-                }
-            } else { // le robot à pattes va verser son eau
-                for (int i = 0; i < incendie.getLitres() / robot.getQteVersement(); i++) {
-                    simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
-                }
+    protected void donneOrdre(Robot robot, Incendie incendie, Chemin chemin){
+
+        chemin.creerEvenements(simulateur, robot);
+        if (robot.getCapacite() != -1) { // si ce n'est pas un robot à pattes
+            for (int i = 0; i < Math.min(incendie.getLitres() / robot.getQteVersement(),
+                    robot.getReservoir() / robot.getQteVersement()); i++) {
+                simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
             }
-        } catch (IllegalPathException e) {
-            System.out.println(e);
-            throw e;
+        } else { // le robot à pattes va verser son eau
+            for (int i = 0; i < incendie.getLitres() / robot.getQteVersement(); i++) {
+                simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
+            }
         }
     }
 
@@ -151,7 +140,7 @@ public class ChefAvanceV2 extends Chef{
      *                              du robot vers une source d'eau
      * @throws NoWaterException      - Exception s'il n'y a pas d'eau dans la carte
      */
-    public Chemin ouAllerRemplirReservoir(Robot robot) throws NoWaterException, PasDeCheminException { 
+    public Chemin ouAllerRemplirReservoir(Robot robot) throws NoWaterException, NoPathAvailableException { 
         if (casesAvecEau.size() == 0)
             throw new NoWaterException();
         // Initialisation du chemin
@@ -169,7 +158,7 @@ public class ChefAvanceV2 extends Chef{
                         cheminARetourner = cheminVersEau;
                         ilYAUnChemin = true;
                     }
-                } catch (PasDeCheminException e) {
+                } catch (NoPathAvailableException e) {
                     continue;
                 }
             } else {
@@ -186,7 +175,7 @@ public class ChefAvanceV2 extends Chef{
                         } else {
                             continue;
                         }
-                    } catch (PasDeCheminException e) {
+                    } catch (NoPathAvailableException e) {
                         continue;
                     } catch (CellOutOfMapException e) {
                         continue;
@@ -195,7 +184,7 @@ public class ChefAvanceV2 extends Chef{
             }
         }
         if (!ilYAUnChemin)
-            throw new PasDeCheminException();
+            throw new NoPathAvailableException();
         return cheminARetourner;
     }
     
@@ -206,13 +195,10 @@ public class ChefAvanceV2 extends Chef{
             simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
         } catch (NoWaterException e){
             throw e;
-        } catch (PasDeCheminException e){
+        } catch (NoPathAvailableException e){
             System.out.println("Pas possible de remplir reservoir.");
             return;
-        } catch (IllegalPathException e) {
-            System.out.println(e);
-            return;
-        }
+        } 
     }
 }
    
