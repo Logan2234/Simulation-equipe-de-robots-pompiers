@@ -21,7 +21,7 @@
 #   -classpath : repertoire dans lequel sont cherches les .class deja compiles
 #   -sourcepath : repertoire dans lequel sont cherches les .java (dependances)
 
-all: testScenarios testSimulation testDijkstra testBasique
+all: testScenarios testSimulation testDijkstra testBasique testAvance
 
 testInvader:
 	javac -d bin -classpath bin/gui.jar -sourcepath src src/Tests/TestInvader.java
@@ -82,4 +82,4 @@ exeAvance:
 	java -classpath bin:bin/gui.jar Tests/TestAvance cartes/carteSujet.map
 
 clean:
-	rm -rf bin/Donnees bin/Evenements bin/Tests bin/io bin/Chemin
+	rm -rf bin/Donnees bin/Evenements bin/Tests bin/io bin/Chemin bin/Chefs bin/Exceptions bin/Autre
