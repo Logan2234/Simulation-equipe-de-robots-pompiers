@@ -15,7 +15,7 @@ import gui.ImageElement;
 import gui.Rectangle;
 import gui.Text;
 
-public class Dessin {
+public final class Dessin {
 
     private Dessin() {
         throw new IllegalStateException(

@@ -28,7 +28,7 @@ public class TestAvance {
             DonneesSimulation donnees = LecteurDonnees.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
             ChefAvance chef = new ChefAvance(donnees, simulateur);
-            new Simulation(gui, donnees, simulateur, Test.TEST_BASIQUE, fichier, chef);
+            new Simulation(gui, donnees, simulateur, EnumTest.TEST_BASIQUE, fichier, chef);
 
         } catch (FileNotFoundException e) {
             System.out.println("fichier " + fichier + " inconnu ou illisible");
@@ -37,6 +37,7 @@ public class TestAvance {
         }
     }
 
+    
     public static void main(String[] args) {
         if (args.length < 1) {
             System.out.println("Syntaxe: java TestSimulation <nomDeFichier>");
