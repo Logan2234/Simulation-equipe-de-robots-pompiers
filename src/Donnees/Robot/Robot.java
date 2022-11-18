@@ -6,10 +6,24 @@ import Donnees.NatureTerrain;
 import Exceptions.CellOutOfMapException;
 import Exceptions.NoWaterException;
 
+/**
+ * @param position      : position actuelle du robot
+ * @param capacite      : capacité maximale du réservoir du robot
+ * @param vitesse       : vitesse (en m/s) par défaut du robot
+ * @param tmpVersement  : temps nécessaire (en s) pour vider la
+ *                      {@code qteVersement}
+ * @param qteVersement  : quantité (en L) que l'on va déverser
+ *                      pendant {@code tmpVersement}
+ * @param tmpReplissage : temps nécessaire (en s) pour un remplissage
+ *                      complet
+ * @param reservoir     : quantité d'eau actuelle dans le robot 
+ * @param lastDate      : dernière date où il a été utilisé.
+ * @param imagePath     : path vers l'image pour le représenter
+ */
 public abstract class Robot {
     private Case position;
     private int reservoir; // en L.
-    private long lastDate;
+    private long lastDate; // dernière date où il a été utilisé.
     private final int capacite; // en L.
     private final int tmpVersement; // en s.
     private final int qteVersement; // en L.

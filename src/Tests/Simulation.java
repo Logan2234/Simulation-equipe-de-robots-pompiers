@@ -20,7 +20,7 @@ class Simulation implements Simulable {
     private boolean simulationTerminee;
 
     /**
-     * Fonction permettant seulement de factoriser le code des constructeurs
+     * Méthode permettant seulement de factoriser le code des constructeurs
      */
     private void initialisationCommune() {
         gui.setSimulable(this);
@@ -39,6 +39,15 @@ class Simulation implements Simulable {
         draw();
     }
 
+    /**
+     * Initialise une simulation.
+     * 
+     * @param gui : gui
+     * @param donnees : fichier avec les données à tester
+     * @param simulateur : initialisé par la méthode {@code initialize}, définie dans les tests
+     * @param test : test que l'on souhaite lancer si il s'agit d'un test fait par nos soins (dans l'énumérateur Test)
+     * @param fichier : fichier à tester
+     */
     public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test test, String fichier) {
         this.gui = gui;
         this.donnees = donnees;
@@ -48,6 +57,16 @@ class Simulation implements Simulable {
         initialisationCommune();
     }
 
+    /**
+     * Initialise une simulation.
+     * 
+     * @param gui : gui
+     * @param donnees : donnees du fichier envoyé
+     * @param simulateur : initialisé par la méthode {@code initialize}, définie dans les tests
+     * @param test : test que l'on souhaite lancer si il s'agit d'un test fait par nos soins (dans l'énumérateur Test)
+     * @param fichier : fichier avec les données à tester
+     * @param chef : méthode que l'on souhaite appelée (basique ou avancée)
+     */
     public Simulation(GUISimulator gui, DonneesSimulation donnees, Simulateur simulateur, Test test, String fichier,
             Chef chef) {
         this.gui = gui;
@@ -65,7 +84,7 @@ class Simulation implements Simulable {
     }
 
     /**
-     * Fonction de dessin exécuté à chaque execution de {@code next}
+     * Méthode de dessin exécutée à chaque exécution de {@code next}
      */
     private void draw() {
         gui.reset();
@@ -73,8 +92,8 @@ class Simulation implements Simulable {
     }
 
     /**
-     * Fonction de gui.jar overridée permettant d'exécuter les évènements
-     * correspondant à {@code dateSimulation} après avoir incrémenté la date puis de
+     * Méthode de gui.jar overridée permettant d'exécuter les événements
+     * correspondants à {@code dateSimulation} après avoir incrémenté la date puis de
      * redessiner le résultat
      */
     @Override
@@ -108,7 +127,7 @@ class Simulation implements Simulable {
     }
 
     /**
-     * Fonction de gui.jar overridée permettant de réinitialiser la simulation
+     * Méthode de gui.jar overridée permettant de réinitialiser la simulation
      */
     @Override
     public void restart() {

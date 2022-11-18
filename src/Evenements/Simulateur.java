@@ -12,13 +12,16 @@ public class Simulateur {
     private long dateSimulation;
     private PriorityQueue<Evenement> evenementsPQueue;
 
+    /**
+     * Va initialiser la date du simulateur à 0 et créer une PriorityQueue d'événement ordonnés par leur date.
+     */
     public Simulateur() {
         this.dateSimulation = 0;
         this.evenementsPQueue = new PriorityQueue<>();
     }
 
     /**
-     * @return long : Date courante de la simulation
+     * @return long : date courante de la simulation
      */
     public long getDateSimulation() {
         return dateSimulation;
@@ -44,7 +47,7 @@ public class Simulateur {
     /**
      * Ajoute un évènement à {@code PriorityQueue evenementsActuels}
      * 
-     * @param e : Évènement à ajouter à la liste des évènements
+     * @param e : événement à ajouter à la liste des événements
      */
     public void ajouteEvenement(Evenement e) {
         this.evenementsPQueue.add(e);
@@ -54,11 +57,11 @@ public class Simulateur {
      * Méthode exécutant tout les évènements pour la date courante définie dans
      * {@code dateSimulation}
      * 
-     * @throws NoMoreFireException   - Dans le cas où l'évènement est
+     * @throws NoMoreFireException   Dans le cas où l'évènement est
      *                               {@code EventChefOrdonne} mais qu'il n'y a plus
      *                               de feu sur la carte. Exception renvoyée par le
      *                               {@code chef}
-     * @throws NoMoreRobotsException - Dans le cas où l'évènement est
+     * @throws NoMoreRobotsException Dans le cas où l'évènement est
      *                               {@code EventChefOrdonne} mais qu'il n'y a plus
      *                               de robots disponible sur la carte. Exception
      *                               renvoyée par le {@code chef}
@@ -80,17 +83,16 @@ public class Simulateur {
     }
 
     /**
-     * Méthode renvoyant un booléen correspondant à la finition (ou non) de la
-     * simulation
+     * Méthode renvoyant un booléen selon l'état de la simulation
      * 
-     * @return boolean : 1 si la simulation est terminée, 0 sinon
+     * @return boolean : true si la simulation est terminée, false sinon
      */
     public boolean simulationTerminee() {
         return (this.evenementsPQueue.isEmpty());
     }
 
     /**
-     * @return String : Retourne le texte incluant la {@code dateSimulation} et la
+     * @return String : retourne le texte incluant la {@code dateSimulation} et la
      *         liste des {@code evenements}
      */
     @Override

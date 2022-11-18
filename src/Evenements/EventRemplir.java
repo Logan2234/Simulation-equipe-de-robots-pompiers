@@ -6,6 +6,13 @@ import Exceptions.NoWaterException;
 public class EventRemplir extends Evenement {
     private final Robot robot;
 
+    /**
+     * Evenement qui, quand il sera {@code execute},
+     * à {@code date} va remplir le réservoir du robot {@code robot}.
+     * 
+     * @param date : date où on commence le remplissage du robot
+     * @param robot : robot dont on remplit le réservoir
+     */
     public EventRemplir(long date, Robot robot) {
         super(date + robot.getTmpRemplissage());
         this.robot = robot;
@@ -13,8 +20,8 @@ public class EventRemplir extends Evenement {
     }
 
     /**
-     * @throws NoWaterException : Exception levée dans le cas où il n'y a pas d'eau
-     *                          à proximité
+     * Va exécuter l'événement
+     * @throws NoWaterException Si on n'a pas d'eau à proximité
      */
     @Override
     public void execute() throws NoWaterException {
@@ -22,7 +29,7 @@ public class EventRemplir extends Evenement {
     }
 
     /**
-     * @return String : Affiche la date de l'évènement
+     * @return String : affiche la date de l'évènement
      */
     @Override
     public String toString() {

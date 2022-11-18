@@ -12,10 +12,20 @@ import Evenements.Simulateur;
 import gui.GUISimulator;
 import io.LecteurDonnees;
 
+/**
+ * Test qui a pour but de tester le chef pompier avancé
+ */
 public class TestAvance {
-
+    
+    /** 
+     * Va initialiser et lancer la simulation
+     * 
+     * @param fichier : fichier avec les données à tester
+     * @param gui : gui
+     */
     public static void initialize(String fichier, GUISimulator gui) {
         try {
+            // Initialisation de la simulation
             DonneesSimulation donnees = LecteurDonnees.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
             ChefAvanceV2 chef = new ChefAvanceV2(donnees, simulateur);
@@ -27,6 +37,8 @@ public class TestAvance {
             System.out.println("\n\t**format du fichier " + fichier + " invalide: " + e.getMessage());
         }
     }
+
+    
 
     public static void main(String[] args) {
         if (args.length < 1) {

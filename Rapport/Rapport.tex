@@ -24,17 +24,20 @@ Pour notre projet, nous avons fait le choix de rassembler en différents package
 \begin{itemize}
     \item Le package \texttt{Donnees} comporte tous les fichiers de classe des objets que l'on va manipuler pendant
     la simulation (\texttt{Robot}, \texttt{Carte}, \texttt{Case}, \texttt{Direction}\ldots).
-    \item Le package \texttt{Robot}, lui même dans le package \texttt{Donnees}, comporte notre classe abstraite de \texttt{Robot} ainsi
+    \item Le package \texttt{Robot}, lui-même dans le package \texttt{Donnees}, comporte notre classe abstraite de \texttt{Robot} ainsi
     que toutes les classes de robots qui en hérite.
-    \item Le package \texttt{Evenements} comporte tous les évènements ainsi que la classe abstraite \texttt{Evenement}
+    \item Le package \texttt{Evenements} comporte la classe abstraite \texttt{Evenement} tous les évènements qui en héritent.
     \item Le package \texttt{Exceptions} comporte toutes les exceptions rajoutées par nos soins.
     \item Le package \texttt{Tests} comporte tous les tests créés pour tester les différentes parties du sujet. On y trouve également
-    La classe \texttt{Simulation} et l'énumérateur \texttt{Test} qui liste tous nos tests (son utilité sera expliquée plus bas).
+    la classe \texttt{Simulation} et l'énumérateur \texttt{Test} qui liste tous nos tests (son utilité sera expliquée plus bas).
     \item Le package \texttt{Chefs} comporte la classe abstraite \texttt{Chef} ainsi que \texttt{ChefBasique} et \texttt{ChefAvance} qui mettent
     en place les deux stratégies proposées par l'énoncé.
     \item Le package \texttt{io} gère les entrées et sorties du programme. 
-    On y retrouve donc la classe utilitaire finale \texttt{LecteurDonnees} construisant les \texttt{DonneesSimulation}, la classe \texttt{LecteurDonneesTextuel} (classe initialement fournie et nommée \texttt{LecteurDonnees}) et la classe utilitaire finale \texttt{Dessin} regroupant les fonctions utiles pour la fonction \texttt{draw} de la classe \texttt{Simulation}. 
-    \item Enfin, le package \texttt{Autre} comporte la classe \texttt{Chemin} et la classe utilitaire finale \texttt{CalculPCC} qui s'occupe de calculer le chemin le plus rapide entre deux cases.
+    On y retrouve donc la classe utilitaire finale \texttt{LecteurDonnees} construisant les \texttt{DonneesSimulation}, la classe 
+    \texttt{LecteurDonneesTextuel} (classe initialement fournie et nommée \texttt{LecteurDonnees}) et la classe utilitaire finale 
+    \texttt{Dessin} regroupant les fonctions utiles pour la fonction \texttt{draw} de la classe \texttt{Simulation}. 
+    \item Enfin, le package \texttt{Autre} comporte la classe \texttt{Chemin} et la classe utilitaire finale \texttt{CalculPCC} 
+    qui s'occupe de calculer le chemin le plus rapide entre deux cases.
     
 \end{itemize}
 
@@ -44,28 +47,31 @@ Nous avons décidé de rajouter quelques exceptions afin de rendre notre projet 
 Ainsi, {\tt NoFireException} (resp. {\tt NoWaterException}) est soulevée lorsque qu'un robot essaie d'intéragir avec une case n'étant pas en feu (resp.\ de se remplir sans eau à proximité).
 {\tt NoMoreFireException} est soulevée quand il n'y a plus de feu sur la carte (la simulation est donc terminée) tandis que {\tt NoMoreRobotsException} est lancée quand plus aucun robot n'a d'eau dans son réservoir (et que le chef n'est pas en capacité de leur ordonner de se remplir).
 
-\subsection{Ajout de méthodes dans les objets}
-\subsubsection{getLastDate dans Robot}
-\subsubsection{getLitresInit dans Incendie}
+
 \subsection{Classe Simulation}
 
-La classe {\tt Simulation} permet de factoriser le code des fonctions utilisées dans chacun des tests, que ce soit la fonction {\tt draw}, {\tt next} ou encore {\tt restart}.
+La classe {\tt Simulation} permet de factoriser le code des fonctions utilisées dans chacun des tests, que ce soit la fonction {\tt draw}, 
+{\tt next} ou encore {\tt restart}.
 C'est cette classe qui implémente l'interface {\tt Simulable}.
 
 \subsection{Algorithme de plus court chemin: Dijkstra}
 
-Pour réaliser ses déplacements dans le moindre nombre de mouvements possibles, nos robots doivent trouver le plus court chemin pour atteindre le feu à éteindre. Pour cela, nous devons considérer notre mappe comme étant un graphe pondéré où tous les poids sont positifs ou nuls. Ainsi, les sommets du graphe seraient les cases de la mappe et le poids serait le temps dépensé par le robot subissant le déplacement pour aller d'une case à une autre. Nous avons donc décidé d'utiliser un des algorithmes classiques de la Recherche Opérationnelle avec une compléxité $\theta(n^2)$ : l'algorithme de Dijkstra. \\ \\
-Ainsi, nous avons implémenté l'algorithme en adaptant le pseudo-code suivant : \\ \\
+Pour réaliser ses déplacements dans le moindre nombre de mouvements possibles, nos robots doivent trouver le plus court chemin pour atteindre le feu à éteindre. 
+Pour cela, nous devons considérer notre map comme étant un graphe pondéré où tous les poids sont positifs ou nuls. 
+Ainsi, les sommets du graphe seraient les cases de la map et le poids serait le temps dépensé par le robot subissant le déplacement pour aller
+d'une case à une autre. Nous avons donc décidé d'utiliser un des algorithmes classiques de la Recherche Opérationnelle avec une 
+complexité $\theta(n^2)$ : l'algorithme de Dijkstra. \\
+Ainsi, nous avons implémenté l'algorithme en adaptant le pseudo-code suivant : \\
 
 \begin{tabbing}
-{\tt Entrées :} mappe et robot à déplacer, ainsi que la case d'arrivé.\\
+{\tt Entrées :} map et robot à déplacer, ainsi que la case d'arrivée.\\
 {\tt Sortie : } le meilleur chemin pour réaliser le déplacement. \\ \\
-dist $\leftarrow [|\infty,...,\infty|]$          matrice de même taille que la mappe \\
+dist $\leftarrow [|\infty,...,\infty|]$          matrice de même taille que la map \\
 dist(case du robot) = 0\\
-chemins $\leftarrow$          matrice de chemins vides de même taille que la mappe\\
+chemins $\leftarrow$          matrice de chemins vides de même taille que la map\\
 chemins(case du robot) = case du robot \\
-ouverts $\leftarrow [|0,m.n|]$          avec m et n les dimensions de la mappe\\
-{\tt tant \= que} ouvert $\neq \oslash$ {\tt faire}\\
+ouverts $\leftarrow [|0,m.n|]$          avec m et n les dimensions de la map\\
+{\tt tant \= que} ouverts $\neq \oslash$ {\tt faire}\\
 \> soit j $\in$ ouverts tel que dist.(j) soit minimal\\
 \> ouverts $\leftarrow $ ouverts $\setminus$ {j}\\
 \>{\tt pour} k \= voisin accessible par la case j {\tt faire} \\
@@ -73,14 +79,13 @@ ouverts $\leftarrow [|0,m.n|]$          avec m et n les dimensions de la mappe\\
 \> \> {\tt si} d \=< dist(k) {\tt alors} \\
 \> \> \> dist.(k) $\leftarrow$ d\\
 \> \> \> chemins(k) = chemins(s) $\Rightarrow$ k\\
-return chemins.(case d'arrivé)
+{\tt return} chemins.(case d'arrivée)
 \end{tabbing}
-
-\\ \\ \\
+\\ 
 
 Le robot qui cherche à se déplacer exécute cette fonction et ajoute au simulateur le mouvement vers la case où se trouve le feu. \\
-La fonction a été codée dans le fichier {\tt CalculPCC} sous forme de fonction statique, utilisée à chaque fois que le robot souhaite recharger son réservoir ou éteindre un feu.
-
+La fonction a été codée dans le fichier {\tt CalculPCC} sous forme de fonction statique, utilisée à chaque fois que le robot souhaite
+recharger son réservoir ou éteindre un feu et donc se déplacer d'un endroit à l'autre.
 
 \subsection{Les chefs pompiers}
 La structure des deux chefs est commune, d'où l'utilisation d'une classe abstraite \texttt{Chef}. Typiquement, on retrouve:
@@ -95,50 +100,70 @@ La  classe \texttt{ChefBasique} implémente la méthode basique proposée par le
 Après lecture du sujet, il restait des zones d'ombres. On a donc fait deux choix:
 \begin{itemize}
     \item Les robots ne vont jamais se remplir: cet aspect sera vu dans \texttt{ChefAvance};
-    \item Ici, nous avons fait le choix de fixer le pas à $n=50$, il est modifiable dans la classe \texttt{EventChefOrdonne} dans son constructu
+    \item Ici, nous avons fait le choix de fixer le pas à $n=50$, il est modifiable dans la classe \texttt{Evenement.EventChefOrdonne} 
+    dans son constructeur.
 \end{itemize}
 
-Pour stocker l'état de nos robots et de nos incendies, nous avons créé la HashMap \texttt{incendies\_rob} 
-qui va stocker en clé les incendies encore allumés et en valeur le robot qui leur est affecté. L'intérêt d'avoir accès à la valeur de robot,
-permet de voir si ce robot a vidé son eau, si c'est le cas il est envoyé dans le HashSet \texttt{morts} et est retiré du HashSet \texttt{occupes}.
+Pour stocker l'état de nos robots et de nos incendies, nous avons créé la HashMap \texttt{incendiesRob} qui va stocker en clé 
+les incendies encore allumés et en valeur le robot qui leur est affecté s'il y en a un. L'intérêt d'avoir accès à la valeur de robot,
+permet de voir si ce robot a vidé son eau, et si c'est le cas il est envoyé dans le HashSet \texttt{morts} 
+et est retiré du HashSet \texttt{occupes}.
 
-Le code a été factorisé avec deux méthodes privées supplémentaires:
+Le code a été factorisé avec deux méthodes privées supplémentaires :
 \begin{enumerate}
-    \item \texttt{gestionIncendies} qui va envoyer un robot sur un incendie qui n'est pas éteint. S'il trouve un robot pas occupé et pas mort,
-    il va alors appeler la fonction \texttt{donneOrdre}. Pendant son appel, il va en profiter pour faire le tri dans les robots s'ils sont
-    mal placés (pas encore mort alors que le réservoir est vide, encore occupe alors qu'il n'est plus associé à un incendie et qu'il lui reste
-    de l'eau);
-    \item \texttt{donneOrdre} va donner l'ordre au robot d'aller jusqu'à l'incendie et d'intervenir dessus avec les événements nécessaires.
+    \item \texttt{gestionIncendies} va envoyer un robot sur un incendie qui n'est pas éteint. S'il trouve un robot ni occupé ni mort,
+    il va alors appeler la fonction \texttt{donneOrdre};
+    \item \texttt{donneOrdre} va donner l'ordre au robot d'aller jusqu'à l'incendie par le plus court chemin (en le calculant avec Dijkstra)
+    et d'intervenir dessus en créant et ajoutant les événements nécessaires.
 \end{enumerate}
 
 \subsubsection{Chef avancé}
+
+\subsection{Ajouts mineurs}
+\subsubsection{Vitesse dans Robot}
+Bien que dans l'énoncé, les vitesses des robots soient données en km/h, nous avons décidé de les stocker en m/s
+car les distances sont en mètres et les temps de versement et de remplissage sont en secondes. Ainsi, l'utilisateur pourra spécifier une 
+vitesse en km/h mais, pour éviter les calculs redondants, on stockera directement la vitesse en m/s dans le robot.
+\subsubsection{L'événement EventIntervenir}
+Après lecture de l'énoncé, il semblait plus intéressant de prendre l'événement d'intervention comme une intervention unitaire
+(i.e. qui dure \texttt{tmpVersement} pour un robot donné). Cela signifie que, dès qu'on voudra éteindre un feu, il faudra faire une 
+boucle qui enverra autant d'interventions que nécessaire.
+\subsubsection{getLastDate dans Robot}
+Cette méthode permet de savoir jusqu'à quelle date le robot a un événement qu'il lui est associé. Cela permet de ne lui envoyer un événement
+qu'après la date de sa dernière tâche ajoutée. Cela permet également de paralléliser les appels pour le \texttt{ChefBasique} 
+(pas besoin d'attendre que tous les événements du simulateur aient été exécutés pour envoyer un nouveau robot).
+
 \section{Tests effectués et résultats}
 \subsection{Le fonctionnement des tests}
 \subsubsection{Lancer les tests}
 Les différents tests du package \texttt{Tests} sont là pour tester les différentes parties du sujet.
 \begin{itemize}
-    \item \texttt{TestSimulation} s'assure que l'on peut lancer une simulation.
+    \item \texttt{TestSimulation} s'assure que l'on peut lancer une simulation et que le robot peut se déplacer et se remplir
+    (en particulier le cas du robot à pattes qui ne doit pas se remplir).
     \item \texttt{TestScenarios} lance les scénarios proposés dans la partie 2.2 du sujet.
     \item \texttt{TestDijkstra} a pour but de vérifier que l'algorithme de Dijkstra fonctionne. Sur la carte sujet, 
     on sélectionne le second robot, qui est le robot à pattes et on l'envoie sur le premier incendie (celui en bas à gauche).
-    On veut s'assurer qu'il contourne l'eau et passe bien par les rochers et ne fasse pas de détours.
+    On veut s'assurer qu'il contourne l'eau et passe bien par les rochers et ne fasse pas de détours mais qu'il évite quand même l'eau.
     \item \texttt{TestBasique} teste le chef pompier avec l'algorithme élémentaire du sujet.
     \item \texttt{TestAvance} teste le chef pompier avec l'algorithme plus poussé fourni par le sujet.
 \end{itemize}
 
 \subsubsection{Makefile}
-Le Makefile et les tests rajoutés sont lancés sur la map du sujet par défaut.
-Pour compiler lancer les tests: 
-\begin{itemize}
-    \item \texttt{testSimulation} pour compiler \texttt{TestSimulation} puis \texttt{exeSimulation} pour exécuter;
-    \item \texttt{testScenarios} pour compiler \texttt{TestScenarios} puis \texttt{exeScenarios} pour exécuter;
-    \item \texttt{testDijkstra} pour compiler \texttt{TestDijkstra} puis \texttt{exeDijkstra} pour exécuter;
-    \item \texttt{testBasique} pour compiler \texttt{TestBasique} puis \texttt{exeBasique} pour exécuter;
-    \item \texttt{testAvance} pour compiler \texttt{TestAvance} puis \texttt{exeAvance} pour exécuter;
-\end{itemize}
+Le Makefile s'est vu ajouté des raccourcis pour les tests rajoutés.
+Pour compiler les tests, on lancera la commande : \\
+\texttt{make test<NomDuTest>}\\
+Puis pour l'exécuter : \\
+\texttt{make exe<NomDuTest><Map>} pour \texttt{TestBasique}\\
+\texttt{make exe<NomDuTest>} pour les autres (ils seront lancés sur la map carteSujet).\\
 
+Avec \texttt{<NomDuTest>} dans \texttt{Simulation}, \texttt{Scenarios}, \texttt{Dijkstra}, \texttt{Basique} ou \texttt{Avance} et avec 
+\texttt{<Map>} dans \texttt{CarteSujet}, \texttt{Mushroom}, \texttt{Desert} ou \texttt{Spiral}.
 
 \subsection{Résultats obtenus}
+Comme vous pourrez le voir avec nos différents fichiers de tests, l'algorithme élémentaire (\texttt{ChefBasique}) fonctionne sur toutes les cartes 
+fournies, comme demandé par l'énoncé.
+
 \subsection{Pistes d'amélioration}
+Une première optimisation serait de trouver un moyen de ne pas recalculer systématiquement tous les chemins pour chaque action d'intervention ou de remplissage.
 
 \end{document}
