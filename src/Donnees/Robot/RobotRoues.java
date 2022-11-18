@@ -5,7 +5,8 @@ import Donnees.NatureTerrain;
 
 public class RobotRoues extends Robot {
     /**
-     * @param position : spécifie la position actuelle du robot
+     * Va paramétrer la vitesse, le tmpVersement, la qteVersement, tmpRemplissage et l'image liés au robot à roues.
+     * @param position : spécifie la position actuelle du robot 
      */
     public RobotRoues(Case position) {
         super(position, 5000, 80/3.6, 5, 100, 600, "assets/Roues.png");
@@ -24,8 +25,7 @@ public class RobotRoues extends Robot {
      * Modifie la position du robot à condition que la nouvelle case ne soit pas de l'eau ou des rochers.
      * 
      * @param newCase : la nouvelle case où le déplacer
-     * 
-     * @exception IllegalArgumentException on va dans l'eau ou dans les rochers
+     * @exception IllegalArgumentException On va dans l'eau ou dans les rochers
      */
     @Override
     public void setPosition(Case newCase) {

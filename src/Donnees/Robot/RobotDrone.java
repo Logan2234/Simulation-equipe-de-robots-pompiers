@@ -6,6 +6,7 @@ import Exceptions.NoWaterException;
 
 public class RobotDrone extends Robot {
     /**
+     * Va paramétrer la vitesse, le tmpVersement, la qteVersement, tmpRemplissage et l'image liés au drone
      * @param position : spécifie la position actuelle du robot
      */
     public RobotDrone(Case position) {
@@ -14,12 +15,18 @@ public class RobotDrone extends Robot {
 
     /**
      * @param position : spécifie la position actuelle du robot
-     * @param vitesse  : indique la vitesse (en km/h) par défaut du robot
+     * @param vitesse  : indique la vitesse (en km/h) par défaut du robot, sera stockée en m/s
      */
     public RobotDrone(Case position, int vitesse) {
         super(position, 10000, Math.min(vitesse, 150) / 3.6, 30, 10000, 1800, "assets/Drone.png");
     }
 
+
+    
+    /** 
+     * @param nature : non utilisé mais nécessaire pour l'override et éviter la surcharge
+     * @return double : la vitesse du drone sur n'importe quel nature de terrain car cela ne l'affecte pas
+     */
     @Override
     public double getVitesse(NatureTerrain nature) {
         return vitesseDefaut;

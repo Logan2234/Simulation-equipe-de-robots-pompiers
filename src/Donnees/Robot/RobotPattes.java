@@ -5,6 +5,7 @@ import Donnees.NatureTerrain;
 
 public class RobotPattes extends Robot {
     /**
+     * Va paramétrer la vitesse, le tmpVersement, la qteVersement, tmpRemplissage et l'image liés au robot à pattes
      * @param position : spécifie la position actuelle du robot
      */
     public RobotPattes(Case position) {
@@ -30,13 +31,13 @@ public class RobotPattes extends Robot {
 
     @Override
     public void remplirReservoir() {
-        // Cette fonction permet simplement de ne pas éxecuter remplirReservoir
-        // de la classe mère puisque ce robot n'a aucun intérêt à se remplir
+        /* Cet override de fonction permet simplement de ne pas éxecuter remplirReservoir
+        de la classe mère puisque ce robot n'a aucun intérêt à se remplir puisque son réservoir
+        est infini */
     }
 
     /**
-     * Renvoie la vitesse (en m/s) du robot pour la nature du terrain où il se
-     * situe.
+     * Renvoie la vitesse (en m/s) du robot pour la nature du terrain demandée.
      * 
      * @param nature : nature du terrain
      * @return double : la vitesse (en m/s)

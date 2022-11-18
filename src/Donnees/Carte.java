@@ -75,7 +75,7 @@ public class Carte {
 
     /**
      * Vérifie si la case {@code src} possède un voisin dans la direction
-     * {@code dir} demandée.
+     * {@code dir} demandée. (i.e. n'est pas sur le bord de la carte)
      * 
      * @param src
      * @param dir
@@ -108,6 +108,9 @@ public class Carte {
 
     
     /** 
+     * Surcharge de la méthode {@code voisinExiste} qui vérifie si le robot peut accéder au voisin de src dans  la direction dir.
+     * (en fonction du robot, on ne peut pas toujours aller sur de l'eau, des rochers ...)
+     * 
      * @param src : la case regardée
      * @param dir : direction regardée par rapport à la case
      * @param robot : robot concerné par la recherche d'une case voisine
@@ -123,7 +126,7 @@ public class Carte {
     }
 
     /**
-     * Donne le voisin pour la direction donnée
+     * Donne le voisin de src pour la direction donnée.
      * 
      * @param src : la case regardée
      * @param dir : direction regardée par rapport à la case

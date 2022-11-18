@@ -95,8 +95,7 @@ La  classe \texttt{ChefBasique} implémente la méthode basique proposée par le
 Après lecture du sujet, il restait des zones d'ombres. On a donc fait deux choix:
 \begin{itemize}
     \item Les robots ne vont jamais se remplir: cet aspect sera vu dans \texttt{ChefAvance};
-    \item Le concept de pas n n'est pas utilisé, on le fixe à 1 et on va lancer la fonction \texttt{gestionIncendie} systématiquement 
-    et faire du traitement que s'il y a des robots non occupés.
+    \item Ici, nous avons fait le choix de fixer le pas à $n=50$, il est modifiable dans la classe \texttt{EventChefOrdonne} dans son constructu
 \end{itemize}
 
 Pour stocker l'état de nos robots et de nos incendies, nous avons créé la HashMap \texttt{incendies\_rob} 
