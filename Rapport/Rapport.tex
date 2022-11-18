@@ -136,6 +136,14 @@ La classe \texttt{ChefAvance} implémente la méthode avancée proposée par le 
 Pour stocker l'état de nos incendies et robots, nous avons à nouveau utilisé une HashMap \texttt{incendiesRob} qui stocke en clé des incendies. Mais, cette fois-ci, nous pouvons avoir plus d'un robot associé à un même feu. Ainsi, on affecte un HashSet à chaque incendie contenant les robots qui sont en train de se déplacer et de gérer l'incendie.
 Nous allons aussi stocker dans un ArrayList les cases d'eau de la carte, afin de pouvoir trouver la case la plus proche en cas de devoir remplir le réservoir.
 
+\begin{enumerate}
+    \item \texttt{gestionIncendies} va chercher le robot libre le plus proche de l'incendie. S'il le trouve, il va alors appeler la fonction \texttt{donneOrdre};
+    \item \texttt{donneOrdre} va donner l'ordre au robot d'aller jusqu'à l'incendie par le plus court chemin (en le calculant avec Dijkstra)
+    et d'intervenir dessus en créant et ajoutant les événements nécessaires.
+    \item \texttt{ouAllerRemplirReservoir} va chercher la case d'eau la plus proche d'un robot et renvoie le chemin pour arriver à cette case.
+    \item \texttt{vaRemplirEau} fait appel à \texttt{ouAllerRemplirReservoir} pour trouver le chemin vers la case d'eau la plus proche et envoie le robot pour se remplir d'eau.
+\end{enumerate}
+
 \subsection{Ajouts mineurs}
 \subsubsection{Vitesse dans Robot}
 Bien que dans l'énoncé, les vitesses des robots soient données en km/h, nous avons décidé de les stocker en m/s
