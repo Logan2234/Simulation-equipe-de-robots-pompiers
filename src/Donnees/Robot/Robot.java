@@ -20,11 +20,11 @@ public abstract class Robot {
     /**
      * @param position      : spécifie la position actuelle du robot
      * @param capacite      : donne la capacité maximale du réservoir du robot
-     * @param vitesse       : indique la vitesse (en km/h) par défaut du robot
+     * @param vitesse       : indique la vitesse (en km/h) par défaut du robot, elle sera stockée en m/s
      * @param tmpVersement  : indique le temps nécessaire (en s) pour vider la
-     *                      qteVersement
+     *                      {@code qteVersement}
      * @param qteVersement  : indique la quantité (en L) que l'on va déverser
-     *                      pendant tmpVersement
+     *                      pendant {@code tmpVersement}
      * @param tmpReplissage : indique le temps nécessaire (en s) pour un remplissage
      *                      complet
      */
@@ -62,6 +62,11 @@ public abstract class Robot {
         return this.vitesseDefaut;
     }
 
+    
+    /** 
+     * @param getCapacite(
+     * @return double
+     */
     /**
      * @param nature
      * @return double : la vitesse (en m/s) du robot pour une nature donnée
@@ -97,12 +102,16 @@ public abstract class Robot {
     }
 
     /**
-     * @return long lastDate : Dernière date utilisée pour le robot
+     * @return long lastDate : Dernière date utilisée dans la simulation pour le robot
      */
     public long getLastDate() {
         return lastDate;
     }
 
+    
+    /** 
+     * @return String imagePath : Image associée au robot
+     */
     public String getImagePath() {
         return imagePath;
     }
@@ -125,12 +134,9 @@ public abstract class Robot {
     }
 
     /**
-     * Cette méthode sera uniquement appelée pour remplir le réservoir du drone car
-     * il se remplit différemment
-     * (i.e. l'eau est sur notre position et non à côté).
-     * Pour les autres robots, il faudra appeler {@code remplirReservoir}.
+     * Cette méthode sera uniquement appelée par {@code remplirReservoir}, elle remplit le réservoir du robot.
      */
-    public void fillReservoir() {
+    protected void fillReservoir() {
         this.reservoir = this.capacite;
     }
 
@@ -146,8 +152,7 @@ public abstract class Robot {
 
     /**
      * Remplit le réservoir d'un robot terrestre s'il est à côté d'une case de type
-     * Eau.
-     * 
+     * EAU.
      * Cette méthode sera override dans le cas du drone et du robot à pattes.
      * 
      * @exception NoWaterException On n'est pas à côté d'un réservoir

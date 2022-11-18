@@ -17,10 +17,10 @@ import Exceptions.NoMoreRobotsException;
 import Exceptions.NoPathAvailableException;
 
 /**
- * @param incendiesRob : Table de hachage qui a pour clé les incendies
+ * @param incendiesRob : HashMap qui a pour clé les incendies
  *                      non-éteints et en valeur le robot qui s'en occupe.
- * @param morts         : Table dynamique qui comporte l'ensemble des robots
- *                      morts (i.e qui n'ont plus d'eau dans le réservoir)
+ * @param morts         : Set qui comporte l'ensemble des robots
+ *                      morts (i.e. qui n'ont plus d'eau dans le réservoir)
  */
 public class ChefBasique extends Chef {
 
@@ -67,11 +67,12 @@ public class ChefBasique extends Chef {
      * Va essayer d'éteindre {@code incendie} en appelant un robot à la fois et en
      * mettant à jour les tables {@code occupes} et {@code morts}.
      * 
-     * @param incendie : Il ne doit avoir aucun robot affecté (dans
+     * @param incendie : Il ne doit avoir aucun robot affecté (vérifié dans
      *                 {@code incendies_rob})
      */
     @Override
     protected void gestionIncendies(Incendie incendie) {
+        // On parcourt les robots de la carte
         for (Robot robot : donnees.getRobots()) {
             // Si le robot choisi est disponible
             if (!occupes.contains(robot) && !morts.contains(robot)) {
@@ -83,25 +84,25 @@ public class ChefBasique extends Chef {
                     break; // Si on a réussi, on ne va pas envoyer de second robot sur l'incendie
                 } catch (NoPathAvailableException e) {
                     continue;
-                    // On n'a pas besoin d'afficher quoi que ce soit, juste on continue
+                    // On n'a pas de chemin entre le robot et l'incendie : on va prendre un autre robot.
                 }
             }
         }
     }
 
     /**
-     * Implémente la stratégie basique (pas de parallélisme, pas de remplissage
-     * d'eau).
-     * On va traiter un incendie à la fois, tant qu'on en a qui ne sont pas éteints.
+     * Implémente la stratégie basique (pas de remplissage d'eau).
+     * On va traiter un incendie à la fois, tant qu'on en a qui ne sont pas éteints et qu'il y a des robots avec de l'eau.
      */
     @Override
     public void strategie() throws NoMoreFireException, NoMoreRobotsException {
 
-        // S'il y a des incendies à éteindre et des robots avec de l'eau, on va choisir un incendie
+        // S'il y a des incendies à éteindre et des robots avec de l'eau
         if (!incendiesRob.isEmpty() && donnees.getRobots().size() != morts.size()) {
+            // On prend un incendie
             for (Incendie incendie : donnees.getIncendies()) {
 
-                // Si il est déjà éteint, on ne va pas traiter son cas
+                // Si il est déjà éteint, on ne va pas traiter son cas et on va choisir un autre incendie
                 if (!incendiesRob.containsKey(incendie))
                     continue;
 
@@ -109,14 +110,14 @@ public class ChefBasique extends Chef {
                 if (incendiesRob.get(incendie) != null) {
                     Robot robot = incendiesRob.get(incendie);
 
-                    // Si le robot est vide il devient inutilisable
+                    // Si le robot est vide il devient inutilisable, on met à jour nos tables
                     if (robot.getReservoir() == 0) {
                         incendiesRob.put(incendie, null);
                         occupes.remove(robot);
                         morts.add(robot);
                     }
 
-                    // Si l'incendie est éteint, on met à jour incendies_rob
+                    // Si l'incendie est éteint, on met à jour nos tables
                     if (incendie.getLitres() <= 0) {
                         occupes.remove(robot);
                         incendiesRob.remove(incendie);
@@ -126,6 +127,7 @@ public class ChefBasique extends Chef {
                 else
                     gestionIncendies(incendie);
             }
+            //On effectue un pas avant de sélectionner un nouvel incendie
             simulateur.ajouteEvenement(new EventChefOrdonne(simulateur.getDateSimulation(), this));
         } else if (incendiesRob.isEmpty()) {
             throw new NoMoreFireException();

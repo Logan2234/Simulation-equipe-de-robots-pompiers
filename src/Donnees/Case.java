@@ -64,7 +64,7 @@ public class Case {
      * Regarde si l'objet est identique à la case appelée.
      * 
      * @param obj : objet de comparaison
-     * @return boolean : true si on est sur la même ligne et même colonne
+     * @return boolean : true si on est sur la même ligne et même colonne, on ne comparera pas la nature ni si on est sur la même carte.
      */
     @Override
     public boolean equals(Object obj) {

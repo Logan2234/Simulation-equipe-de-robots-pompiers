@@ -2,7 +2,7 @@ package Donnees;
 
 /**
  * Enum des différents terrains.
- * Chaque terrain est associé un chemin vers une image utilisée par la fonction
+ * Chaque terrain est associé un chemin vers une image utilisée par la méthode
  * {@code Dessin.dessin}
  */
 public enum NatureTerrain {

@@ -5,6 +5,7 @@ import Donnees.NatureTerrain;
 
 public class RobotChenilles extends Robot {
     /**
+     * Va paramétrer la vitesse, le tmpVersement, la qteVersement, tmpRemplissage et l'image liés au robot à chenilles
      * @param position : spécifie la position actuelle du robot
      */
     public RobotChenilles(Case position) {
@@ -13,7 +14,7 @@ public class RobotChenilles extends Robot {
 
     /**
      * @param position : spécifie la position actuelle du robot
-     * @param vitesse  : indique la vitesse (en km/h) par défaut du robot
+     * @param vitesse  : spécifie la vitesse (en km/h) par défaut du robot (elle sera stockée en m/s)
      */
     public RobotChenilles(Case position, double vitesse) {
         super(position, 2000, Math.min(vitesse, 80) / 3.6, 8, 100, 300, "assets/Chenilles.png");
@@ -25,7 +26,7 @@ public class RobotChenilles extends Robot {
      * 
      * @param newCase : la nouvelle case où le déplacer
      * 
-     * @exception IllegalArgumentException on va dans l'eau ou dans les rochers
+     * @exception IllegalArgumentException On va dans l'eau ou dans les rochers
      */
     @Override
     public void setPosition(Case newCase) {
@@ -37,8 +38,7 @@ public class RobotChenilles extends Robot {
     }
 
     /**
-     * Renvoie la vitesse (en m/s) du robot pour la nature du terrain où il se
-     * situe.
+     * Renvoie la vitesse (en m/s) du robot pour la nature du terrain demandée.
      * 
      * @param nature : nature du terrain
      * @return double : la vitesse (en m/s)

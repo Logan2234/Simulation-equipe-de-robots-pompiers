@@ -26,7 +26,7 @@ public class Incendie {
 
     /**
      * Fonction seulement utilisée pour calculer le % d'extinction d'un feu
-     * Ce % n'est calculé uniquement que pour le dessin proportionnel d'un feu
+     * Ce pourcentage n'est calculé uniquement que pour le dessin proportionnel d'un feu
      * 
      * @return int : quantité d'eau nécessaire pour éteindre le feu au départ
      */

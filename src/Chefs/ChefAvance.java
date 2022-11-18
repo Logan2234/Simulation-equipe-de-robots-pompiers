@@ -252,7 +252,9 @@ public class ChefAvance extends Chef {
 
     /**
      * Fonction executant la stratégie d'extinction des feux du Chef des Pompiers
-     * Avancé
+     * Avancé.
+     * 
+     * @implNote /!\ La stratégie n'est pas encore fonctionnelle : dès qu'on a un réservoir vide et qu'on va le remplir, on a des erreurs.
      */
     @Override
     public void strategie() {
