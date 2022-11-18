@@ -53,6 +53,35 @@ La classe {\tt Simulation} permet de factoriser le code des fonctions utilisées
 C'est cette classe qui implémente l'interface {\tt Simulable}.
 
 \subsection{Algorithme de plus court chemin: Dijkstra}
+
+Pour réaliser ses déplacements dans le moindre nombre de mouvements possibles, nos robots doivent trouver le plus court chemin pour atteindre le feu à éteindre. Pour cela, nous devons considérer notre mappe comme étant un graphe pondéré où tous les poids sont positifs ou nuls. Ainsi, les sommets du graphe seraient les cases de la mappe et le poids serait le temps dépensé par le robot subissant le déplacement pour aller d'une case à une autre. Nous avons donc décidé d'utiliser un des algorithmes classiques de la Recherche Opérationnelle : l'algorithme de Dijkstra. \\ \\
+Ainsi, nous avons implémenté l'algorithme en adaptant le pseudo-code suivant : \\ \\
+
+\begin{tabbing}
+{\tt Entrées :} mappe et robot à déplacer, ainsi que la case d'arrivé.\\
+{\tt Sortie : } le meilleur chemin pour réaliser le déplacement. \\ \\
+dist $\leftarrow [|\infty,...,\infty|]$          matrice de même taille que la mappe \\
+dist(case du robot) = 0\\
+chemins $\leftarrow$          matrice de chemins vides de même taille que la mappe\\
+chemins(case du robot) = case du robot \\
+ouverts $\leftarrow [|0,m.n|]$          avec m et n les dimensions de la mappe\\
+{\tt tant \= que} ouvert $\neq \oslash$ {\tt faire}\\
+\> soit j $\in$ ouverts tel que dist.(j) soit minimal\\
+\> ouverts $\leftarrow $ ouverts $\setminus$ {j}\\
+\>{\tt pour} k \= voisin accessible par la case j {\tt faire} \\
+\>\> d $\leftarrow$ dist.(j) + distance(j $\rightarrow$ k)\\
+\> \> {\tt si} d \=< dist(k) {\tt alors} \\
+\> \> \> dist.(k) $\leftarrow$ d\\
+\> \> \> chemins(k) = chemins(s) $\Rightarrow$ k\\
+return chemins.(case d'arrivé)
+\end{tabbing}
+
+\\ \\ \\
+
+Le robot qui cherche à se déplacer exécute cette fonction et ajoute au simulateur le mouvement vers la case où se trouve le feu. \\
+La fonction a été codée dans le fichier {\tt CalculPCC} sous forme de fonction statique, utilisée à chaque fois que le robot souhaite recharger son réservoir ou éteindre un feu.
+
+
 \subsection{Les chefs pompiers}
 La structure des deux chefs est commune, d'où l'utilisation d'une classe abstraite \texttt{Chef}. Typiquement, on retrouve:
 \begin{enumerate}
