@@ -60,7 +60,7 @@ Pour réaliser ses déplacements dans le moindre nombre de mouvements possibles,
 Pour cela, nous devons considérer notre map comme étant un graphe pondéré où tous les poids sont positifs ou nuls. 
 Ainsi, les sommets du graphe seraient les cases de la map et le poids serait le temps dépensé par le robot subissant le déplacement pour aller
 d'une case à une autre. Nous avons donc décidé d'utiliser un des algorithmes classiques de la Recherche Opérationnelle avec une 
-complexité $\theta(n^2)$ : l'algorithme de Dijkstra. \\
+complexité $\Theta(n^2)$ : l'algorithme de Dijkstra. \\
 Ainsi, nous avons implémenté l'algorithme en adaptant le pseudo-code suivant : \\
 
 \begin{tabbing}
@@ -118,6 +118,18 @@ Le code a été factorisé avec deux méthodes privées supplémentaires :
 \end{enumerate}
 
 \subsubsection{Chef avancé}
+La classe \texttt{ChefAvance} implémente la méthode avancée proposée par le sujet pour aller éteindre les incendies. Après lecture du sujet, nous avons à nouveau trouvé quelques zones sombres. Nous avons alors décidé que :
+\begin{itemize}
+    \item Cette fois-ci, même si un robot est déjà en train d'aller éteindre un feu, un deuxième robot peut aller l'aider dans un deuxième temps ;
+    \item Les robots peuvent donc arriver dans une case pour éteindre un feu qui a déjà été éteint. Le robot doit donc vérifier si le feu a été éteint avant de procéder à l'extinction ;
+    \item Au début de chaque itération, si les robots sont vides, on les envoie chercher la source d'eau la plus proche et ils se remplissent ;
+    \item Pour les robots autres que le drone, le remplissage doit se faire à côté d'une des cases d'eau : il faut donc calculer le chemin idéal entre toutes les cases adjacentes aux cases d'eau ;
+    \item Nous avons maintenu le choix de fixer le pas à $n=50$, il est modifiable dans la classe \texttt{Evenement.EventChefOrdonne} 
+    dans son constructeur ;
+\end{itemize}
+
+Pour stocker l'état de nos incendies et robots, nous avons à nouveau utilisé une HashMap \texttt{incendiesRob} qui stocke en clé des incendies. Mais, cette fois-ci, nous pouvons avoir plus d'un robot associé à un même feu. Ainsi, on affecte un HashSet à chaque incendie contenant les robots qui sont en train de se déplacer et de gérer l'incendie.
+Nous allons aussi stocker dans un ArrayList les cases d'eau de la carte, afin de pouvoir trouver la case la plus proche en cas de devoir remplir le réservoir.
 
 \subsection{Ajouts mineurs}
 \subsubsection{Vitesse dans Robot}
