@@ -58,11 +58,12 @@ public class CalculPCC {
             throw new NoPathAvailableException();
         
         // Sinon on commence à faire Dijkstra
-        long[][] distance = new long[carte.getNbLignes()][carte.getNbColonnes()];
-        Chemin[][] chemins = new Chemin[carte.getNbLignes()][carte.getNbColonnes()];
-        ArrayList<Coordonees> ouverts = new ArrayList<>();
+        long[][] distance = new long[carte.getNbLignes()][carte.getNbColonnes()]; // matrice des temps pour arriver à la case depuis le robot
+        Chemin[][] chemins = new Chemin[carte.getNbLignes()][carte.getNbColonnes()]; // matrice des chemins idéaux pour arriver à chaque case
+        ArrayList<Coordonees> ouverts = new ArrayList<>(); // liste des cases non traitées
 
-        for (int i = 0; i < carte.getNbLignes(); i++) {
+        // On initialise les matrices et la liste
+        for (int i = 0; i < carte.getNbLignes(); i++) { 
             for (int j = 0; j < carte.getNbColonnes(); j++) {
                 distance[i][j] = Integer.MAX_VALUE;
                 ouverts.add(new Coordonees(i, j));
@@ -70,6 +71,7 @@ public class CalculPCC {
             }
         }
 
+        // On met à 0 pour la case initiale
         distance[caseCourante.getLigne()][caseCourante.getColonne()] = 0;
         chemins[caseCourante.getLigne()][caseCourante.getColonne()].addElement(caseCourante, date);
 
@@ -78,11 +80,12 @@ public class CalculPCC {
         long minDistance;
         Coordonees minCoordonees;
 
-        while (!ouverts.isEmpty()) {
+        while (!ouverts.isEmpty()) { // tant qu'on ait pas traité toutes les cases...
 
             // On cherche valeur minimale de distance
             minDistance = distance[ouverts.get(0).getI()][ouverts.get(0).getJ()];
             minCoordonees = ouverts.get(0); // On initialise avec le premier élèment, mais que importe
+            // On cherche l'ouvert avec le temps de parcours le plus court
             for (int i = 0; i < ouverts.size(); i++) {
                 if (distance[ouverts.get(i).getI()][ouverts.get(i).getJ()] < minDistance) {
                     minCoordonees = ouverts.get(i);
@@ -90,6 +93,7 @@ public class CalculPCC {
                 }
             }
 
+            // On traite cet ouvert et on le sort de la liste
             ouverts.remove(minCoordonees);
 
             int I = minCoordonees.getI();
@@ -103,7 +107,8 @@ public class CalculPCC {
             // On cherche le chemin
             long distanceCaseMinimale = distance[I][J];
 
-
+            // On voit, pour ses voisins, si passer par ce chemin c'est vraiment le plus court chemin
+            
             if (caseCourante.getCarte().voisinExiste(caseMinimale, Direction.NORD, robot)) {
                 try {
                     caseATraiter = caseCourante.getCarte().getVoisin(caseMinimale, Direction.NORD);
@@ -112,6 +117,7 @@ public class CalculPCC {
                     if (tempsTotal < distance[I - 1][J]) {
                         distance[I - 1][J] = tempsTotal;
                         chemins[I - 1][J] = chemins[I][J].deepCopyChemin();
+                        // le nouveau chemin c'est le chemin qu'avant plus la nouvelle case
                         chemins[I - 1][J].addElement(caseATraiter, chemins[I][J].getLastDate() + temps);
                     }
                 } catch (CellOutOfMapException e) {
@@ -127,6 +133,7 @@ public class CalculPCC {
                     if (tempsTotal < distance[I][J + 1]) {
                         distance[I][J + 1] = tempsTotal;
                         chemins[I][J + 1] = chemins[I][J].deepCopyChemin();
+                        // le nouveau chemin c'est le chemin qu'avant plus la nouvelle case
                         chemins[I][J + 1].addElement(caseATraiter, chemins[I][J].getLastDate() + temps);
                     }
                 } catch (CellOutOfMapException e) {
@@ -142,6 +149,7 @@ public class CalculPCC {
                     if (tempsTotal < distance[I + 1][J]) {
                         distance[I + 1][J] = tempsTotal;
                         chemins[I + 1][J] = chemins[I][J].deepCopyChemin();
+                        // le nouveau chemin c'est le chemin qu'avant plus la nouvelle case
                         chemins[I + 1][J].addElement(caseATraiter, chemins[I][J].getLastDate() + temps);
                     }
                 } catch (CellOutOfMapException e) {
@@ -157,6 +165,7 @@ public class CalculPCC {
                     if (tempsTotal < distance[I][J - 1]) {
                         distance[I][J - 1] = tempsTotal;
                         chemins[I][J - 1] = chemins[I][J].deepCopyChemin();
+                        // le nouveau chemin c'est le chemin qu'avant plus la nouvelle case
                         chemins[I][J - 1].addElement(caseATraiter, chemins[I][J].getLastDate() + temps);
                     }
                 } catch (CellOutOfMapException e) {
