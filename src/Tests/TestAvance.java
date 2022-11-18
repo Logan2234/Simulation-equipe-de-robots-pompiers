@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.util.zip.DataFormatException;
 
 import Chefs.ChefAvance;
-import Chefs.ChefAvanceV2;
 import Donnees.DonneesSimulation;
 import Evenements.Simulateur;
 import gui.GUISimulator;
@@ -28,7 +27,7 @@ public class TestAvance {
             // Initialisation de la simulation
             DonneesSimulation donnees = LecteurDonnees.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            ChefAvanceV2 chef = new ChefAvanceV2(donnees, simulateur);
+            ChefAvance chef = new ChefAvance(donnees, simulateur);
             new Simulation(gui, donnees, simulateur, Test.TEST_BASIQUE, fichier, chef);
 
         } catch (FileNotFoundException e) {
@@ -37,8 +36,6 @@ public class TestAvance {
             System.out.println("\n\t**format du fichier " + fichier + " invalide: " + e.getMessage());
         }
     }
-
-    
 
     public static void main(String[] args) {
         if (args.length < 1) {
