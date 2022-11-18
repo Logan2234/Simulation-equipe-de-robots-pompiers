@@ -6,7 +6,7 @@ package Tests;
  * fichier annexe et ainsi factoriser le code.
  * Utilisé seulement dans {@code Simulation.java}
  */
-public enum Test {
+public enum EnumTest {
     TEST_SIMULATION,
     TEST_SCENARIOS,
     TEST_DIJKSTRA,

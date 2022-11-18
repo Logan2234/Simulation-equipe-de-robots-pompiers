@@ -34,7 +34,7 @@ public class TestDijkstra {
             // Initialisation de la simulation
             DonneesSimulation donnees = LecteurDonnees.creerSimulation(fichier);
             Simulateur simulateur = new Simulateur();
-            new Simulation(gui, donnees, simulateur, Test.TEST_DIJKSTRA, fichier);
+            new Simulation(gui, donnees, simulateur, EnumTest.TEST_DIJKSTRA, fichier);
 
             // On va sélectionner un robot aléatoire (sur la carteSujet, il s'agira du robot à pattes).
             Robot robot = donnees.getRobots().get(2);

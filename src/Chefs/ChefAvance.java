@@ -2,71 +2,200 @@ package Chefs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import Autre.CalculPCC;
 import Autre.Chemin;
+import Donnees.Carte;
 import Donnees.Case;
 import Donnees.Direction;
 import Donnees.DonneesSimulation;
 import Donnees.Incendie;
 import Donnees.NatureTerrain;
 import Donnees.Robot.Robot;
+import Evenements.EventChefOrdonne;
 import Evenements.EventIntervenir;
 import Evenements.EventRemplir;
 import Evenements.Simulateur;
 import Exceptions.CellOutOfMapException;
+import Exceptions.NoMoreFireException;
+import Exceptions.NoWaterException;
 import Exceptions.NoPathAvailableException;
 
-public class ChefAvance extends Chef {
-
-    private HashMap<Incendie, ArrayList<Robot>> incendies_rob;
+/**
+ * @param incendiesRob : HashMap qui a pour clé les incendies
+ *                      non-éteints et en valeur le set avec les robots qui s'en occupe.
+ */
+public class ChefAvance extends Chef{
+    private HashMap<Incendie, Set<Robot>> incendiesRob;
     private ArrayList<Case> casesAvecEau;
-
+    private Carte carte;
+    
+    /**
+     * Va implémenter la stratégie avancée pour le chef pompier. Il faudra ensuite appelée la méthode stratégie pour exécuter le pompier.
+     * 
+     * @param donnees    : Données utilisées pour la simulation
+     * @param simulateur : Simulateur à initialiser avant
+     */
     public ChefAvance(DonneesSimulation donnees, Simulateur simulateur) {
         super(donnees, simulateur);
-        this.incendies_rob = new HashMap<Incendie, ArrayList<Robot>>();
+        this.incendiesRob = new HashMap<Incendie, Set<Robot>>();
         for (Incendie incendie : donnees.getIncendies()) {
-            incendies_rob.put(incendie, new ArrayList<Robot>());
+            incendiesRob.put(incendie, new HashSet<>());
         }
+        this.carte = donnees.getCarte();
 
         // On va déclarer les cases qui contiennent de l'eau
         ArrayList<Case> casesAvecEau = new ArrayList<Case>();
-        for (int i = 0; i < donnees.getCarte().getNbLignes(); i++) {
-            for (int j = 0; j < donnees.getCarte().getNbColonnes(); j++) {
-                if (donnees.getCarte().getCase(i, j).getNature() == NatureTerrain.EAU)
-                    casesAvecEau.add(donnees.getCarte().getCase(i, j));
+        for (int i = 0; i < carte.getNbLignes(); i++) {
+            for (int j = 0; j < carte.getNbColonnes(); j++) {
+                if (carte.getCase(i, j).getNature() == NatureTerrain.EAU)
+                    casesAvecEau.add(carte.getCase(i, j));
             }
         }
         this.casesAvecEau = casesAvecEau;
+    }
+
+    
+    /** 
+     * 
+     * Implémente la stratégie avancée (avec remplissage d'eau et envoi de plusieurs robots simultanément).
+     * On va traiter un incendie à la fois, tant qu'on en a qui ne sont pas éteints.
+     * 
+     * C'est cette méthode qui va envoyer des robots se remplir ou demandé à éteindre un incendie.
+     * Elle gère aussi les tables {@code incendiesRob} et {@code occupes}.
+     * 
+     * @throws NoMoreFireException Si tous les incendies ont été éteints
+     */
+    public void strategie() throws NoMoreFireException{
+        // Si il reste des incendies pas encore éteints
+        if (!incendiesRob.isEmpty()){
+            for (Incendie incendie : donnees.getIncendies()){
+                // Si l'incendie est éteient on passe au suivant
+                if (!incendiesRob.containsKey(incendie)) {
+                    continue;
+                }
+                Set<Robot> robotsListe = incendiesRob.get(incendie);
+                // Si on a au moins un robot en charge de l'incendie
+                if (!robotsListe.isEmpty()){
+                    // On va parcourir la liste des robots qui s'en occupe
+                    for (Robot robot : robotsListe){
+                        // Si le robot est vide, on l'envoie se remplir et il ne s'occupe plus de l'incendie
+                        if (robot.getReservoir() == 0){
+                            robotsListe.remove(robot);
+                            try{
+                                vaRemplirEau(robot);
+                            } catch ( NoWaterException e){
+                                System.out.println("Pas d'eau dans la carte. Le robot ne peux pas remplir le réservoir.");
+                            }
+                        }
+
+                        // Si l'incendie a été éteint, on met à jour occupes
+                        if (incendie.getLitres() == 0){
+                            occupes.remove(robot);
+                        }
+                    }
+                    // Si l'incendie n'est pas éteint, on met à jour et on va chercher des robots
+                    if (incendie.getLitres() > 0) { 
+                        incendiesRob.put(incendie, robotsListe);
+                        gestionIncendies(incendie);
+                    }
+                    // Si il a été éteint, on le retire de incendiesRob
+                    else incendiesRob.remove(incendie);
+
+
+                } else
+                    // SI aucun robot lui a été envoyé, on lui en envoie un
+                    gestionIncendies(incendie);
+            }
+            simulateur.ajouteEvenement(new EventChefOrdonne(simulateur.getDateSimulation(), this));
+        } else 
+            throw new NoMoreFireException(); 
+    }
+    
+    
+    /**
+     * Va essayer d'éteindre {@code incendie} en appelant un robot à la fois et en cherchant le plus proche robot disponible.
+     * 
+     * @param incendie : incendie à traiter
+     */
+    protected void gestionIncendies(Incendie incendie){
+        boolean robotTrouve = false;
+        Robot robotAMobiliser = donnees.getRobots().get(0);
+        long tempsDuRobot = Long.MAX_VALUE;
+        Chemin cheminDuRobot = new Chemin();
+        // On cherche un robot
+        for (Robot robot : donnees.getRobots()){
+            // S'il est disponible
+            if (!occupes.contains(robot)){
+                // On essaie de l'envoyer sur l'incendie et voir le temps nécessaire pour y aller
+                try {
+                    Chemin chemin = CalculPCC.dijkstra(carte, robot.getPosition(), incendie.getPosition(), robot, robot.getLastDate());
+                    if (chemin.getTempsChemin() < tempsDuRobot){
+                        robotTrouve = true;
+                        robotAMobiliser = robot;
+                        tempsDuRobot = chemin.getTempsChemin();
+                        cheminDuRobot = chemin;
+                    }
+                } catch (NoPathAvailableException e) {
+                    continue;
+                }
+            } 
+        }
+        // Si on a trouvé un robot disponible, ça veut dire que robotAMobiliser est le plus proche de l'incendie sélectionné.
+        if (robotTrouve){
+            donneOrdre(robotAMobiliser, incendie, cheminDuRobot);
+            occupes.add(robotAMobiliser);
+            // On ajoute le robot à la liste de robot qui s'occupent de l'incendie
+            Set<Robot> nouvelleListe = incendiesRob.get(incendie);
+            nouvelleListe.add(robotAMobiliser);
+            incendiesRob.put(incendie, nouvelleListe);
+        }
+    }
+
+    
+    /** 
+     * Méthode pour envoyer un robot éteindre un incendie.
+     * 
+     * @param robot : robot à envoyer sur l'incendie
+     * @param incendie : incendie à éteindre
+     * @param chemin : chemin pour se rendre à l'incendie
+     */
+    protected void donneOrdre(Robot robot, Incendie incendie, Chemin chemin){
+
+        chemin.creerEvenements(simulateur, robot);
+
+        if (incendie.getLitres()  > 0 ){
+            // Création de toutes les interventions unitaires sur l'incendie
+            for (int i = 0; i <= Math.min(incendie.getLitres() / robot.getQteVersement(),
+                                robot.getReservoir() / robot.getQteVersement()); i++)
+                simulateur.ajouteEvenement(new EventIntervenir(robot.getLastDate(), robot, incendie));
+        }
     }
 
     /**
      * Renvoie le chemin idéal vers la source d'eau la plus proche pour remplir le
      * reservoir d'un robot.
      * 
-     * @param robot - Robot qui doit aller remplir son reservoir
-     * @return Chemin - Chemin idéal vers une source d'eau
-     * @throws NoPathAvailableException Exception s'il n'y a pas de chemins
-     *                                  possibles
-     *                                  du robot vers une source d'eau
+     * @param robot : robot qui doit aller remplir son reservoir
+     * @return Chemin : chemin le plus court vers une source d'eau
+     * @throws PasDeCheminException S'il n'y a aucune source d'eau atteignable par le robot
+     * @throws NoWaterException S'il n'y a pas d'eau dans la carte
      */
-    private Chemin ouAllerRemplirReservoir(Robot robot) throws NoPathAvailableException {
-        if (casesAvecEau.size() == 0) {
-            System.out.println("Il n'y a pas d'eau sur cette carte, le robot ne va donc pas se remplir");
-            ;
-            return null;
-        }
+    private Chemin ouAllerRemplirReservoir(Robot robot) throws NoWaterException, NoPathAvailableException { 
+        if (casesAvecEau.size() == 0)
+            throw new NoWaterException();
         // Initialisation du chemin
         Chemin cheminARetourner = new Chemin();
         long tempsDeplacement = Long.MAX_VALUE;
         Case positionRobot = robot.getPosition();
         boolean ilYAUnChemin = false;
-
+        // On va regarder toutes les cases avec de l'eau et chercher la plus proche
         for (Case caseEau : casesAvecEau) {
-            if (robot.getCapacite() == 10000) { // Car on remplit le réservoir au-dessus dans le cas du drone
+            if (robot.getCapacite() == 10000) { // Si c'est un drone : remplissage au-dessus de l'eau
                 try {
-                    Chemin cheminVersEau = CalculPCC.dijkstra(donnees.getCarte(), positionRobot, caseEau, robot,
-                            robot.getLastDate());
+                    Chemin cheminVersEau = CalculPCC.dijkstra(carte, positionRobot, caseEau, robot, robot.getLastDate());
                     // Actualisation du chemin vers eau si on en trouve un plus court
                     if (cheminVersEau.getTempsChemin() < tempsDeplacement) {
                         tempsDeplacement = cheminVersEau.getTempsChemin();
@@ -74,24 +203,32 @@ public class ChefAvance extends Chef {
                         ilYAUnChemin = true;
                     }
                 } catch (NoPathAvailableException e) {
+                    // Si on ne peut pas accéder à la case on cherche un autre robot
                     continue;
                 }
-            } else {
+            } else { // Pour les autres robots qui se remplissent à côté de l'eau (et non pas au-dessus)
+                // On va regarder pour chaque direction si on peut placer le robot à côté.
                 for (Direction direction : Direction.values()) {
                     try {
                         if (positionRobot.getCarte().voisinExiste(caseEau, direction, robot)) {
-                            Chemin cheminVersEau = CalculPCC.dijkstra(donnees.getCarte(), positionRobot,
+                            Chemin cheminVersEau = CalculPCC.dijkstra(carte, positionRobot,
                                     positionRobot.getCarte().getVoisin(caseEau, direction), robot, robot.getLastDate());
+                            // Actualisation du chemin vers eau si on en trouve un plus court
                             if (cheminVersEau.getTempsChemin() < tempsDeplacement) {
                                 tempsDeplacement = cheminVersEau.getTempsChemin();
                                 cheminARetourner = cheminVersEau;
                                 ilYAUnChemin = true;
                             }
-                        } else
+                        } else {
+                            // Si on ne peut pas accéder à la case par la direction voulue on cherche une autre direction
                             continue;
+                        }
                     } catch (NoPathAvailableException e) {
+                        // Si on ne peut pas accéder à la case on cherche un autre robot
                         continue;
                     } catch (CellOutOfMapException e) {
+                        // Si on ne peut pas accéder à la case on cherche un autre robot (cette exception 
+                        // ne devrait jamais être attrapée).
                         continue;
                     }
                 }
@@ -101,172 +238,28 @@ public class ChefAvance extends Chef {
             throw new NoPathAvailableException();
         return cheminARetourner;
     }
-
-    /**
-     * Fonction qui, pour chaque incendie, décide quel robot envoyer pour réaliser
-     * l'extinction et commande les robots pour
-     * réaliser les extinctions ou leurs remplissages d'eau.
+    
+    
+    /** 
+     * Méthode qui va envoyer le robot {@code robot} se remplir à la source la plus proche
      * 
-     * @param incendie - Incendie à traiter par les robots
+     * @param robot : robot à remplir
+     * @throws NoWaterException S'il n'y a pas d'eau dans la carte
      */
-    public void gestionIncendies(Incendie incendie) {
-        if (incendie.getLitres() == 0) { // si l'incendie n'a pas besoin d'être éteint, du coup zuc
-            System.out.println("MAAAARC"); // MAAARC
-            for (Robot robotDeIcendie : incendies_rob.get(incendie)) { // pour tous les robots qui étaient censés
-                                                                       // l'éteindre...
-                if (robotDeIcendie.getReservoir() == 0) { // si le robot n'a pas d'eau dans le réservoir
-                    try {
-                        Chemin cheminVersEau = ouAllerRemplirReservoir(robotDeIcendie);
-                        cheminVersEau.creerEvenements(this.simulateur, robotDeIcendie); // le robot va jusqu'à l'eau et
-                                                                                        // se remplit
-                        simulateur.ajouteEvenement(new EventRemplir(robotDeIcendie.getLastDate(), robotDeIcendie)); // remplit
-                                                                                                                    // toi
-                                                                                                                    // wesh
-                    } catch (NoPathAvailableException e) {
-                        continue;
-                    }
-                }
-                occupes.remove(robotDeIcendie); // du coup le robot n'est plus occupé
-            }
-            incendies_rob.remove(incendie); // on élimine l'incendie
-            System.out.println("On l'a éteint");
+    private void vaRemplirEau(Robot robot) throws NoWaterException{
+        try {
+            // Se déplace jusqu'à la source
+            Chemin chemin = ouAllerRemplirReservoir(robot);
+            chemin.creerEvenements(simulateur, robot);
+            // Se remplit
+            simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
+            occupes.remove(robot);
+        } catch (NoWaterException e){
+            throw e;
+        } catch (NoPathAvailableException e){
+            System.out.println("Pas possible de remplir reservoir pour " + robot.toString());
             return;
-        }
-        // Cherchons le robot le plus proche de l'incendie
-        boolean robotTrouve = false;
-        Robot robotAMobiliser = donnees.getRobots().get(0); // On initialise avec un robot random
-        Chemin cheminAParcourir = new Chemin(); // On initialise avec un chemin random
-        long tempsDeplacement = Long.MAX_VALUE;
-        // Cherchons le robot le plus proche de l'incendie et le chemin à parcourir
-        for (Robot robot : donnees.getRobots()) {
-            // Si le robot est disponible, on l'envoie sur l'incendie
-            if (!occupes.contains(robot)) {
-                // Si il est vide, on le considère comme occupé
-                if (robot.getReservoir() == 0) {
-                    occupes.add(robot);
-                    continue;
-                }
-                try {
-                    Chemin chemin = new Chemin();
-                    chemin = CalculPCC.dijkstra(donnees.getCarte(), robot.getPosition(), incendie.getPosition(), robot,
-                            robot.getLastDate());
-                    if (chemin.getTempsChemin() < tempsDeplacement) { // on trouve le robot avec le chemin le plus court
-                        robotTrouve = true; // on a trouvé au moins un chemin
-                        robotAMobiliser = robot;
-                        cheminAParcourir = chemin;
-                        tempsDeplacement = chemin.getTempsChemin();
-                    }
-                } catch (NoPathAvailableException e) {
-                    continue;
-                }
-            } else { // si le robot est occupé...
-                // Si le réservoir du robot est vide, on va essayer de le remplir
-                if (robot.getReservoir() == 0) {
-                    try { // le robot ne s'occupe plus de l'incendie, du coup on le sort
-                        if (incendies_rob.containsKey(incendie) && incendies_rob.get(incendie).contains(robot)) {
-                            ArrayList<Robot> nouvelleListe = incendies_rob.get(incendie);
-                            nouvelleListe.remove(robot);
-                            incendies_rob.put(incendie, nouvelleListe);
-                        } // on calcule le chemin le plus court vers l'eau
-                        Chemin cheminVersEau = ouAllerRemplirReservoir(robot);
-                        if (cheminVersEau == null)
-                            continue; // ! S'il n'y a aucun robot à pattes on risque d'avoir un stack overflow ?
-                        cheminVersEau.creerEvenements(this.simulateur, robot); // le robot va jusqu'à l'eau et se
-                                                                               // remplit
-                        simulateur.ajouteEvenement(new EventRemplir(robot.getLastDate(), robot));
-                        occupes.remove(robot); // le robot n'est plus occupé.
-                        // On enlève le robot de la liste de l'intervention sur l'incendie
-                    } catch (NoPathAvailableException e) {
-                        continue;
-                    }
-                } else
-                    continue;
-            }
-        }
-        // Maintenant, si on a trouvé un robot, on l'envoie travailler
-        if (robotTrouve) {
-            System.out.println(incendie);
-            System.out.println(robotAMobiliser);
-            System.out.println(occupes);
-            // Mobilisation du robot en l'ajoutant à la liste
-            ArrayList<Robot> nouvelleListe = incendies_rob.get(incendie);
-            nouvelleListe.add(robotAMobiliser);
-            incendies_rob.put(incendie, nouvelleListe);
-            // System.out.println(cheminAParcourir);
-            occupes.add(robotAMobiliser);
-            cheminAParcourir.creerEvenements(simulateur, robotAMobiliser);
-            // On regarde si le feu n'a pas été éteint avant
-            if (incendie.getLitres() != 0) {
-                System.out.println("On va éteindre ");
-                if (robotAMobiliser.getTmpRemplissage() != -1) { // si ce n'est pas un robot à pattes
-                    for (int i = 0; i < Math.min(incendie.getLitres() / robotAMobiliser.getQteVersement(),
-                            robotAMobiliser.getReservoir() / robotAMobiliser.getQteVersement()); i++) {
-                        simulateur.ajouteEvenement(
-                                new EventIntervenir(robotAMobiliser.getLastDate(), robotAMobiliser, incendie));
-                    }
-                } else { // le robot à pattes va verser son eau
-                    for (int i = 0; i < incendie.getLitres() / robotAMobiliser.getQteVersement(); i++) {
-                        simulateur.ajouteEvenement(
-                                new EventIntervenir(robotAMobiliser.getLastDate(), robotAMobiliser, incendie));
-                    }
-                }
-                // On démobilise le robot
-                if (incendies_rob.containsKey(incendie) && incendies_rob.get(incendie).contains(robotAMobiliser)) {
-                    nouvelleListe.remove(robotAMobiliser);
-                    incendies_rob.put(incendie, nouvelleListe);
-                }
-                System.out.println("On a essayé d'éteindre");
-                // On regarde l'état de l'incendie
-                if (incendie.getLitres() == 0) {
-                    System.out.println("MAAAARC");
-                    for (Robot robotDeIcendie : incendies_rob.get(incendie)) {
-                        if (robotDeIcendie.getReservoir() == 0) {
-                            try {
-                                Chemin cheminVersEau = ouAllerRemplirReservoir(robotDeIcendie);
-                                if (cheminVersEau == null)
-                                    continue;
-                                cheminVersEau.creerEvenements(this.simulateur, robotDeIcendie);
-                                simulateur.ajouteEvenement(
-                                        new EventRemplir(robotDeIcendie.getLastDate(), robotDeIcendie));
-                            } catch (NoPathAvailableException e) {
-                                continue;
-                            }
-                        }
-                        occupes.remove(robotDeIcendie);
-                    }
-                    incendies_rob.remove(incendie);
-                    System.out.println("On l'a éteint");
-                }
-                // Sinon on annule l'opération
-            } else { // On garde ça au cas où, mais on ne devrait pas rentrer là dedans.
-                System.out.println("On l'a éteint avant nous\n");
-                if (robotAMobiliser.getReservoir() > 0) {
-                    occupes.remove(robotAMobiliser);
-                } else if (robotAMobiliser.getReservoir() == 0 && !occupes.contains(robotAMobiliser)) {
-                    occupes.add(robotAMobiliser);
-                }
-                incendies_rob.remove(incendie);
-            }
-        }
-    }
-
-    /**
-     * Fonction executant la stratégie d'extinction des feux du Chef des Pompiers
-     * Avancé.
-     * 
-     * @implNote /!\ La stratégie n'est pas encore fonctionnelle : dès qu'on a un réservoir vide et qu'on va le remplir, on a des erreurs.
-     */
-    @Override
-    public void strategie() {
-        // On supposera qu'il existe toujours une source d'eau accessible par tous les
-        // robots sur la carte
-        while (!incendies_rob.isEmpty()) {
-            for (Incendie incendie : donnees.getIncendies()) {
-                // Si il est déjà éteint, on ne va pas traiter son cas
-                if (!incendies_rob.containsKey(incendie))
-                    continue;
-                gestionIncendies(incendie);
-            }
-        }
+        } 
     }
 }
+   
