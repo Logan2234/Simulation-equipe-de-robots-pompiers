@@ -1,4 +1,4 @@
-\documentclass[a4paper,8pt]{article} %style de document
+\documentclass[a4paper,10pt]{article} %style de document
 \usepackage[utf8]{inputenc} %encodage des caractères
 \usepackage[french]{babel} %paquet de langue français
 \usepackage[T1]{fontenc} %encodage de la police
@@ -130,8 +130,8 @@ La classe \texttt{ChefAvance} implémente la méthode avancée proposée par le 
     \item Au début de chaque itération, si les robots sont vides, on les envoie chercher la source d'eau la plus proche et ils se remplissent ;
     \item Pour les robots autres que le drone, le remplissage doit se faire à côté d'une des cases d'eau : il faut donc calculer le chemin idéal entre toutes les cases adjacentes aux cases d'eau ;
     \item Nous avons maintenu le choix de fixer le pas à $n=50$, il est modifiable dans la classe \texttt{Evenement.EventChefOrdonne} 
-    dans son constructeur ;
-\end{itemize} \\
+    dans son constructeur.
+\end{itemize}
 
 Pour stocker l'état de nos incendies et robots, nous avons à nouveau utilisé une HashMap \texttt{incendiesRob} qui stocke en clé des incendies. Mais, cette fois-ci, nous pouvons avoir plus d'un robot associé à un même feu. Ainsi, on affecte un HashSet à chaque incendie contenant les robots qui sont en train de se déplacer et de gérer l'incendie.
 Nous allons aussi stocker dans un ArrayList les cases d'eau de la carte, afin de pouvoir trouver la case la plus proche en cas de devoir remplir le réservoir.
@@ -204,7 +204,5 @@ Puis, \texttt{ChefAvance} ne fonctionne pas comme il devrait, il faut alors rép
 Néanmoins, le robot à chenille réussie à éteindre tous les autres feux accessibles sans problème.\\
 
 Une autre piste d'amélioration serait l'optimisation de la recherche d'une case d'eau à proximité. Actuellement, un robot terrestre doit effectuer 4 recherches de Dijkstra (une pour chaque case adjacente) par case d'eau de la carte. Ceci résulte en une grande complexité. Il faut donc trouver une manière de rendre cette recherche plus optimale. \\
-
-\texttt{ChefAvance} pourrait distribuer mieux les robots vers les feux. Actuellement, on prend les incendies par ordre d'insertion et on leur assigne le robot le plus proche. Mais, dans l'idéal, chaque robot devrait aller éteindre l'incendie le plus proche à sa position. De cette façon, nous pourrions éviter les cas où, par exemple, un robot va éteindre un feu à distance moyenne au lieu d'éteindre un feu qui se trouve à côté de lui.
 
 \end{document}

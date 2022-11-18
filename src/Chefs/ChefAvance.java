@@ -23,6 +23,8 @@ import Exceptions.NoMoreFireException;
 import Exceptions.NoWaterException;
 import Exceptions.NoPathAvailableException;
 
+//! ========= Ce code n'est pas complètement fonctionnel ===========
+
 /**
  * @param incendiesRob : HashMap qui a pour clé les incendies
  *                      non-éteints et en valeur le set avec les robots qui s'en occupe.
